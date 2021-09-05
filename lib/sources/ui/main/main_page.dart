@@ -2,7 +2,7 @@ import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/ui/main/exchange/exchange_screen.dart';
 import 'package:car_world_system/sources/ui/main/home/home_screen.dart';
 import 'package:car_world_system/sources/ui/main/profile/profile_screen.dart';
-import 'package:car_world_system/sources/ui/main/search/search_screen.dart';
+import 'package:car_world_system/sources/ui/main/search/search_car_screen.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
