@@ -1,7 +1,8 @@
+import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/ui/main/home/contest_screen.dart';
 import 'package:car_world_system/sources/ui/main/home/event_screen.dart';
 import 'package:flutter/material.dart';
-
+import 'package:sizer/sizer.dart';
 class TabBar_Event_Contest_Screen extends StatefulWidget {
   const TabBar_Event_Contest_Screen({ Key? key }) : super(key: key);
 
@@ -14,25 +15,27 @@ class _TabBar_Event_Contest_ScreenState extends State<TabBar_Event_Contest_Scree
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 500,
+      height: 55.h,
       child: DefaultTabController(
         length: 2,
-        child: new Scaffold(
-          appBar: new PreferredSize(
+        child:  Scaffold(
+          appBar:  PreferredSize(
+            
             preferredSize: Size.fromHeight(kToolbarHeight),
-            child: new Container(
-              color: Colors.blue,
-              child: new SafeArea(
+            child:  Container(
+              color: AppConstant.backgroundColor,
+              child:  SafeArea(
                 child: Column(
                   children: <Widget>[
-                    new Expanded(child: new Container()),
-                    new TabBar(
+                     Expanded(child:  Container()),
+                     TabBar(
+                       indicatorColor: Color.fromRGBO(255, 255, 255, 1),
                       tabs: 
                       [Column(children: [
-                        Icon(Icons.event, size: 35,),
+                        Icon(Icons.event, size: 5.0.h,),
                         Text("Sự kiện")
                       ],), Column(children: [
-                        Icon(Icons.sports_kabaddi, size: 36,),
+                        Icon(Icons.sports_kabaddi, size: 5.0.h,),
                         Text("Cuộc thi")
                       ],)],
                     ),
@@ -41,7 +44,7 @@ class _TabBar_Event_Contest_ScreenState extends State<TabBar_Event_Contest_Scree
               ),
             ),
           ),
-          body: new TabBarView(
+          body:  TabBarView(
             children: <Widget>[
               EventScreen(),
               ContestScreen()

@@ -1,3 +1,5 @@
+import 'package:car_world_system/constant/app_constant.dart';
+import 'package:car_world_system/sources/ui/main/home/proposal_screen.dart';
 import 'package:car_world_system/sources/ui/main/home/tabbar_event_contest_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -15,31 +17,24 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Text("Welcome"),
         centerTitle: true,
         automaticallyImplyLeading: false,
-        actions: [
-          Padding(
-              padding: EdgeInsets.only(right: 20.0),
-              child: GestureDetector(
-                onTap: () {
-                  //do some thing here
-                },
-                child: Icon(
-                  Icons.notifications,
-                  size: 26.0,
-                ),
-              ))
-        ],
+        backgroundColor: AppConstant.backgroundColor,
       ),
       body: ListView(
         children: <Widget>[slider(), TabBar_Event_Contest_Screen()],
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          //do some thing here
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ProposalScreen(),
+              ));
         },
-        child: Column(
-          children: [Icon(Icons.add), Text("Đề nghị")],
+        child: Icon(
+          Icons.add,
+          size: 35,
         ),
-        isExtended: true,
+        backgroundColor: AppConstant.backgroundColor,
       ),
     );
   }
@@ -51,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
       initialPage: 0,
       indicatorColor: Colors.blue,
       indicatorBackgroundColor: Colors.grey,
-      autoPlayInterval: 4000,
+      autoPlayInterval: 5000,
       isLoop: true,
       children: [
         Image(

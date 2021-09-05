@@ -7,6 +7,10 @@ class Exchange extends StatefulWidget {
 class _ExchangeState extends State<Exchange> {
   @override
   Widget build(BuildContext context) {
-    return Container(child:Text("Exchange"));
+    return Scaffold(
+      body: Center(
+        child: Text("Trao đổi"),
+      ),
+    );
   }
 }
