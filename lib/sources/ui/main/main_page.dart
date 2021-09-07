@@ -2,7 +2,7 @@ import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/ui/main/exchange/exchange_screen.dart';
 import 'package:car_world_system/sources/ui/main/home/home_screen.dart';
 import 'package:car_world_system/sources/ui/main/profile/profile_screen.dart';
-import 'package:car_world_system/sources/ui/main/search/search_car_screen.dart';
+import 'package:car_world_system/sources/ui/main/search/tabbar_search.dart';
 import 'package:flutter/material.dart';
 
 class MainPage extends StatefulWidget {
@@ -14,7 +14,7 @@ class _MainPageState extends State<MainPage> {
   int _selectedIndex = 0;
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    SearchScreen(),
+    Tabbar_Search(),
     Exchange(),
     ProfileScreen(),
   ];

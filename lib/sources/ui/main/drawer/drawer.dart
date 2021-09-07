@@ -1,4 +1,9 @@
 import 'package:car_world_system/constant/app_constant.dart';
+import 'package:car_world_system/sources/ui/main/drawer/contest/manager_contest_screen.dart';
+import 'package:car_world_system/sources/ui/main/drawer/event/manager_event_screen.dart';
+import 'package:car_world_system/sources/ui/main/drawer/exchange/history_exchange_screen.dart';
+import 'package:car_world_system/sources/ui/main/drawer/exchange/manager_post_screen.dart';
+import 'package:car_world_system/sources/ui/main/drawer/proposal/manager_proposal_screen.dart';
 import 'package:flutter/material.dart';
 
 class DrawerScreen extends StatefulWidget {
@@ -27,50 +32,68 @@ class _DrawerScreenState extends State<DrawerScreen> {
               ),
             ),
             decoration: BoxDecoration(
-              color:AppConstant.backgroundColor,
+              color: AppConstant.backgroundColor,
             ),
           ),
           ListTile(
             leading: Icon(Icons.event),
             title: Text("Sự kiện đã tham gia và đăng ký"),
             onTap: () {
-             
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ManagerEventScreen(),
+                  ));
             },
           ),
-           ListTile(
+          ListTile(
             leading: Icon(Icons.sports_kabaddi),
             title: Text("Cuộc thi đã tham gia và đăng ký"),
             onTap: () {
-             
+              Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => ManagerContestScreen(),
+                  ));
             },
           ),
-           ListTile(
+          ListTile(
             leading: Icon(Icons.note_add),
             title: Text("Ý tưởng đã gửi"),
             onTap: () {
-             
+              Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ManagerProposalScreen(),
+                          ));
             },
           ),
-           ListTile(
+          ListTile(
             leading: Icon(Icons.history),
             title: Text("Lịch sử trao đổi"),
             onTap: () {
-             
+              Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => HistoryExchangeScreen(),
+                          ));
             },
           ),
-           ListTile(
+          ListTile(
             leading: Icon(Icons.manage_search),
             title: Text("Quản lý bài đăng"),
             onTap: () {
-             
+              Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ManagerPostScreen(),
+                          ));
             },
           ),
-           ListTile(
+          ListTile(
             leading: Icon(Icons.logout),
             title: Text("Đăng xuất"),
-            onTap: () {
-             
-            },
+            onTap: () {},
           ),
         ],
       ),

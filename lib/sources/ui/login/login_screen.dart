@@ -40,21 +40,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       textStyle:
                           TextStyle(color: Colors.white, fontSize: 15.0.sp)),
                 ),
-
                 SizedBox(height: 71.0.h //It will take a 30% of screen height
                     ),
                 Padding(
-                  padding: EdgeInsets.only(left:10.0.h, right:10.0.h),
+                  padding: EdgeInsets.only(left: 10.0.h, right: 10.0.h),
                   child: ElevatedButton.icon(
-                      style: ElevatedButton.styleFrom(
-                        primary:Colors.white,
+                    style: ElevatedButton.styleFrom(
+                        primary: Colors.white,
                         onPrimary: Colors.black,
-                        minimumSize: Size(double.infinity, 50)
-                      ),
-                      icon: FaIcon(FontAwesomeIcons.google, color: Colors.red,),
-                      label: Text("Đăng nhập với Google"),
+                        minimumSize: Size(double.infinity, 50)),
+                    icon: FaIcon(
+                      FontAwesomeIcons.google,
+                      color: Colors.red,
+                    ),
+                    label: Text("Đăng nhập với Google"),
                     onPressed: () {
-                     Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(),));
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MainPage(),
+                          ));
                     },
                   ),
                 )

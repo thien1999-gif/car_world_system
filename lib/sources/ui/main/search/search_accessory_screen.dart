@@ -1,14 +1,15 @@
 import 'package:car_world_system/constant/app_constant.dart';
+import 'package:car_world_system/sources/ui/main/search/search_acessory_detail.dart';
 import 'package:car_world_system/sources/ui/main/search/search_car_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
-class SearchCarScreen extends StatefulWidget {
+class SearchAccessoryScreen extends StatefulWidget {
   @override
-  _SearchCarScreenState createState() => _SearchCarScreenState();
+  _SearchAccessoryScreenState createState() => _SearchAccessoryScreenState();
 }
 
-class _SearchCarScreenState extends State<SearchCarScreen> {
+class _SearchAccessoryScreenState extends State<SearchAccessoryScreen> {
   final List<Map> myProducts =
       List.generate(15, (index) => {"id": index, "name": "Product $index"})
           .toList();
@@ -33,7 +34,7 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
 
                 decoration: InputDecoration(
                   label: Text(
-                    "Tìm kiếm xe hơi",
+                    "Tìm kiếm linh kiện",
                     style: TextStyle(color: AppConstant.backgroundColor),
                   ),
                   hintText: "Bạn có thể tìm kiếm theo tên, hãng,...",
@@ -73,7 +74,7 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SearchCarDetailScreen(),
+                              builder: (context) => SearchAccessoryDetailScreen(),
                             ));
                       },
                       child: Padding(
@@ -117,7 +118,7 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                                           width: 5,
                                         ),
                                         Text(
-                                          "BMW Z4",
+                                          "Vô lăng",
                                           style: TextStyle(
                                               fontWeight: AppConstant.titleBold,
                                               fontSize: 16),
