@@ -1,39 +1,70 @@
 import 'package:car_world_system/constant/app_constant.dart';
-import 'package:car_world_system/sources/ui/main/search/search_car_detail_screen.dart';
+import 'package:car_world_system/sources/ui/main/exchange/exchange_accessory_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
+class ExchangeAccessoryScreen extends StatefulWidget {
+  const ExchangeAccessoryScreen({ Key? key }) : super(key: key);
 
-class SearchCarScreen extends StatefulWidget {
   @override
-  _SearchCarScreenState createState() => _SearchCarScreenState();
+  _ExchangeAccessoryScreenState createState() => _ExchangeAccessoryScreenState();
 }
 
-class _SearchCarScreenState extends State<SearchCarScreen> {
+class _ExchangeAccessoryScreenState extends State<ExchangeAccessoryScreen> {
+String distance = '5';
   final List<Map> myProducts =
       List.generate(15, (index) => {"id": index, "name": "Product $index"})
           .toList();
-
-  String? value;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: ListView(
-      children: [
-        SizedBox(height: 2.h,),
-        Row(
-          children: [
-            SizedBox(
-              width: 1.h,
-            ),
-            Container(
-              width: 38.h,
-              height: 8.h,
-              child: TextFormField(
+      body: ListView(
+        children: [
+          SizedBox(
+            height: 1.h,
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 1.h,
+              ),
+
+              Container(
+                 width: 12.h,
+                height: 7.1.h,
+                child: DropdownButtonFormField<String>(
+                  value: distance,
+                  isExpanded: true,
+                  decoration: InputDecoration(
+                    labelText: 'Khoảng cách (km)',
+                  fillColor: AppConstant.backgroundColor
+                  ),
+                  onChanged: (String? newValue) {
+                    setState(() {
+                      distance = newValue!;
+                      //Text(distance)
+                    });
+                  },
+                  items: <String>['5', '10', '15']
+                      .map<DropdownMenuItem<String>>((String value) {
+                    return DropdownMenuItem<String>(
+                      value: value,
+                      child: Text(value),
+                    );
+                  }).toList(),
+                ),
+              ),
+              SizedBox(
+                width: 1.h,
+              ),
+              Container(
+                width: 28.h,
+                height: 7.h,
+                child: TextFormField(
                 //controller: ,
 
                 decoration: InputDecoration(
                   label: Text(
-                    "Tìm kiếm xe hơi",
+                    "Tìm kiếm linh kiện",
                     style: TextStyle(color: AppConstant.backgroundColor),
                   ),
                   hintText: "Bạn có thể tìm kiếm theo tên, hãng,...",
@@ -48,20 +79,16 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                 //   }
                 //   return null;
                 // },
-              ),
-            ),
-            SizedBox(
-              width: 1.h,
-            ),
-            IconButton(
+              )),
+              IconButton(
                 icon: Icon(Icons.search),
                 color: AppConstant.backgroundColor,
                 iconSize: 30,
                 onPressed: () {},
               ),
-          ],
-        ),
-        Container(
+            ],
+          ),
+          Container(
           height: 62.1.h,
           width: 500.h,
           child: Padding(
@@ -75,7 +102,7 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SearchCarDetailScreen(),
+                              builder: (context) => ExchangeAccessoryDetailScreen(),
                             ));
                       },
                       child: Padding(
@@ -119,7 +146,7 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                                           width: 5,
                                         ),
                                         Text(
-                                          "BMW Z4",
+                                          "Vô lăng",
                                           style: TextStyle(
                                               fontWeight: AppConstant.titleBold,
                                               fontSize: 16),
@@ -192,7 +219,8 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                 }),
           ),
         )
-      ],
-    ));
+        ],
+      ),
+    );
   }
 }

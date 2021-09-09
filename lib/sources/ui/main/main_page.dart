@@ -1,5 +1,5 @@
 import 'package:car_world_system/constant/app_constant.dart';
-import 'package:car_world_system/sources/ui/main/exchange/exchange_screen.dart';
+import 'package:car_world_system/sources/ui/main/exchange/tabbar_exchange.dart';
 import 'package:car_world_system/sources/ui/main/home/home_screen.dart';
 import 'package:car_world_system/sources/ui/main/profile/profile_screen.dart';
 import 'package:car_world_system/sources/ui/main/search/tabbar_search.dart';
@@ -15,7 +15,7 @@ class _MainPageState extends State<MainPage> {
   static List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     Tabbar_Search(),
-    Exchange(),
+    TabbarExchangeScreen(),
     ProfileScreen(),
   ];
 

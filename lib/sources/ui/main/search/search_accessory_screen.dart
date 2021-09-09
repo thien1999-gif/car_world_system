@@ -20,14 +20,14 @@ class _SearchAccessoryScreenState extends State<SearchAccessoryScreen> {
     return Scaffold(
         body: ListView(
       children: [
-        SizedBox(height: 1.h,),
+        SizedBox(height: 2.h,),
         Row(
           children: [
             SizedBox(
               width: 1.h,
             ),
             Container(
-              width: 34.h,
+              width: 38.h,
               height: 8.h,
               child: TextFormField(
                 //controller: ,
@@ -54,10 +54,12 @@ class _SearchAccessoryScreenState extends State<SearchAccessoryScreen> {
             SizedBox(
               width: 1.h,
             ),
-            FlatButton(
+         IconButton(
+                icon: Icon(Icons.search),
+                color: AppConstant.backgroundColor,
+                iconSize: 30,
                 onPressed: () {},
-                child: Text('Tìm kiếm', style: TextStyle(color: Colors.white)),
-                color: AppConstant.backgroundColor),
+              ),
           ],
         ),
         Container(
