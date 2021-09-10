@@ -1,4 +1,6 @@
+import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/ui/main/main_page.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,7 +15,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+      backgroundColor: AppConstant.backgroundColor,
       body: Stack(
         children: <Widget>[
           Image(
@@ -38,20 +40,28 @@ class _LoginScreenState extends State<LoginScreen> {
                       textStyle:
                           TextStyle(color: Colors.white, fontSize: 15.0.sp)),
                 ),
-
                 SizedBox(height: 71.0.h //It will take a 30% of screen height
                     ),
-                ElevatedButton.icon(
+                Padding(
+                  padding: EdgeInsets.only(left: 10.0.h, right: 10.0.h),
+                  child: ElevatedButton.icon(
                     style: ElevatedButton.styleFrom(
-                      primary:Colors.white,
-                      onPrimary: Colors.black,
-                      minimumSize: Size(double.infinity, 50)
+                        primary: Colors.white,
+                        onPrimary: Colors.black,
+                        minimumSize: Size(double.infinity, 50)),
+                    icon: FaIcon(
+                      FontAwesomeIcons.google,
+                      color: Colors.red,
                     ),
-                    icon: FaIcon(FontAwesomeIcons.google, color: Colors.red,),
                     label: Text("Đăng nhập với Google"),
-                  onPressed: () {
-                   Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage(),));
-                  },
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => MainPage(),
+                          ));
+                    },
+                  ),
                 )
               ],
             ),

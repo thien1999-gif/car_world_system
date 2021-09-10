@@ -1,19 +1,18 @@
 import 'package:car_world_system/constant/app_constant.dart';
-import 'package:car_world_system/sources/ui/main/home/contest_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
-class ContestScreen extends StatefulWidget {
-  const ContestScreen({Key? key}) : super(key: key);
+class EventRegisteredScreen extends StatefulWidget {
+  const EventRegisteredScreen({ Key? key }) : super(key: key);
 
   @override
-  _ContestScreenState createState() => _ContestScreenState();
+  _EventRegisteredScreenState createState() => _EventRegisteredScreenState();
 }
 
-class _ContestScreenState extends State<ContestScreen> {
+class _EventRegisteredScreenState extends State<EventRegisteredScreen> {
   final List<Map> myProducts =
       List.generate(15, (index) => {"id": index, "name": "Product $index"})
           .toList();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,24 +23,18 @@ class _ContestScreenState extends State<ContestScreen> {
             itemCount: myProducts.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => ContestDetailScreen(),
-                        ));
-                  },
+                  onTap: () {},
                   child: Padding(
                       padding: EdgeInsets.all(3),
                       child: Container(
-                        height: 15.h,
+                        height: 22.h,
                         child: Row(
                           children: [
                             Column(
                               children: [
                                 Container(
                                     width: 14.h,
-                                    height: 14.6.h,
+                                    height: 21.5.h,
                                     decoration: new BoxDecoration(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(2.0)),
@@ -49,7 +42,7 @@ class _ContestScreenState extends State<ContestScreen> {
                                       image: new DecorationImage(
                                           fit: BoxFit.cover,
                                           image: AssetImage(
-                                              "assets/images/slider_3.png")),
+                                              "assets/images/slider_4.png")),
                                     )),
                               ],
                             ),
@@ -65,14 +58,14 @@ class _ContestScreenState extends State<ContestScreen> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.sports_kabaddi,
+                                      Icons.event,
                                       size: 15,
                                     ),
                                     SizedBox(
                                       width: 5,
                                     ),
                                     Text(
-                                      "Đua xe địa hình ",
+                                      "Đấu giá xe ",
                                       style: TextStyle(
                                           fontWeight: AppConstant.titleBold,
                                           fontSize: 16),
@@ -121,17 +114,51 @@ class _ContestScreenState extends State<ContestScreen> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.money,
+                                      Icons.location_on,
                                       size: 15,
                                     ),
                                     SizedBox(
                                       width: 5,
                                     ),
                                     Text(
-                                      "100.000 đồng",
+                                      "Tp.Hồ Chí Minh ",
                                       style: TextStyle(fontSize: 15),
+                                      maxLines: 2,
                                     ),
                                   ],
+                                ),
+                                RaisedButton(
+                                  child: Text(
+                                    "Hủy",
+                                    style: TextStyle(color: Colors.white),
+                                  ),
+                                  onPressed: () {
+                                    showDialog(
+                                      context: context,
+                                      builder: (context) => AlertDialog(
+                                        title: Text('Xác nhận'),
+                                        content: Text(
+                                            'Bạn có chắc là muốn hủy tham gia không ?'),
+                                        actions: <Widget>[
+                                          FlatButton(
+                                              onPressed: () {},
+                                              child: Text('Không',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                              color:
+                                                  AppConstant.backgroundColor),
+                                          FlatButton(
+                                              onPressed: () {},
+                                              child: Text('Có',
+                                                  style: TextStyle(
+                                                      color: Colors.white)),
+                                              color:
+                                                  AppConstant.backgroundColor),
+                                        ],
+                                      ),
+                                    );
+                                  },
+                                  color: AppConstant.backgroundColor,
                                 ),
                               ],
                             )

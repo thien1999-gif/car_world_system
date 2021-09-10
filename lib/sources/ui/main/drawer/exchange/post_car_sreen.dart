@@ -1,16 +1,15 @@
 import 'package:car_world_system/constant/app_constant.dart';
-import 'package:car_world_system/sources/ui/main/home/contest_detail_screen.dart';
+import 'package:car_world_system/sources/ui/main/drawer/exchange/post_car_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
-
-class ContestScreen extends StatefulWidget {
-  const ContestScreen({Key? key}) : super(key: key);
+class PostCarScreen extends StatefulWidget {
+  const PostCarScreen({ Key? key }) : super(key: key);
 
   @override
-  _ContestScreenState createState() => _ContestScreenState();
+  _PostCarScreenState createState() => _PostCarScreenState();
 }
 
-class _ContestScreenState extends State<ContestScreen> {
+class _PostCarScreenState extends State<PostCarScreen> {
   final List<Map> myProducts =
       List.generate(15, (index) => {"id": index, "name": "Product $index"})
           .toList();
@@ -28,7 +27,7 @@ class _ContestScreenState extends State<ContestScreen> {
                     Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => ContestDetailScreen(),
+                          builder: (context) => PostCarDetailScreen(),
                         ));
                   },
                   child: Padding(
@@ -72,7 +71,7 @@ class _ContestScreenState extends State<ContestScreen> {
                                       width: 5,
                                     ),
                                     Text(
-                                      "Đua xe địa hình ",
+                                      "Cần bán xe",
                                       style: TextStyle(
                                           fontWeight: AppConstant.titleBold,
                                           fontSize: 16),
@@ -92,7 +91,7 @@ class _ContestScreenState extends State<ContestScreen> {
                                       width: 5,
                                     ),
                                     Text(
-                                      "15h - 01/01/2000 ",
+                                      "????????? ",
                                       style: TextStyle(fontSize: 15),
                                     ),
                                   ],
@@ -103,14 +102,14 @@ class _ContestScreenState extends State<ContestScreen> {
                                 Row(
                                   children: [
                                     Icon(
-                                      Icons.people,
+                                      Icons.location_on,
                                       size: 15,
                                     ),
                                     SizedBox(
                                       width: 5,
                                     ),
                                     Text(
-                                      "10 người",
+                                      "TP.Hồ Chí Minh",
                                       style: TextStyle(fontSize: 15),
                                     ),
                                   ],
