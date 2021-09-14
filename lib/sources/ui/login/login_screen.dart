@@ -1,4 +1,5 @@
 import 'package:car_world_system/constant/app_constant.dart';
+import 'package:car_world_system/sources/repository/google_sign_in.dart';
 import 'package:car_world_system/sources/ui/main/main_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -55,11 +56,16 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     label: Text("Đăng nhập với Google"),
                     onPressed: () {
-                      Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => MainPage(),
-                          ));
+                      
+
+                      GoogleSingInProvider.signInWithGoogle().then((result) {
+                        if (result != null) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => MainPage()));
+                        }
+                      });
                     },
                   ),
                 )
