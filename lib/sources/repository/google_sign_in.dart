@@ -29,14 +29,14 @@ class GoogleSingInProvider{
 
       final User currentUser = _auth.currentUser;
       assert(user.uid == currentUser.uid);
-
+      
       print('signInWithGoogle succeeded: $user');
       return '$user';
     }
     return null;
   }
 
-  Future<void> signOutGoogle() async {
+ static Future<void> signOutGoogle() async {
     await googleSignIn.signOut();
 
     print("User Signed Out");

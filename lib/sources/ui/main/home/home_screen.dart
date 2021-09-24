@@ -3,6 +3,7 @@ import 'package:car_world_system/sources/ui/main/home/proposal_screen.dart';
 import 'package:car_world_system/sources/ui/main/home/tabbar_event_contest_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:sizer/sizer.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -13,12 +14,15 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text("Welcome"),
-        centerTitle: true,
-        automaticallyImplyLeading: false,
-        backgroundColor: AppConstant.backgroundColor,
-      ),
+      appBar: PreferredSize(
+          preferredSize: Size.fromHeight(50.0),
+          child: AppBar(
+            automaticallyImplyLeading: false, // hides leading widget
+            flexibleSpace: Image(
+              image: AssetImage('assets/images/logo.jpg'),
+              fit: BoxFit.cover,
+            ),
+          )),
       body: ListView(
         children: <Widget>[slider(), TabBar_Event_Contest_Screen()],
       ),
@@ -42,7 +46,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget slider() {
     return ImageSlideshow(
       width: double.infinity,
-      height: 200,
+      height: 150,
       initialPage: 0,
       indicatorColor: Colors.blue,
       indicatorBackgroundColor: Colors.grey,
