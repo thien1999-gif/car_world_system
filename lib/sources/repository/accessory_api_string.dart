@@ -1,0 +1,27 @@
+const String BASE_URL = "https://carworld.cosplane.asia";
+
+class AccessoryApiString {
+  //get all accessory
+  //https://carworld.cosplane.asia/api/accessory/GetAllAccessories
+  static String getListAccessory() {
+    return BASE_URL + '/api/accessory/GetAllAccessories';
+  }
+
+  //get list accessory by name
+  //https://carworld.cosplane.asia/api/accessory/GetAccessoryByName?accessoryName=tes
+  static String getListAccessoryByName(String name) {
+    return BASE_URL + '/api/accessory/GetAccessoryByName?accessoryName=$name';
+  }
+
+  //get accessory detail by id
+  //https://carworld.cosplane.asia/api/accessory/GetAccessoryById?id=7
+  static String getAccessoryDetail(int id) {
+    return BASE_URL + '/api/accessory/GetAccessoryById?id=$id';
+  }
+
+  //get brand detail
+  //https://carworld.cosplane.asia/api/brand/GetBrandById?id=1007
+  static String getBrandDetail(int id){
+    return BASE_URL + '/api/brand/GetBrandById?id=$id';
+  }
+}

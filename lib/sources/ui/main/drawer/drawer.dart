@@ -1,4 +1,5 @@
 import 'package:car_world_system/constant/app_constant.dart';
+import 'package:car_world_system/sources/repository/google_sign_in.dart';
 import 'package:car_world_system/sources/ui/main/drawer/contest/manager_contest_screen.dart';
 import 'package:car_world_system/sources/ui/main/drawer/event/manager_event_screen.dart';
 import 'package:car_world_system/sources/ui/main/drawer/exchange/history_exchange_screen.dart';
@@ -93,7 +94,9 @@ class _DrawerScreenState extends State<DrawerScreen> {
           ListTile(
             leading: Icon(Icons.logout),
             title: Text("Đăng xuất"),
-            onTap: () {},
+            onTap: () {
+              GoogleSingInProvider.signOutGoogle();
+            },
           ),
         ],
       ),

@@ -48,8 +48,7 @@ dependencies:
   multi_image_picker: ^4.6.1
   google_sign_in: ^4.5.4
   http: ^0.12.2
-  bloc: ^3.0.0
-  rxdart: ^0.23.1
+  rxdart: ^0.18.0
   provider: ^5.0.0
 
 dev_dependencies:

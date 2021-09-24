@@ -17,7 +17,7 @@ class _TabBar_Event_Contest_ScreenState
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 55.h,
+      height: 60.h,
       child: DefaultTabController(
         length: 2,
         child: Scaffold(

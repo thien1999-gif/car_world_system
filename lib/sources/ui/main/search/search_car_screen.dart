@@ -1,4 +1,6 @@
 import 'package:car_world_system/constant/app_constant.dart';
+import 'package:car_world_system/sources/bloc/car_bloc.dart';
+import 'package:car_world_system/sources/model/car.dart';
 import 'package:car_world_system/sources/ui/main/search/search_car_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -9,17 +11,21 @@ class SearchCarScreen extends StatefulWidget {
 }
 
 class _SearchCarScreenState extends State<SearchCarScreen> {
-  final List<Map> myProducts =
-      List.generate(15, (index) => {"id": index, "name": "Product $index"})
-          .toList();
+  final searchValue = TextEditingController();
+  bool isSelect = true;
+  @override
+  void initState() {
+    super.initState();
+  }
 
-  String? value;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
         body: ListView(
       children: [
-        SizedBox(height: 2.h,),
+        SizedBox(
+          height: 2.h,
+        ),
         Row(
           children: [
             SizedBox(
@@ -29,7 +35,7 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
               width: 38.h,
               height: 8.h,
               child: TextFormField(
-                //controller: ,
+                controller: searchValue,
 
                 decoration: InputDecoration(
                   label: Text(
@@ -54,28 +60,90 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
               width: 1.h,
             ),
             IconButton(
-                icon: Icon(Icons.search),
-                color: AppConstant.backgroundColor,
-                iconSize: 30,
-                onPressed: () {},
-              ),
+              icon: Icon(Icons.search),
+              color: AppConstant.backgroundColor,
+              iconSize: 30,
+              onPressed: () {
+                setState(() {
+                  isSelect = false;
+                });
+              },
+            ),
           ],
         ),
-        Container(
+        loadListCar()
+      ],
+    ));
+  }
+
+    Widget loadListCar() {
+    if (isSelect) {
+      carBloc.getListCar();
+      return StreamBuilder(
+          stream: carBloc.listCar,
+          builder: (context, AsyncSnapshot<List<Car>> snapshot) {
+            if (snapshot.hasData) {
+              return _buildListCar(snapshot.data!);
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            return Center(child: CircularProgressIndicator());
+          });
+    } else {
+      carBloc.getListCarByName(searchValue.text);
+      return StreamBuilder(
+          stream: carBloc.listCar,
+          builder: (context, AsyncSnapshot<List<Car>> snapshot) {
+            if (snapshot.hasData) {
+              return _buildListCar(snapshot.data!);
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            return Center(child: CircularProgressIndicator());
+          });
+    }
+  }
+
+   Widget _buildListCar(List<Car> data) {
+     if(data.length == 0){
+     return Container(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+              Container(
+              height: 55.h,
+              width: 100.h,
+              child: Image(image: AssetImage("assets/images/not found.png"),
+              fit: BoxFit.cover,),
+            ),
+            Text(
+              "Xin lỗi",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Text(
+                "chúng tôi không thể tìm được kết quả hợp với tìm kiếm của bạn")
+          ],
+        ),
+      );
+     }
+     else{
+        return Container(
           height: 62.1.h,
           width: 500.h,
           child: Padding(
             padding: const EdgeInsets.all(4.0),
             child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: myProducts.length,
+                itemCount: data.length,
                 itemBuilder: (context, index) {
                   return GestureDetector(
                       onTap: () {
                         Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => SearchCarDetailScreen(),
+                              builder: (context) => SearchCarDetailScreen(id: data[index].id,),
                             ));
                       },
                       child: Padding(
@@ -95,8 +163,10 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                                           shape: BoxShape.rectangle,
                                           image: new DecorationImage(
                                               fit: BoxFit.cover,
-                                              image: AssetImage(
-                                                  "assets/images/slider_2.png")),
+                                              image: NetworkImage(data[index]
+                                                .image
+                                                .split("|")
+                                                .elementAt(0))),
                                         )),
                                   ],
                                 ),
@@ -119,7 +189,7 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                                           width: 5,
                                         ),
                                         Text(
-                                          "BMW Z4",
+                                          data[index].name,
                                           style: TextStyle(
                                               fontWeight: AppConstant.titleBold,
                                               fontSize: 16),
@@ -139,7 +209,7 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                                           width: 5,
                                         ),
                                         Text(
-                                          "BMW",
+                                          ".",
                                           style: TextStyle(fontSize: 15),
                                         ),
                                       ],
@@ -157,8 +227,8 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                                           width: 5,
                                         ),
                                         Text(
-                                          "3000000000 đồng",
-                                          style: TextStyle(fontSize: 15),
+                                          data[index].price.toString() +" đồng",
+                                          style: TextStyle(fontSize: 15, color: Colors.red),
                                         ),
                                       ],
                                     ),
@@ -175,7 +245,7 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                                           width: 5,
                                         ),
                                         Text(
-                                          "4 chỗ",
+                                         data[index].seats.toString() +" chỗ",
                                           style: TextStyle(fontSize: 15),
                                         ),
                                       ],
@@ -191,8 +261,7 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                           )));
                 }),
           ),
-        )
-      ],
-    ));
-  }
+        );
+     }
+   }
 }
