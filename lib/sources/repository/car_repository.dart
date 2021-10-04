@@ -13,6 +13,10 @@ class CarRepository {
   Future<List<Car>> getListCarByName(String name) {
     return carAPIProvider.getListCarByName(name);
   }
+    //get all car by  brand name
+  Future<List<Car>> getListCarByBrandName(String brandName) {
+    return carAPIProvider.getListCarByBrandName(brandName);
+  }
 
   //get car detail by id
   Future<Car> getCarDetail(int id) {

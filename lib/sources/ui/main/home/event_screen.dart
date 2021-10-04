@@ -1,4 +1,6 @@
 import 'package:car_world_system/constant/app_constant.dart';
+import 'package:car_world_system/sources/bloc/event_bloc.dart';
+import 'package:car_world_system/sources/model/event.dart';
 import 'package:car_world_system/sources/ui/main/home/event_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
@@ -11,121 +13,246 @@ class EventScreen extends StatefulWidget {
 }
 
 class _EventScreenState extends State<EventScreen> {
-  final List<Map> myProducts =
-      List.generate(15, (index) => {"id": index, "name": "Product $index"})
-          .toList();
+  String sortEvent = 'Mới nhất';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: ListView.builder(
-            scrollDirection: Axis.vertical,
-            itemCount: myProducts.length,
-            itemBuilder: (context, index) {
-              return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => EventDetailScreen(),
-                        ));
-                  },
-                  child: Padding(
-                      padding: EdgeInsets.all(3),
-                      child: Container(
-                        height: 15.h,
-                        child: Row(
-                          children: [
-                            Column(
-                              children: [
-                                Container(
-                                    width: 14.h,
-                                    height: 14.6.h,
-                                    decoration: new BoxDecoration(
-                                      borderRadius: BorderRadius.all(
-                                          Radius.circular(2.0)),
-                                      shape: BoxShape.rectangle,
-                                      image: new DecorationImage(
-                                          fit: BoxFit.cover,
-                                          image: AssetImage(
-                                              "assets/images/slider_2.png")),
-                                    )),
-                              ],
+      body: ListView(
+        children: [
+        Row(
+          children: [
+            SizedBox(
+              width: 1.h,
+            ),
+            Container(
+              width: 13.h,
+              height: 8.1.h,
+              child: DropdownButtonFormField<String>(
+                value: sortEvent,
+                isExpanded: true,
+                decoration: InputDecoration(
+                    labelText: 'Sắp xếp theo',
+                    fillColor: AppConstant.backgroundColor),
+                onChanged: (String? newValue) {
+                  setState(() {
+                    sortEvent = newValue!;
+                  });
+                },
+                items: <String>['Mới nhất', 'Nổi bật']
+                    .map<DropdownMenuItem<String>>((String value) {
+                  return DropdownMenuItem<String>(
+                    value: value,
+                    child: Text(value),
+                  );
+                }).toList(),
+              ),
+            ),
+            SizedBox(
+              width: 1.h,
+            ),
+          ],
+        ),
+        loadListEvent()
+      ],
+    ));
+  }
+
+  Widget loadListEvent() {
+    if (sortEvent == "Mới nhất") {
+      eventBloc.getListNewEvent();
+      return StreamBuilder(
+          stream: eventBloc.listEvent,
+          builder: (context, AsyncSnapshot<List<Event>> snapshot) {
+            if (snapshot.hasData) {
+              return _buildListEvent(snapshot.data!);
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            return Center(child: CircularProgressIndicator());
+          });
+    } else {
+      eventBloc.getListSignificantEvent();
+      return StreamBuilder(
+          stream: eventBloc.listEvent,
+          builder: (context, AsyncSnapshot<List<Event>> snapshot) {
+            if (snapshot.hasData) {
+              return _buildListEvent(snapshot.data!);
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            return Center(child: CircularProgressIndicator());
+          });
+    }
+  }
+
+  Widget _buildListEvent(List<Event> data) {
+    if (data.length == 0) {
+      return Container(
+        width: MediaQuery.of(context).size.width,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: <Widget>[
+            Container(
+              height: 55.h,
+              width: 100.h,
+              child: Image(
+                image: AssetImage("assets/images/not found.png"),
+                fit: BoxFit.cover,
+              ),
+            ),
+            Text(
+              "Xin lỗi",
+              style: TextStyle(fontWeight: FontWeight.bold),
+            ),
+            Text(
+                "chúng tôi không thể tìm được kết quả hợp với tìm kiếm của bạn")
+          ],
+        ),
+      );
+    } else {
+      return Container(
+        height: 62.1.h,
+        width: 500.h,
+        child: Padding(
+          padding: const EdgeInsets.all(4.0),
+          child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              itemCount: data.length,
+              itemBuilder: (context, index) {
+                return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => EventDetailScreen(
+                              id: data[index].id,
                             ),
-                            Container(
-                              width: 1.0.h,
-                            ),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.event,
-                                      size: 15,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      "Triễn lãm xe hơi ",
-                                      style: TextStyle(
-                                          fontWeight: AppConstant.titleBold,
-                                          fontSize: 16),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.timeline,
-                                      size: 15,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      "15h - 01/01/2000 ",
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
-                                    Icon(
-                                      Icons.people,
-                                      size: 15,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      "10 người",
-                                      style: TextStyle(fontSize: 15),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            )
-                          ],
-                        ),
-                        decoration: BoxDecoration(
-                            border: Border.all(width: 1),
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(1.0))),
-                      )));
-            }),
-      ),
-    );
+                          ));
+                    },
+                    child: Padding(
+                        padding: EdgeInsets.all(3),
+                        child: Container(
+                          height: 15.h,
+                          child: Row(
+                            children: [
+                              Column(
+                                children: [
+                                  Container(
+                                      width: 14.h,
+                                      height: 14.6.h,
+                                      decoration: new BoxDecoration(
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(2.0)),
+                                        shape: BoxShape.rectangle,
+                                        image: new DecorationImage(
+                                            fit: BoxFit.cover,
+                                            image: AssetImage(
+                                                "assets/images/slider_2.png")),
+                                      )),
+                                ],
+                              ),
+                              Container(
+                                width: 1.0.h,
+                              ),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(
+                                        Icons.event,
+                                        size: 15,
+                                        color: Colors.lightGreen,
+                                      ),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        data[index].title,
+                                        style: TextStyle(
+                                            fontWeight: AppConstant.titleBold,
+                                            fontSize: 16),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.timeline,
+                                          size: 15, color: Colors.lightGreen),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        data[index]
+                                                .startRegister
+                                                .substring(0, 10) +
+                                            " - " +
+                                            data[index]
+                                                .endRegister
+                                                .substring(0, 10),
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 10,
+                                  ),
+                                  Row(
+                                    children: [
+                                      Icon(Icons.people,
+                                          size: 15, color: Colors.lightGreen),
+                                      SizedBox(
+                                        width: 5,
+                                      ),
+                                      Text(
+                                        data[index]
+                                                .currentParticipants
+                                                .toString() +
+                                            " người",
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    children: [
+                                      SizedBox(
+                                        width: 17.h,
+                                      ),
+                                      Row(children: <Widget>[
+                                        Text(
+                                          "Xem chi tiết",
+                                          style: TextStyle(
+                                              color:
+                                                  AppConstant.backgroundColor,
+                                              fontStyle: FontStyle.italic),
+                                        ),
+                                        Icon(
+                                          Icons.view_carousel,
+                                          color: AppConstant.backgroundColor,
+                                        ),
+                                      ])
+                                    ],
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                          decoration: BoxDecoration(
+                              border: Border.all(width: 1),
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(1.0))),
+                        )));
+              }),
+        ),
+      );
+    }
   }
 }

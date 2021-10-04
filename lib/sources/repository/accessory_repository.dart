@@ -15,6 +15,11 @@ class AccessoryRepository {
     return accessoryApiProvider.getListAccessoryByName(name);
   }
 
+
+  //get list accessory by brand name
+  Future<List<Accessory>> getListAccessoryByBrandName(String name) {
+    return accessoryApiProvider.getListAccessoryByBrandName(name);
+  }
   //get accessory detail by id
   Future<Accessory> getAccessoryDetail(int id) {
     return accessoryApiProvider.getAccessoryDetail(id);

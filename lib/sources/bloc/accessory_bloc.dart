@@ -27,6 +27,12 @@ class AccessoryBloc {
         await accessoryRepository.getListAccessoryByName(name);
     _listAccessoryFetcher.sink.add(listAccessoryByName);
   }
+    //get list accessory by name
+  getListAccessoryByBrandName(String name) async {
+    List<Accessory> listAccessoryByBrandName =
+        await accessoryRepository.getListAccessoryByBrandName(name);
+    _listAccessoryFetcher.sink.add(listAccessoryByBrandName);
+  }
 
   //get accessory detail by id
   getAccessoryDetail(int id) async {

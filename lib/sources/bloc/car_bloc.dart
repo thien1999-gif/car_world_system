@@ -15,10 +15,16 @@ class CarBloc {
     _listCarFetcher.sink.add(listCar);
   }
 
-  //get list accessory by name
+  //get list car by name
   getListCarByName(String name) async {
     List<Car> listCarByName = await carRepository.getListCarByName(name);
     _listCarFetcher.sink.add(listCarByName);
+  }
+
+  //get list car by brand name
+  getListCarByBrandName(String brandName) async {
+    List<Car> listCarByBrandName = await carRepository.getListCarByBrandName(brandName);
+    _listCarFetcher.sink.add(listCarByBrandName);
   }
 
   //get car detail by id
