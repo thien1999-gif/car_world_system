@@ -276,12 +276,20 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
                                       SizedBox(
                                         width: 5,
                                       ),
-                                      Text(
-                                        data[index].name,
-                                        style: TextStyle(
-                                            fontWeight: AppConstant.titleBold,
-                                            fontSize: 16),
-                                      ),
+                                      Container(
+                                          child: Text(
+                                            data[index].name.length > 60
+                                                ? data[index]
+                                                        .name
+                                                        .substring(0, 57) +
+                                                    "..."
+                                                : data[index].name,
+                                            style: TextStyle(
+                                                fontWeight:
+                                                    AppConstant.titleBold,
+                                                fontSize: 15),
+                                          ),
+                                          width: 29.h)
                                     ],
                                   ),
                                   SizedBox(

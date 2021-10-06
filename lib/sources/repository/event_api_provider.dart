@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:car_world_system/sources/model/event.dart';
+import 'package:car_world_system/sources/model/listProposal.dart';
 import 'package:car_world_system/sources/model/proposal.dart';
 import 'package:car_world_system/sources/model/userEvent.dart';
 import 'package:car_world_system/sources/repository/event_api_string.dart';
@@ -137,13 +138,50 @@ class EventApiProvider {
     if (response.statusCode == 200) {
       print("thanh cong");
 
-      
-      return UserEvent.fromJson(jsonDecode(response.body)); 
+      return UserEvent.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 CREATED response,
       // then throw an exception.
-      
+
       throw Exception('Failed to user register event.');
+    }
+  }
+
+  //ge list proposal of user
+  Future<List<ListProposal>> getListProposalOfUser(int id) async {
+    final response = await http.get(EventApiString.getListProposalOfUser(id));
+    List<ListProposal> listProposal = [];
+    var jsonData = jsonDecode(response.body);
+    for (var data in jsonData) {
+      ListProposal proposal = ListProposal(
+          id: data['Id'],
+          userId: data['UserId'],
+          type: data['Type'],
+          title: data['Title'],
+          description: data['Description'],
+          venue: data['Venue'],
+          image: data['Image'],
+          minParticipants: data['MinParticipants'],
+          maxParticipants: data['MaxParticipants'],
+          startDate: data['StartDate'],
+          endDate: data['EndDate'],
+          status: data['Status'],
+          createdDate: data['CreatedDate'],
+          modifiedDate: data['ModifiedDate'],
+          managerId: data['ManagerId'],
+          reason: data['Reason']);
+      listProposal.add(proposal);
+      // }
+    }
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON
+      return listProposal;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load list proposal of user');
     }
   }
 }

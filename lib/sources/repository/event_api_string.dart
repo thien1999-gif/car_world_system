@@ -30,6 +30,11 @@ class EventApiString {
   static String registerEvent() {
     return BASE_URL + '/api/userEvent/RegisterEvent';
   }
+  //get list proposal of user send for manager
+  //https://carworld.cosplane.asia/api/proposal/GetProposalsUserSubmited?userId=18
+  static String getListProposalOfUser(int id) {
+    return BASE_URL + '/api/proposal/GetProposalsUserSubmited?userId=$id';
+  }
 }
 
 // https://carworld.cosplane.asia/api/userEvent/CancelRegisterEvent

@@ -148,8 +148,10 @@ class _EventScreenState extends State<EventScreen> {
                                         shape: BoxShape.rectangle,
                                         image: new DecorationImage(
                                             fit: BoxFit.cover,
-                                            image: AssetImage(
-                                                "assets/images/slider_2.png")),
+                                            image: NetworkImage(data[index]
+                                                .image
+                                                .split("|")
+                                                .elementAt(0))),
                                       )),
                                 ],
                               ),
@@ -172,12 +174,21 @@ class _EventScreenState extends State<EventScreen> {
                                       SizedBox(
                                         width: 5,
                                       ),
-                                      Text(
-                                        data[index].title,
-                                        style: TextStyle(
-                                            fontWeight: AppConstant.titleBold,
-                                            fontSize: 16),
-                                      ),
+                                      Container(
+                                          child: Text(
+                                            data[index].title.length > 30
+                                                ? data[index]
+                                                        .title
+                                                        .substring(0, 28) +
+                                                    "..."
+                                                : data[index].title,
+                                            style: TextStyle(
+                                                fontWeight:
+                                                    AppConstant.titleBold,
+                                                fontSize: 15),
+                                          ),
+                                          width: 29.h)
+                                      
                                     ],
                                   ),
                                   SizedBox(
