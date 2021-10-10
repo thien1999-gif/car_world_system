@@ -3,6 +3,7 @@ import 'package:car_world_system/sources/bloc/event_bloc.dart';
 import 'package:car_world_system/sources/model/event.dart';
 import 'package:car_world_system/sources/ui/main/home/event_detail_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 class EventScreen extends StatefulWidget {
@@ -18,8 +19,8 @@ class _EventScreenState extends State<EventScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: ListView(
-        children: [
+        body: ListView(
+      children: [
         Row(
           children: [
             SizedBox(
@@ -59,8 +60,10 @@ class _EventScreenState extends State<EventScreen> {
   }
 
   Widget loadListEvent() {
+    DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    String now = dateFormat.format(DateTime.now());
     if (sortEvent == "Mới nhất") {
-      eventBloc.getListNewEvent();
+      eventBloc.getListNewEvent(now);
       return StreamBuilder(
           stream: eventBloc.listEvent,
           builder: (context, AsyncSnapshot<List<Event>> snapshot) {
@@ -72,7 +75,7 @@ class _EventScreenState extends State<EventScreen> {
             return Center(child: CircularProgressIndicator());
           });
     } else {
-      eventBloc.getListSignificantEvent();
+      eventBloc.getListSignificantEvent(now);
       return StreamBuilder(
           stream: eventBloc.listEvent,
           builder: (context, AsyncSnapshot<List<Event>> snapshot) {
@@ -188,7 +191,6 @@ class _EventScreenState extends State<EventScreen> {
                                                 fontSize: 15),
                                           ),
                                           width: 29.h)
-                                      
                                     ],
                                   ),
                                   SizedBox(

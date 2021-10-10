@@ -60,8 +60,10 @@ class _ContestScreenState extends State<ContestScreen> {
   }
 
   Widget loadListContest() {
+     DateFormat dateFormat = DateFormat("yyyy-MM-dd HH:mm:ss");
+    String now = dateFormat.format(DateTime.now());
     if (sortEvent == "Mới nhất") {
-      contestBloc.getListNewContest();
+      contestBloc.getListNewContest(now);
       return StreamBuilder(
           stream: contestBloc.listContest,
           builder: (context, AsyncSnapshot<List<Contest>> snapshot) {
@@ -73,7 +75,7 @@ class _ContestScreenState extends State<ContestScreen> {
             return Center(child: CircularProgressIndicator());
           });
     } else {
-      contestBloc.getListSignficantContest();
+      contestBloc.getListSignficantContest(now);
       return StreamBuilder(
           stream: contestBloc.listContest,
           builder: (context, AsyncSnapshot<List<Contest>> snapshot) {

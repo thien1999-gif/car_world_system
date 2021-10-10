@@ -7,8 +7,8 @@ import 'package:http/http.dart' as http;
 
 class ContestApiProvider {
   // get all new contest
-  Future<List<Contest>> getListNewContest() async {
-    final response = await http.get(ContestApiString.getListNewEvent());
+  Future<List<Contest>> getListNewContest(String now) async {
+    final response = await http.get(ContestApiString.getListNewEvent(now));
     List<Contest> listContest = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
@@ -47,8 +47,8 @@ class ContestApiProvider {
   }
 
 // get all significant contest
-  Future<List<Contest>> getListSignificantContest() async {
-    final response = await http.get(ContestApiString.getListSignificantEvent());
+  Future<List<Contest>> getListSignificantContest(String now) async {
+    final response = await http.get(ContestApiString.getListSignificantEvent(now));
     List<Contest> listContest = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
@@ -101,7 +101,7 @@ class ContestApiProvider {
   }
 
   //register contest
-  Future<UserContest> registerContest(UserContest userContest) async {
+  Future<bool> registerContest(UserContest userContest) async {
     final response = await http.post(
       ContestApiString.registerContest(),
       headers: <String, String>{
@@ -110,14 +110,13 @@ class ContestApiProvider {
       body: json.encode(userContest),
     );
     if (response.statusCode == 200) {
-      print("thanh cong");
+      print("thanh cong dang ký cuoc thi");
 
-      print(response.body);
-      return UserContest.fromJson(jsonDecode(response.body)); 
+      return true;
     } else {
       // If the server did not return a 200 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to user register contest.');
+      return false;
     }
   }
 }

@@ -4,6 +4,7 @@ import 'package:car_world_system/sources/model/listProposal.dart';
 import 'package:car_world_system/sources/model/userProfile.dart';
 import 'package:car_world_system/sources/repository/login_repository.dart';
 import 'package:car_world_system/sources/ui/login/login_screen.dart';
+import 'package:car_world_system/sources/ui/main/drawer/proposal/proposal_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -95,18 +96,31 @@ class _ManagerProposalScreenState extends State<ManagerProposalScreen> {
             itemCount: data.length,
             itemBuilder: (context, index) {
               return GestureDetector(
-                  onTap: () {},
+                  onTap: () {
+                    if (data[index].status == 1) {
+                      SnackBar snackbar = SnackBar(
+                          content: Text('Đang trong quá trình xử lý.'));
+                      ScaffoldMessenger.of(context).showSnackBar(snackbar);
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) =>
+                                ProposalDetailScreen(id: data[index].id),
+                          ));
+                    }
+                  },
                   child: Padding(
                       padding: EdgeInsets.all(3),
                       child: Container(
-                        height: 22.h,
+                        height: 20.h,
                         child: Row(
                           children: [
                             Column(
                               children: [
                                 Container(
                                     width: 14.h,
-                                    height: 21.5.h,
+                                    height: 19.5.h,
                                     decoration: new BoxDecoration(
                                       borderRadius: BorderRadius.all(
                                           Radius.circular(2.0)),
@@ -185,23 +199,6 @@ class _ManagerProposalScreenState extends State<ManagerProposalScreen> {
                                 ),
                                 Row(
                                   children: [
-                                    Icon(Icons.location_on,
-                                        size: 15, color: Colors.lightGreen),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      data[index].venue,
-                                      style: TextStyle(fontSize: 15),
-                                      maxLines: 2,
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(
-                                  height: 10,
-                                ),
-                                Row(
-                                  children: [
                                     Icon(Icons.query_stats_outlined,
                                         size: 15, color: Colors.lightGreen),
                                     SizedBox(
@@ -244,28 +241,25 @@ class _ManagerProposalScreenState extends State<ManagerProposalScreen> {
                                 SizedBox(
                                   height: 10,
                                 ),
-                                Container(
-                                    child: (data[index].status == 3)
-                                        ? Row(
-                                            children: [
-                                              Text(
-                                                "Lí do: ",
-                                                style: TextStyle(
-                                                    color: Colors.red),
-                                              ),
-                                              SizedBox(
-                                                width: 5,
-                                              ),
-                                              Text(
-                                                data[index].reason,
-                                                style: TextStyle(
-                                                    fontSize: 15,
-                                                    color: Colors.red),
-                                                maxLines: 2,
-                                              ),
-                                            ],
-                                          )
-                                        : Container()),
+                                Row(
+                                  children: [
+                                    SizedBox(
+                                      width: 17.h,
+                                    ),
+                                    Row(children: <Widget>[
+                                      Text(
+                                        "Xem chi tiết",
+                                        style: TextStyle(
+                                            color: AppConstant.backgroundColor,
+                                            fontStyle: FontStyle.italic),
+                                      ),
+                                      Icon(
+                                        Icons.view_carousel,
+                                        color: AppConstant.backgroundColor,
+                                      ),
+                                    ])
+                                  ],
+                                ),
                               ],
                             )
                           ],

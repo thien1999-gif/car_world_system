@@ -2,15 +2,15 @@ const String BASE_URL = "https://carworld.cosplane.asia";
 
 class ContestApiString {
   //get all new contest
-  //https://carworld.cosplane.asia/api/contest/GetAllNewContests
-  static String getListNewEvent() {
-    return BASE_URL + '/api/contest/GetAllNewContests';
+  //https://carworld.cosplane.asia/api/contest/GetNewContests?now=2021-10-10T05%3A02%3A29.429Z
+  static String getListNewEvent(String now) {
+    return BASE_URL + '/api/contest/GetNewContests?now=$now';
   }
 
   //get all significant contest
-  //https://carworld.cosplane.asia/api/contest/GetAllSignificantContests
-  static String getListSignificantEvent() {
-    return BASE_URL + '/api/contest/GetAllSignificantContests';
+  //https://carworld.cosplane.asia/api/contest/GetSignificantContests?now=2021-10-10T05%3A02%3A29.429Z
+  static String getListSignificantEvent(String now) {
+    return BASE_URL + '/api/contest/GetSignificantContests?now=$now';
   }
 
   //get contest detail

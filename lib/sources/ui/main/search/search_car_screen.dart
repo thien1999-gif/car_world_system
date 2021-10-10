@@ -22,6 +22,13 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
     getProvince();
   }
 
+  // @override
+  // void dispose() {
+  //    getProvince();
+  //   super.dispose();
+   
+  // }
+
   String _baseUrl = "https://carworld.cosplane.asia/api/brand/GetAllBrands";
   String? _valProvince;
   List<dynamic> _dataProvince = [];

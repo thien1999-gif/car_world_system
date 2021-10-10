@@ -15,7 +15,7 @@ class TabbarExchangeScreen extends StatefulWidget {
 class _TabbarExchangeScreenState extends State<TabbarExchangeScreen> {
   void initState() {
     super.initState();
-    _showDialog();
+    // _showDialog();
   }
 
   _showDialog() async {

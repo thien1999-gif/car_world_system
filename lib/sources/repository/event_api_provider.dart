@@ -1,16 +1,20 @@
 import 'dart:convert';
 
+import 'package:car_world_system/sources/model/cancel_register_event.dart';
 import 'package:car_world_system/sources/model/event.dart';
+import 'package:car_world_system/sources/model/event_register.dart';
+import 'package:car_world_system/sources/model/feedback.dart';
 import 'package:car_world_system/sources/model/listProposal.dart';
 import 'package:car_world_system/sources/model/proposal.dart';
+import 'package:car_world_system/sources/model/proposal_detail.dart';
 import 'package:car_world_system/sources/model/userEvent.dart';
 import 'package:car_world_system/sources/repository/event_api_string.dart';
 import 'package:http/http.dart' as http;
 
 class EventApiProvider {
   // get all new event
-  Future<List<Event>> getListNewEvent() async {
-    final response = await http.get(EventApiString.getListNewEvent());
+  Future<List<Event>> getListNewEvent(String now) async {
+    final response = await http.get(EventApiString.getListNewEvent(now));
     List<Event> listEvent = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
@@ -48,8 +52,9 @@ class EventApiProvider {
   }
 
   // get all significant event
-  Future<List<Event>> getListSignificantEvent() async {
-    final response = await http.get(EventApiString.getListSignnificantEvent());
+  Future<List<Event>> getListSignificantEvent(String now) async {
+    final response =
+        await http.get(EventApiString.getListSignnificantEvent(now));
     List<Event> listEvent = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
@@ -86,22 +91,8 @@ class EventApiProvider {
     }
   }
 
-  //get event detail by id
-  Future<Event> getEventDetail(int id) async {
-    final response = await http.get(EventApiString.getEventDetail(id));
-    if (response.statusCode == 200) {
-      // If the server did return a 200 OK response,
-      // then parse the JSON
-      return Event.fromJson(jsonDecode(response.body));
-    } else {
-      // If the server did not return a 200 OK response,
-      // then throw an exception.
-      throw Exception('Failed to load event detail');
-    }
-  }
-
   //create proposal
-  Future<Proposal> createProposal(Proposal proposal) async {
+  Future<bool> createProposal(Proposal proposal) async {
     final response = await http.post(
       EventApiString.createProposal(),
       headers: <String, String>{
@@ -110,24 +101,17 @@ class EventApiProvider {
       body: json.encode(proposal),
     );
     if (response.statusCode == 200) {
-      print("thanh cong");
-
-      // final Map<String, dynamic> data = json.decode(response.body);
-
-      // Proposal responseProposal = Proposal.fromJson(data);
-
-      // return responseProposal;
-      print(response.body);
-      return Proposal.fromJson(jsonDecode(response.body)); // có lỗi chỗ này
+      print("thanh cong tao proposal");
+      return true;
     } else {
       // If the server did not return a 200 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to create proposal.');
+      return false;
     }
   }
 
   //register event
-  Future<UserEvent> registerEvent(UserEvent userEvent) async {
+  Future<bool> registerEvent(UserEvent userEvent) async {
     final response = await http.post(
       EventApiString.registerEvent(),
       headers: <String, String>{
@@ -135,15 +119,78 @@ class EventApiProvider {
       },
       body: json.encode(userEvent),
     );
-    if (response.statusCode == 200) {
-      print("thanh cong");
 
-      return UserEvent.fromJson(jsonDecode(response.body));
+    if (response.statusCode == 200) {
+      print("thanh cong đăng ký sự kiện");
+      return true;
     } else {
       // If the server did not return a 200 CREATED response,
       // then throw an exception.
 
-      throw Exception('Failed to user register event.');
+      return false;
+    }
+  }
+
+  //user rating event
+  Future<bool> ratingEvent(double rate, UserEvent userEvent) async {
+    final response = await http.put(
+      EventApiString.ratingEvent(rate),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(userEvent),
+    );
+
+    if (response.statusCode == 200) {
+      print("thanh cong đánh giá sự kiện");
+      return true;
+    } else {
+      // If the server did not return a 200 CREATED response,
+      // then throw an exception.
+
+      return false;
+    }
+  }
+  //user feed event
+  Future<bool> feedbackEvent(int id, FeedBack feedBack) async {
+    final response = await http.post(
+      EventApiString.feedbackEvent(id),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(feedBack),
+    );
+
+    if (response.statusCode == 200) {
+      print("thanh cong gửi feedback sự kiện");
+      return true;
+    } else {
+      // If the server did not return a 200 CREATED response,
+      // then throw an exception.
+
+      return false;
+    }
+  }
+
+  //cancel event
+  Future<bool> cancelEvent(CancelRegisterEvent userEvent) async {
+    final response = await http.put(
+      EventApiString.cancelEvent(),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(userEvent),
+    );
+    print("vao ham huy");
+    print("code" + response.statusCode.toString());
+    if (response.statusCode == 200) {
+      print("thanh cong hủy tham gia sự kiện");
+      return true;
+    } else {
+      // If the server did not return a 200 CREATED response,
+      // then throw an exception.
+
+      return false;
     }
   }
 
@@ -182,6 +229,84 @@ class EventApiProvider {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load list proposal of user');
+    }
+  }
+
+  //get list event user register
+  Future<List<EventRegister>> getListEventUserRegister(int id) async {
+    final response =
+        await http.get(EventApiString.getListEventUserRegister(id));
+    List<EventRegister> listEvent = [];
+    var jsonData = jsonDecode(response.body);
+    for (var data in jsonData) {
+      //if (data['IsDeleted'] == false) {
+      //sử dung kiểu này khi có object ở trong json
+      EventRegister eventRegister = EventRegister.fromJson(data);
+      listEvent.add(eventRegister);
+      // }
+    }
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON
+      return listEvent;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load list event user register');
+    }
+  }
+
+  //get list event user joined
+  Future<List<EventRegister>> getListEventUserJoined(int id) async {
+    final response = await http.get(EventApiString.getListEventUserJoined(id));
+    List<EventRegister> listEvent = [];
+    var jsonData = jsonDecode(response.body);
+    for (var data in jsonData) {
+      //if (data['IsDeleted'] == false) {
+      //sử dung kiểu này khi có object ở trong json
+      EventRegister eventRegister = EventRegister.fromJson(data);
+      listEvent.add(eventRegister);
+      // }
+    }
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON
+      return listEvent;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load list event user joined');
+    }
+  }
+
+  //get event detail by id
+  Future<Event> getEventDetail(int id) async {
+    final response = await http.get(EventApiString.getEventDetail(id));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON
+      return Event.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load event detail');
+    }
+  }
+
+  //get proposal detail by id
+  Future<ProposalDetail> getProposalDetail(int id) async {
+    final response = await http.get(EventApiString.getProposalDetail(id));
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON
+      return ProposalDetail.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load proposal detail');
     }
   }
 }

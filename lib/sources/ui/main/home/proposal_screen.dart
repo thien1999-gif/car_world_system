@@ -603,9 +603,14 @@ class _ProposalScreenState extends State<ProposalScreen> {
                                           EventRepository eventRepository =
                                               EventRepository();
                                           eventRepository
-                                              .createProposal(proposal)
-                                              .then((value) =>
-                                                  {Navigator.pop(context)});
+                                              .createProposal(proposal);
+                                          SnackBar snackbar = SnackBar(
+                                              content: Text(
+                                                  'Ý tưởng của bạn đã gửi thành công và đang được xử lý'));
+                                          ScaffoldMessenger.of(context)
+                                              .showSnackBar(snackbar);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
 
                                           //Navigator.pop(context);
                                         },

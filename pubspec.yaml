@@ -52,6 +52,8 @@ dependencies:
   intl: ^0.16.1
   expandable: ^5.0.1
   flutter_datetime_picker: ^1.4.0
+  # momo_vn: ^2.0.1
+  fluttertoast: ^8.0.8
 
 dev_dependencies:
   flutter_test:

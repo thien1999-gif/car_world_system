@@ -1,32 +1,36 @@
 import 'package:car_world_system/constant/app_constant.dart';
-import 'package:car_world_system/sources/bloc/contest_bloc.dart';
-import 'package:car_world_system/sources/model/contest.dart';
-import 'package:car_world_system/sources/model/userContest.dart';
-import 'package:car_world_system/sources/model/userProfile.dart';
-import 'package:car_world_system/sources/repository/contest_repository.dart';
-import 'package:car_world_system/sources/repository/login_repository.dart';
-import 'package:car_world_system/sources/ui/login/login_screen.dart';
-// import 'package:car_world_system/sources/ui/main/home/payment.dart';
+import 'package:car_world_system/sources/bloc/event_bloc.dart';
+import 'package:car_world_system/sources/model/cancel_register_event.dart';
+import 'package:car_world_system/sources/model/event.dart';
+import 'package:car_world_system/sources/repository/event_repository.dart';
+import 'package:car_world_system/sources/ui/main/drawer/event/manager_event_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
-import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
-class ContestDetailScreen extends StatefulWidget {
-  final int id;
-  const ContestDetailScreen({Key? key, required this.id}) : super(key: key);
+class EventRegisteredDetailScreen extends StatefulWidget {
+  final int eventID, userID, eventStatus;
+  const EventRegisteredDetailScreen(
+      {Key? key,
+      required this.eventID,
+      required this.userID,
+      required this.eventStatus})
+      : super(key: key);
 
   @override
-  _ContestDetailScreenState createState() => _ContestDetailScreenState(id);
+  _EventRegisteredDetailScreenState createState() =>
+      _EventRegisteredDetailScreenState(eventID, userID, eventStatus);
 }
 
-class _ContestDetailScreenState extends State<ContestDetailScreen> {
-  final int id;
-  UserProfile? _profile;
+class _EventRegisteredDetailScreenState
+    extends State<EventRegisteredDetailScreen> {
+  final int eventID, userID, eventStatus;
   bool _enable = true;
   var now = DateTime.now(); // lay ngày hiện hành
-  final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
-  var startDateConvert;
+  var endDateConvert;
+
+  _EventRegisteredDetailScreenState(
+      this.eventID, this.userID, this.eventStatus);
   DateTime convertDateFromString(String strDate) {
     DateTime todayDate = DateTime.parse(strDate);
     print(todayDate);
@@ -36,50 +40,38 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
   @override
   void initState() {
     super.initState();
-    getProfile();
-    contestBloc.getContestDetail(id);
+
+    eventBloc.getEventDetail(eventID);
   }
 
-  void getProfile() async {
-    // LoginApiProvider user = new LoginApiProvider();
-    LoginRepository loginRepository = LoginRepository();
-    var profile = await loginRepository.getProfile(email);
-    setState(() {
-      _profile = profile;
-    });
-  }
-
-  _ContestDetailScreenState(this.id);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: Text("Chi tiết cuộc thi"),
-          backgroundColor: AppConstant.backgroundColor,
-          centerTitle: true,
-        ),
-        body: StreamBuilder(
-            stream: contestBloc.contestDetail,
-            builder: (context, AsyncSnapshot<Contest> snapshot) {
-              if (snapshot.hasData) {
-                return _buildContestDetail(snapshot.data!);
-              } else if (snapshot.hasError) {
-                return Text(snapshot.error.toString());
-              }
-              return Center(child: CircularProgressIndicator());
-            }));
+      appBar: AppBar(
+        title: Text("Chi tiết sự kiện"),
+        backgroundColor: AppConstant.backgroundColor,
+        centerTitle: true,
+      ),
+      body: StreamBuilder(
+          stream: eventBloc.eventDetail,
+          builder: (context, AsyncSnapshot<Event> snapshot) {
+            if (snapshot.hasData) {
+              return _buildEventDetail(snapshot.data!);
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            return Center(child: CircularProgressIndicator());
+          }),
+    );
   }
 
-  Widget _buildContestDetail(Contest data) {
+  Widget _buildEventDetail(Event data) {
     var imageListUrl = data.image.split("|");
-    startDateConvert = convertDateFromString(data.startRegister);
+    endDateConvert = convertDateFromString(data.endRegister);
 
-    int checkDate = now.compareTo(startDateConvert);
-    print("////");
-    print(now.toString());
-    print(startDateConvert.toString());
-    print(checkDate.toString());
-    if (checkDate < 0) {
+    int checkDate = now.compareTo(endDateConvert);
+
+    if (checkDate > 0) {
       _enable = false;
     } else {
       _enable = true;
@@ -90,21 +82,21 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
     return ListView(
       children: [
         ImageSlideshow(
-            width: double.infinity,
-            height: 200,
-            initialPage: 0,
-            indicatorColor: Colors.blue,
-            indicatorBackgroundColor: Colors.grey,
-            autoPlayInterval: 5000,
-            isLoop: true,
-            children: [
-              for (int i = 0; i < imageListUrl.length - 1; i++)
-                Image(
-                  image: NetworkImage(imageListUrl[i]),
-                  fit: BoxFit.cover,
-                ),
-            ],
-          ),
+          width: double.infinity,
+          height: 200,
+          initialPage: 0,
+          indicatorColor: Colors.blue,
+          indicatorBackgroundColor: Colors.grey,
+          autoPlayInterval: 5000,
+          isLoop: true,
+          children: [
+            for (int i = 0; i < imageListUrl.length - 1; i++)
+              Image(
+                image: NetworkImage(imageListUrl[i]),
+                fit: BoxFit.cover,
+              ),
+          ],
+        ),
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Text(
@@ -112,30 +104,13 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
             style: TextStyle(fontWeight: AppConstant.titleBold, fontSize: 23),
           ),
         ),
-        Padding(
-          padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-          child: Row(
-            children: [
-              Text(
-                "Phí tham gia: ",
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue,
-                    fontSize: 18),
-              ),
-              Text('${formatCurrency.format(data.fee)} VNĐ',
-                  style: TextStyle(
-                      fontSize: 18,
-                      color: Colors.red,
-                      fontWeight: FontWeight.bold))
-            ],
-          ),
-        ),
         Container(
             padding: EdgeInsets.only(left: 1.h),
-            child: (_enable)
-                ? Text("")
+            child: (eventStatus != 2)
+                ? Container(
+                    width: 0,
+                    height: 0,
+                  )
                 : Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.start,
@@ -145,7 +120,28 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
                         style: TextStyle(color: Colors.red, fontSize: 17),
                       ),
                       Text(
-                        "Vì chưa đến thời gian đăng kí tham gia nên bạn có thể đăng kí sau. ",
+                        "Bạn đã hủy tham gia sự kiện nên không thể hủy lần nữa",
+                        style: TextStyle(color: Colors.red, fontSize: 15),
+                      )
+                    ],
+                  )),
+        Container(
+            padding: EdgeInsets.only(left: 1.h),
+            child: (_enable)
+                ? Container(
+                    width: 0,
+                    height: 0,
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Lưu ý *** ",
+                        style: TextStyle(color: Colors.red, fontSize: 17),
+                      ),
+                      Text(
+                        "Vì đã qua thời gian đăng ký sự kiện nên bạn không thể hủy tham gia. ",
                         style: TextStyle(color: Colors.red, fontSize: 15),
                       )
                     ],
@@ -279,16 +275,15 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
                 ),
               ],
             )),
-
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Text(
             "Địa điểm tổ chức",
             style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                      fontSize: 18),
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+                fontSize: 18),
           ),
         ),
         Padding(
@@ -304,10 +299,10 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
           child: Text(
             "Mô tả",
             style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                      fontSize: 18),
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+                fontSize: 18),
           ),
         ),
         Padding(
@@ -321,31 +316,31 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
         Row(
           children: [
             SizedBox(
-              width: 32.0.h,
+              width: 35.0.h,
             ),
             RaisedButton(
               color: AppConstant.backgroundColor,
               child: Row(
                 children: [
                   Icon(
-                    Icons.check,
-                     color:  Colors.white,
+                    Icons.cancel,
+                    color: Colors.white,
                   ),
                   SizedBox(width: 5),
                   Text(
-                    "Tham gia",
-                     style: TextStyle(color: Colors.white),
+                    "Hủy",
+                    style: TextStyle(color: Colors.white),
                   )
                 ],
               ),
-              onPressed: _enable
+              onPressed: _enable && eventStatus != 2
                   ? () {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
                           title: Text('Xác nhận'),
-                          content:
-                              Text('Bạn có muốn tham gia sự kiện này không ?'),
+                          content: Text(
+                              'Bạn có muốn hủy tham gia sự kiện này không ?'),
                           actions: <Widget>[
                             FlatButton(
                                 onPressed: () {
@@ -356,24 +351,19 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
                                 color: AppConstant.backgroundColor),
                             FlatButton(
                                 onPressed: () {
-                                  int userID = _profile!.id;
-                                  int contestID = data.id;
-                                  UserContest userContest = UserContest(
-                                      contestId: contestID, userId: userID);
-                                  ContestRepository contestRepository =
-                                      ContestRepository();
-                                  contestRepository.registerContest(userContest);
-                                  SnackBar snackbar = SnackBar(
-                                      content: Text('Đăng ký thành công'));
+                                  CancelRegisterEvent cancelRegisterEvent =
+                                      CancelRegisterEvent(
+                                          eventId: eventID, userId: userID);
+                                  EventRepository eventRepository =
+                                      EventRepository();
+                                  eventRepository
+                                      .cancelEvent(cancelRegisterEvent);
+                                  SnackBar snackbar =
+                                      SnackBar(content: Text('Hủy thành công'));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackbar);
-                                      Navigator.pop(context);
-                                       Navigator.pop(context);
-                                  // Navigator.push(
-                                  //     context,
-                                  //     MaterialPageRoute(
-                                  //       builder: (context) => PayMent(),
-                                  //     ));
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
                                 },
                                 child: Text('Có',
                                     style: TextStyle(color: Colors.white)),

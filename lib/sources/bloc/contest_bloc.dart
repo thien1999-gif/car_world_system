@@ -11,15 +11,15 @@ class ContestBloc {
   Observable<List<Contest>> get listContest => _listContestFetcher.stream;
   Observable<Contest> get contestDetail => _contestDetailFetcher.stream;
   //get list new contest
-  getListNewContest() async {
-    List<Contest> listContest = await contestRepository.getListNewContest();
+  getListNewContest(String now) async {
+    List<Contest> listContest = await contestRepository.getListNewContest(now);
     _listContestFetcher.sink.add(listContest);
   }
 
   //get list significant contest
-  getListSignficantContest() async {
+  getListSignficantContest(String now) async {
     List<Contest> listContest =
-        await contestRepository.getListSignficantContest();
+        await contestRepository.getListSignficantContest(now);
     _listContestFetcher.sink.add(listContest);
   }
 

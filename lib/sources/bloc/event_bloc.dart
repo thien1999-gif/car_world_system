@@ -1,5 +1,7 @@
 import 'package:car_world_system/sources/model/event.dart';
+import 'package:car_world_system/sources/model/event_register.dart';
 import 'package:car_world_system/sources/model/listProposal.dart';
+import 'package:car_world_system/sources/model/proposal_detail.dart';
 import 'package:car_world_system/sources/repository/event_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -7,21 +9,26 @@ class EventBloc {
   final EventRepository eventRepository = EventRepository();
 
   final _listEventFetcher = PublishSubject<List<Event>>();
+  final _listEventRegisterFetcher = PublishSubject<List<EventRegister>>();
   final _listProposalOfUserFetcher = PublishSubject<List<ListProposal>>();
   final _eventDetailFetcher = PublishSubject<Event>();
+  final _proposalDetailFetcher = PublishSubject<ProposalDetail>();
+
 
   Observable<List<Event>> get listEvent => _listEventFetcher.stream;
+  Observable<List<EventRegister>> get listEventRegister => _listEventRegisterFetcher.stream;
   Observable<List<ListProposal>> get listProposalOfUser => _listProposalOfUserFetcher.stream;
   Observable<Event> get eventDetail => _eventDetailFetcher.stream;
+   Observable<ProposalDetail> get proposalDetail => _proposalDetailFetcher.stream;
   //get list new event
-  getListNewEvent() async {
-    List<Event> listEvent = await eventRepository.getListNewEvent();
+  getListNewEvent(String now) async {
+    List<Event> listEvent = await eventRepository.getListNewEvent(now);
     _listEventFetcher.sink.add(listEvent);
   }
 
   //get list significant event
-  getListSignificantEvent() async {
-    List<Event> listEvent = await eventRepository.getListSignificantEvent();
+  getListSignificantEvent(String now) async {
+    List<Event> listEvent = await eventRepository.getListSignificantEvent(now);
     _listEventFetcher.sink.add(listEvent);
   }
 
@@ -30,16 +37,35 @@ class EventBloc {
     List<ListProposal> listProposal = await eventRepository.getListProposalOfUser(id);
     _listProposalOfUserFetcher.sink.add(listProposal);
   }
+
+  //get list event user register
+  getListEventUserRegister(int id) async {
+    List<EventRegister> listEventRegister = await eventRepository.getListEventUserRegister(id);
+    _listEventRegisterFetcher.sink.add(listEventRegister);
+  }
+
+    //get list event user joined
+  getListEventUserJoined(int id) async {
+    List<EventRegister> listEventRegister = await eventRepository.getListEventUserJoined(id);
+    _listEventRegisterFetcher.sink.add(listEventRegister);
+  }
   //get event detail by id
   getEventDetail(int id) async {
     Event eventDetail = await eventRepository.getEventDetail(id);
     _eventDetailFetcher.sink.add(eventDetail);
   }
+    //get proposal detail by id
+  getProposalDetail(int id) async {
+    ProposalDetail proposalDetail = await eventRepository.getProposalDetail(id);
+    _proposalDetailFetcher.sink.add(proposalDetail);
+  }
 
   dispose() {
     _listEventFetcher.close();
+    _listEventRegisterFetcher.close();
     _eventDetailFetcher.close();
     _listProposalOfUserFetcher.close();
+    _proposalDetailFetcher.close();
   }
 }
 

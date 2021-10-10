@@ -59,7 +59,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               ),
             ),
             ListTile(
-              leading: Icon(Icons.event),
+              leading: Icon(Icons.event,color: Colors.lightGreen,),
               title: Text("Sự kiện đã tham gia và đăng ký"),
               onTap: () {
                 Navigator.push(
@@ -70,7 +70,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.sports_kabaddi),
+              leading: Icon(Icons.sports_kabaddi,color: Colors.lightGreen,),
               title: Text("Cuộc thi đã tham gia và đăng ký"),
               onTap: () {
                 Navigator.push(
@@ -81,7 +81,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.note_add),
+              leading: Icon(Icons.note_add,color: Colors.lightGreen,),
               title: Text("Ý tưởng đã gửi"),
               onTap: () {
                 Navigator.push(
@@ -92,7 +92,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.history),
+              leading: Icon(Icons.history,color: Colors.lightGreen,),
               title: Text("Lịch sử trao đổi"),
               onTap: () {
                 Navigator.push(
@@ -103,7 +103,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.manage_search),
+              leading: Icon(Icons.manage_search,color: Colors.lightGreen,),
               title: Text("Quản lý bài đăng"),
               onTap: () {
                 Navigator.push(
@@ -114,7 +114,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
               },
             ),
             ListTile(
-              leading: Icon(Icons.logout),
+              leading: Icon(Icons.logout,color: Colors.lightGreen,),
               title: Text("Đăng xuất"),
               onTap: () {
                 GoogleSingInProvider.signOutGoogle();
