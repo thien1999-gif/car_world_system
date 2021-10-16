@@ -1,5 +1,6 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/ui/main/exchange/exchange_car_detail_screen.dart';
+import 'package:car_world_system/sources/ui/main/exchange/tabbar_exchange.dart';
 import 'package:flutter/material.dart';
 import 'package:sizer/sizer.dart';
 
@@ -20,6 +21,8 @@ class _ExchangeCarScreenState extends State<ExchangeCarScreen> {
     return Scaffold(
       body: ListView(
         children: [
+          // Text("kink dộ: " + longitude.toString()),
+          //   Text("vi dộ: " + latitude.toString()),
           SizedBox(
             height: 1.h,
           ),

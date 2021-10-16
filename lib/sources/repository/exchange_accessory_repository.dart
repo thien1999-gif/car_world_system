@@ -1,10 +1,55 @@
+import 'package:car_world_system/sources/model/create_exchange_accessory.dart';
+import 'package:car_world_system/sources/model/create_exchange_car.dart';
 import 'package:car_world_system/sources/model/exchange_accessory.dart';
+import 'package:car_world_system/sources/model/exchange_car.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_api_provider.dart';
 
-class ExchangeAccessoryRepository{
-  ExchangeAccessoryApiProvider exchangeAccessoryApiProvider = ExchangeAccessoryApiProvider();
-  //create proposal
-   Future<bool>createExchangeAccessory(ExchangeAccessory exchangeAccessory) {
-    return exchangeAccessoryApiProvider.createExchangeAccessory(exchangeAccessory);
+class ExchangeAccessoryRepository {
+  ExchangeAccessoryApiProvider exchangeAccessoryApiProvider =
+      ExchangeAccessoryApiProvider();
+  //create exchange accessory
+  Future<bool> createExchangeAccessory(
+      CreateExchangeAccessory exchangeAccessory) {
+    return exchangeAccessoryApiProvider
+        .createExchangeAccessory(exchangeAccessory);
+  }
+
+  //get all exchange accessory by user id
+  Future<List<ExchangeAccessory>> getAllExchangeAccessoryByUserID(int id) {
+    return exchangeAccessoryApiProvider.getListExchangeAccesoryByUserID(id);
+  }
+
+  //get detail exchange accessory
+  Future<ExchangeAccessory> getDetailExchangeAccessory(String id) {
+    return exchangeAccessoryApiProvider.getExchangeAccessoryDetail(id);
+  }
+
+    //cancel exchange accessory
+  Future<bool> cancelExchangeAccessory(String id) {
+    return exchangeAccessoryApiProvider.cancelExchangeAccessory(id);
+  }
+
+//////////////////
+
+    //create exchange car
+  Future<bool> createExchangeCar(
+      CreateExchangeCar exchangeCar) {
+    return exchangeAccessoryApiProvider
+        .createExchangeCar(exchangeCar);
+  }
+
+    //get all exchange car by user id
+  Future<List<ExchangeCar>> getAllExchangeCarByUserID(int id) {
+    return exchangeAccessoryApiProvider.getListExchangeCarByUserID(id);
+  }
+
+  //get detail exchange car
+  Future<ExchangeCar> getDetailExchangeCar(String id) {
+    return exchangeAccessoryApiProvider.getExchangeCarDetail(id);
+  }
+
+    //cancel exchange accessory
+  Future<bool> cancelExchangeCar(String id) {
+    return exchangeAccessoryApiProvider.cancelExchangeCar(id);
   }
 }

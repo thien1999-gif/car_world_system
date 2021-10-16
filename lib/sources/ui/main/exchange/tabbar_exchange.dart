@@ -4,6 +4,7 @@ import 'package:car_world_system/sources/ui/main/exchange/car_post_screen.dart';
 import 'package:car_world_system/sources/ui/main/exchange/exchange_accessory_screen.dart';
 import 'package:car_world_system/sources/ui/main/exchange/exchange_car_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:location/location.dart';
 
 class TabbarExchangeScreen extends StatefulWidget {
   const TabbarExchangeScreen({Key? key}) : super(key: key);
@@ -12,10 +13,21 @@ class TabbarExchangeScreen extends StatefulWidget {
   _TabbarExchangeScreenState createState() => _TabbarExchangeScreenState();
 }
 
+bool _isEnableLocation = true;
+double longitude = 0, latitude = 0;
+
 class _TabbarExchangeScreenState extends State<TabbarExchangeScreen> {
+  Location location = new Location();
+  late bool _serviceEnable;
+  late PermissionStatus _permissionGranted;
+  late LocationData _locationData;
+
+  bool _isListenLocation = false, _isGetLocation = false;
   void initState() {
     super.initState();
-    // _showDialog();
+    if (_isEnableLocation == true) {
+      _showDialog();
+    }
   }
 
   _showDialog() async {
@@ -33,8 +45,32 @@ class _TabbarExchangeScreenState extends State<TabbarExchangeScreen> {
                     child: Text('Không', style: TextStyle(color: Colors.white)),
                     color: AppConstant.backgroundColor),
                 FlatButton(
-                    onPressed: () {},
-                    child: Text('Có', style: TextStyle(color: Colors.white)),
+                    onPressed: () async {
+                      _serviceEnable = await location.serviceEnabled();
+                      if (!_serviceEnable) {
+                        _serviceEnable = await location.requestService();
+                        if (_serviceEnable) return;
+                      }
+
+                      _permissionGranted = await location.hasPermission();
+                      if (_permissionGranted == PermissionStatus.denied) {
+                        _permissionGranted = await location.requestPermission();
+                        if (_permissionGranted != PermissionStatus.granted)
+                          return;
+                      }
+
+                      _locationData = await location.getLocation();
+                      longitude = _locationData.longitude;
+                      latitude = _locationData.latitude;
+                      print("long: " + longitude.toString());
+                      print("lati: " + latitude.toString());
+                      setState(() {
+                        _isEnableLocation = false;
+                      });
+                      Navigator.pop(context);
+                    },
+                    child:
+                        Text('Cho phép', style: TextStyle(color: Colors.white)),
                     color: AppConstant.backgroundColor),
               ],
             ));

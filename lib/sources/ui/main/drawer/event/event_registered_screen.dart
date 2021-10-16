@@ -231,17 +231,45 @@ class _EventRegisteredScreenState extends State<EventRegisteredScreen> {
                                     Text(
                                       data[index]
                                               .event
-                                              .minParticipants
+                                              .currentParticipants
                                               .toString() +
                                           ' người',
                                       style: TextStyle(fontSize: 15),
                                     ),
                                   ],
                                 ),
+                                 SizedBox(
+                                  height: 5,
+                                ),
                                 Row(
                                   children: [
-                                    SizedBox(
-                                      width: 17.h,
+                                    Container(
+                                      
+                                      child: (data[index].status == 2)
+                                          ? Row(
+                                              children: [
+                                                Icon(
+                                                  Icons
+                                                      .cancel,
+                                                  size: 15,
+                                                  color: Colors.red,
+                                                ),
+                                                SizedBox(
+                                                  width: 5,
+                                                ),
+                                                Text(
+                                                  "Đã hủy",
+                                                  style:
+                                                      TextStyle(fontSize: 15, color: Colors.red),
+                                                ),
+                                                SizedBox(
+                                                  width: 8.5.h,
+                                                ),
+                                              ],
+                                            )
+                                          : SizedBox(
+                                              width: 17.h,
+                                            ),
                                     ),
                                     Row(children: <Widget>[
                                       Text(

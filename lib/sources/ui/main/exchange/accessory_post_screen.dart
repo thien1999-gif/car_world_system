@@ -1,15 +1,18 @@
 import 'package:car_world_system/constant/app_constant.dart';
-import 'package:car_world_system/sources/model/exchange_accessory.dart';
+import 'package:car_world_system/sources/model/create_exchange_accessory.dart';
 import 'package:car_world_system/sources/model/userProfile.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_repository.dart';
 import 'package:car_world_system/sources/repository/login_repository.dart';
 import 'package:car_world_system/sources/ui/login/login_screen.dart';
+import 'package:car_world_system/sources/ui/main/exchange/tabbar_exchange.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:sizer/sizer.dart';
-
+import 'dart:convert';
+import 'package:http/http.dart' as http;
+import 'package:geocode/geocode.dart';
 class AccessoryPostScreen extends StatefulWidget {
   const AccessoryPostScreen({Key? key}) : super(key: key);
 
@@ -24,6 +27,19 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
     // TODO: implement initState
     super.initState();
     getProfile();
+    getProvince();
+  }
+  String _baseUrl =
+      "https://carworld.cosplane.asia/api/brand/GetAllBrandsOfAccessory";
+  String? _valProvince; //lay ten hang
+  List<dynamic> _dataProvince = [];
+  void getProvince() async {
+    final respose = await http.get(_baseUrl);
+    var listData = jsonDecode(respose.body);
+    setState(() {
+      _dataProvince = listData;
+    });
+    print("data : $listData");
   }
 
   void getProfile() async {
@@ -40,7 +56,7 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
   var descriptionController = TextEditingController();
   var addressController = TextEditingController();
   var accessoryNameController = TextEditingController();
-  var maxPeopleController = TextEditingController();
+//  var maxPeopleController = TextEditingController();
   var priceController = TextEditingController();
   var amountController = TextEditingController();
 
@@ -184,8 +200,53 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                         return null;
                       },
                     ),
+                     Row(
+                      children: [
+                        Text("Hãng",
+                            style: TextStyle(
+                                color: AppConstant.backgroundColor,
+                                fontSize: 16)),
+                        SizedBox(
+                          width: 1.h,
+                        ),
+                        Container(
+                            width: 32.h,
+                            height: 7.h,
+                            child: DropdownButton(
+                              hint: Text("Chọn hãng sản xuất"),
+                              value: _valProvince,
+                              isExpanded: true,
+                              items: _dataProvince.map((item) {
+                                return DropdownMenuItem(
+                                  child: Row(
+                                    children: [
+                                      Image(
+                                        image: NetworkImage(item['Image']),
+                                        width: 25,
+                                        height: 25,
+                                      ),
+                                      SizedBox(
+                                        width: 1.h,
+                                      ),
+                                      Text(
+                                        item['Name'],
+                                        style: TextStyle(fontSize: 15),
+                                      ),
+                                    ],
+                                  ),
+                                  value: item['Name'],
+                                );
+                              }).toList(),
+                              onChanged: (value) {
+                                setState(() {
+                                  _valProvince = value as String?;
+                                });
+                              },
+                            )),
+                      ],
+                    ),
                     SizedBox(
-                      height: 2.0.h,
+                      height: 0.5.h,
                     ),
                     TextFormField(
                       controller: accessoryNameController,
@@ -433,20 +494,25 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                                         color: AppConstant.backgroundColor),
                                     FlatButton(
                                         onPressed: () {
-                                          List<ExchangeAccDetail> list = [];
-                                          list.add(ExchangeAccDetail(
-                                              accessoryName: "accessoryName",
-                                              isUsed: true,
-                                              image: "image",
-                                              price: 1,
-                                              amount: 1));
-                                          ExchangeAccessory exchangeAccessory =
-                                              ExchangeAccessory(
-                                                  userId: 18,
-                                                  title: "title",
-                                                  description: "description",
-                                                  address: "address",
-                                                  exchangeAccDetails: list);
+                                          String imageListLink =
+                                              imageUrls.join("|");
+                                          List<ExchangeAccessorryDetail> list = [];
+                                          list.add(ExchangeAccessorryDetail(
+                                              accessoryName: accessoryNameController.text,
+                                              isUsed: _isUsed,
+                                              image: imageListLink,
+                                              price: int.parse(priceController.text),
+                                              amount: int.parse(amountController.text),
+                                             brandName: _valProvince!));
+                                          CreateExchangeAccessory exchangeAccessory =
+                                              CreateExchangeAccessory(
+                                                  userId: _profile!.id,
+                                                  title: titleController.text,
+                                                  description: descriptionController.text,
+                                                  address: addressController.text,
+                                                  exchangeAccessorryDetails: list,
+                                                   latitude: latitude,
+                                                   longitude: longitude);
                                           ExchangeAccessoryRepository
                                               exchangeAccessoryRepository =
                                               ExchangeAccessoryRepository();
@@ -459,6 +525,9 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                                                   'Bạn đã gửi thành công'));
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(snackbar);
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
+                                              Navigator.pop(context);
                                         },
                                         child: Text('Có',
                                             style:

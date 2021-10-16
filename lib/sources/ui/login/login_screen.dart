@@ -13,7 +13,7 @@ class LoginScreen extends StatefulWidget {
   _LoginScreenState createState() => _LoginScreenState();
 }
 String email = "";
-
+String phoneNumberOfUser = "0963852741";
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
@@ -64,6 +64,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           LoginRepository loginRepository = LoginRepository();
                           loginRepository.login(result);
                           email = result.email;
+                          // phoneNumberOfUser = result.phone;
                           Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                   builder: (context) => MainPage()));
