@@ -1,8 +1,10 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/bloc/event_bloc.dart';
 import 'package:car_world_system/sources/model/event.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/model/userEvent.dart';
 import 'package:car_world_system/sources/model/userProfile.dart';
+import 'package:car_world_system/sources/model/user_event_contest.dart';
 import 'package:car_world_system/sources/repository/event_repository.dart';
 import 'package:car_world_system/sources/repository/login_repository.dart';
 import 'package:car_world_system/sources/ui/login/login_screen.dart';
@@ -18,7 +20,7 @@ sau ED
 
  */
 class EventDetailScreen extends StatefulWidget {
-  final int id;
+  final String id;
   const EventDetailScreen({Key? key, required this.id}) : super(key: key);
 
   @override
@@ -26,7 +28,7 @@ class EventDetailScreen extends StatefulWidget {
 }
 
 class _EventDetailScreenState extends State<EventDetailScreen> {
-  final int id;
+  final String id;
   UserProfile? _profile;
   _EventDetailScreenState(this.id);
   bool _enable = true;
@@ -64,7 +66,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
       ),
       body: StreamBuilder(
           stream: eventBloc.eventDetail,
-          builder: (context, AsyncSnapshot<Event> snapshot) {
+          builder: (context, AsyncSnapshot<EventContest> snapshot) {
             if (snapshot.hasData) {
               return _buildEventDetail(snapshot.data!);
             } else if (snapshot.hasError) {
@@ -75,7 +77,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     );
   }
 
-  Widget _buildEventDetail(Event data) {
+  Widget _buildEventDetail(EventContest data) {
     var imageListUrl = data.image.split("|");
     startDateConvert = convertDateFromString(data.startRegister);
 
@@ -142,7 +144,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Thời gian đăng ký sự kiện",
+                  "Thời gian đăng ký",
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.bold,
@@ -175,7 +177,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 SizedBox(
                   height: 1.h,
                 ),
-                Text("Thời gian diễn ra sự kiện",
+                Text("Thời gian diễn ra",
                     style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold,
@@ -341,9 +343,12 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                             FlatButton(
                                 onPressed: () {
                                   int userID = _profile!.id;
-                                  int eventID = data.id;
-                                  UserEvent userEvent = UserEvent(
-                                      eventId: eventID, userId: userID);
+                                  String eventID = data.id;
+                                  
+                                         UserEventContest userEvent =
+                                      UserEventContest(
+                                          contestEventId: eventID,
+                                          userId: userID);
                                   EventRepository eventRepository =
                                       EventRepository();
                                   eventRepository.registerEvent(userEvent);

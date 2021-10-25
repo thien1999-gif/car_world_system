@@ -2,56 +2,54 @@ const String BASE_URL = "https://carworld.cosplane.asia";
 
 class ContestApiString {
   //get all new contest
-  //https://carworld.cosplane.asia/api/contest/GetNewContests?now=2021-10-10T05%3A02%3A29.429Z
-  static String getListNewEvent(String now) {
-    return BASE_URL + '/api/contest/GetNewContests?now=$now';
+  //https://carworld.cosplane.asia/api/contestEvent/GetNewCEs?type=2&now=2021-10-20T00%3A38%3A36.100Z
+  static String getListNewContest(String now) {
+    return BASE_URL + '/api/contestEvent/GetNewCEs?type=2&now=$now';
   }
 
   //get all significant contest
-  //https://carworld.cosplane.asia/api/contest/GetSignificantContests?now=2021-10-10T05%3A02%3A29.429Z
-  static String getListSignificantEvent(String now) {
-    return BASE_URL + '/api/contest/GetSignificantContests?now=$now';
+  //https://carworld.cosplane.asia/api/contestEvent/GetSignificantCEs?type=2&now=2021-10-20T00%3A38%3A36.100Z
+  static String getListSignificantContest(String now) {
+    return BASE_URL + '/api/contestEvent/GetSignificantCEs?type=2&now=$now';
   }
 
   //get contest detail
-  //https://carworld.cosplane.asia/api/contest/GetContestById?id=1
-  static String getContestDetail(int id) {
-    return BASE_URL + '/api/contest/GetContestById?id=$id';
+  static String getContestDetail(String id) {
+    return BASE_URL + '/api/contestEvent/GetCEById?id=$id';
   }
 
   //user register contest
-  // https://carworld.cosplane.asia/api/userContest/RegisterContest
+  // https://carworld.cosplane.asia/api/ceRegister/RegisterCE
   static String registerContest() {
-    return BASE_URL + '/api/userContest/RegisterContest';
+    return BASE_URL + '/api/ceRegister/RegisterCE';
   }
 
   //user cancel contest
 //https://carworld.cosplane.asia/api/userContest/CancelRegisterContest
   static String cancelContest() {
-    return BASE_URL + '/api/userContest/CancelRegisterContest';
+    return BASE_URL + '/api/ceRegister/CancelRegisterCE';
   }
 
   //get list contest of user register
-  //https://carworld.cosplane.asia/api/userContest/GetContestsRegistered?userId=1
   static String getListContestUserRegister(int id) {
-    return BASE_URL + '/api/userContest/GetContestsRegistered?userId=$id';
+    return BASE_URL + '/api/ceRegister/GetCEsRegistered?type=2&userId=$id';
   }
 
   //get list contest of user joined
-  // https://carworld.cosplane.asia/api/userContest/GetContestsJoined?userId=1
+  
   static String getListContestUserJoined(int id) {
-    return BASE_URL + '/api/userContest/GetContestsJoined?userId=$id';
+    return BASE_URL + '/api/ceRegister/GetCEsJoined?type=2&userId=$id';
   }
 
   //user rating contest
   //https://carworld.cosplane.asia/api/userContest/EvaluateContest?evaluation=1
   static String ratingContest(double rate) {
-    return BASE_URL + '/api/userContest/EvaluateContest?evaluation=$rate';
+    return BASE_URL + '/api/ceRegister/EvaluateCE?evaluation=$rate';
   }
 
   //user feedback contest
   //https://carworld.cosplane.asia/api/feedback/FeedbackContest?contestId=1
-  static String feedbackContest(int id) {
-    return BASE_URL + '/api/feedback/FeedbackContest?contestId=$id';
+  static String feedbackContest(String id) {
+    return BASE_URL + '/api/feedback/FeedbackCE?contestEventId=$id';
   }
 }

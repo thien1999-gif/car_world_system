@@ -511,8 +511,7 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                                                   description: descriptionController.text,
                                                   address: addressController.text,
                                                   exchangeAccessorryDetails: list,
-                                                   latitude: latitude,
-                                                   longitude: longitude);
+                                                   );
                                           ExchangeAccessoryRepository
                                               exchangeAccessoryRepository =
                                               ExchangeAccessoryRepository();

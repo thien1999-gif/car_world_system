@@ -2,21 +2,19 @@ const String BASE_URL = "https://carworld.cosplane.asia";
 
 class EventApiString {
   //get all new event
-  //https://carworld.cosplane.asia/api/event/GetNewEvents?now=2021-10-10T09%3A35%3A03.256Z
   static String getListNewEvent(String now) {
-    return BASE_URL + '/api/event/GetNewEvents?now=$now';
+    return BASE_URL + '/api/contestEvent/GetNewCEs?type=1&now=$now';
   }
 
   //get all signnificant event
-  //https://carworld.cosplane.asia/api/event/GetSignificantEvents?now=2021-10-10T09%3A35%3A03.256Z
   static String getListSignnificantEvent(String now) {
-    return BASE_URL + '/api/event/GetSignificantEvents?now=$now';
+    return BASE_URL + '/api/contestEvent/GetSignificantCEs?type=1&now=$now';
   }
 
   //get event detail
-  //https://carworld.cosplane.asia/api/event/GetEventById?id=5
-  static String getEventDetail(int id) {
-    return BASE_URL + '/api/event/GetEventById?id=$id';
+  //https://carworld.cosplane.asia/api/contestEvent/GetCEById?id=265b78c9-213d-4038-8d88-217e10363bf6
+  static String getEventDetail(String id) {
+    return BASE_URL + '/api/contestEvent/GetCEById?id=$id';
   }
 
   // create proposal
@@ -28,13 +26,13 @@ class EventApiString {
   //user register event
 
   static String registerEvent() {
-    return BASE_URL + '/api/userEvent/RegisterEvent';
+    return BASE_URL + '/api/ceRegister/RegisterCE';
   }
 
   //user cancel event
 
   static String cancelEvent() {
-    return BASE_URL + '/api/userEvent/CancelRegisterEvent';
+    return BASE_URL + '/api/ceRegister/CancelRegisterCE';
   }
 
   //get list proposal of user send for manager
@@ -44,15 +42,14 @@ class EventApiString {
   }
 
   //get list event of user register
-  //https://carworld.cosplane.asia/api/userEvent/GetEventsRegistered?userId=18
   static String getListEventUserRegister(int id) {
-    return BASE_URL + '/api/userEvent/GetEventsRegistered?userId=$id';
+    return BASE_URL + '/api/ceRegister/GetCEsRegistered?type=1&userId=$id';
   }
 
   //get list event of user joined
-  //https://carworld.cosplane.asia/api/userEvent/GetEventsJoined?userId=19
+  
   static String getListEventUserJoined(int id) {
-    return BASE_URL + '/api/userEvent/GetEventsJoined?userId=$id';
+    return BASE_URL + '/api/ceRegister/GetCEsJoined?type=1&userId=$id';
   }
 
   //get proposal detail
@@ -65,12 +62,12 @@ class EventApiString {
   //user rating event
   //https://carworld.cosplane.asia/api/userEvent/EvaluateEvent?evaluation=4
   static String ratingEvent(double rate) {
-    return BASE_URL + '/api/userEvent/EvaluateEvent?evaluation=$rate';
+    return BASE_URL + '/api/ceRegister/EvaluateCE?evaluation=$rate';
   }
 
   //user feedback event
   //https://carworld.cosplane.asia/api/feedback/FeedbackEvent?eventId=1
-  static String feedbackEvent(int id) {
-    return BASE_URL + '/api/feedback/FeedbackEvent?eventId=$id';
+  static String feedbackEvent(String id) {
+    return BASE_URL + '/api/feedback/FeedbackCE?contestEventId=$id';
   }
 }

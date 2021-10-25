@@ -1,5 +1,6 @@
 import 'package:car_world_system/sources/model/exchange_accessory.dart';
 import 'package:car_world_system/sources/model/exchange_car.dart';
+import 'package:car_world_system/sources/model/user_exchange_response.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -16,6 +17,13 @@ class ExchangeBloc {
       PublishSubject<List<ExchangeCar>>();
   final _exchangeCarDetailOfUserFetcher =
       PublishSubject<ExchangeCar>();
+//
+      final _listUserExchangeResponseFetcher =
+      PublishSubject<List<UserExchangeResponse>>();
+
+ Observable<List<UserExchangeResponse>> get listUserExchangeResponse =>
+      _listUserExchangeResponseFetcher.stream;
+//
 
   Observable<List<ExchangeAccessory>> get listExchangeAccessoryOfUser =>
       _listExchangeAccessoryOfUserFetcher.stream;
@@ -55,11 +63,33 @@ class ExchangeBloc {
     _exchangeCarDetailOfUserFetcher.sink.add(exchangeAccessoryDetail);
   }
 
+//
+   //get list exchange car by location
+  getListExchangeCarByLocation() async {
+    List<ExchangeCar> list =
+        await exchangeAccessoryRepository.getListExchangeCarByLocation();
+    _listExchangeCarOfUserFetcher.sink.add(list);
+  }
+
+   //get list exchange car by location
+  getListExchangeAccessoryByLocation() async {
+    List<ExchangeAccessory> list =
+        await exchangeAccessoryRepository.getListExchangeAccessoryByLocation();
+    _listExchangeAccessoryOfUserFetcher.sink.add(list);
+  }
+
+     //get list user  exchange response
+  getListUserWattoExchange(String id) async {
+    List<UserExchangeResponse> list =
+        await exchangeAccessoryRepository.getListUserWanttoExchange(id);
+    _listUserExchangeResponseFetcher.sink.add(list);
+  }
   dispose() {
     _listExchangeAccessoryOfUserFetcher.close();
     _exchangeAccessoryDetailOfUserFetcher.close();
     _listExchangeCarOfUserFetcher.close();
     _exchangeCarDetailOfUserFetcher.close();
+    _listUserExchangeResponseFetcher.close();
   }
 }
 final exchangeBloc = ExchangeBloc();

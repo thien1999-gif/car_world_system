@@ -1,6 +1,10 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/model/create_exchange_car.dart';
+import 'package:car_world_system/sources/model/district.dart';
+import 'package:car_world_system/sources/model/province.dart';
 import 'package:car_world_system/sources/model/userProfile.dart';
+import 'package:car_world_system/sources/model/ward.dart';
+import 'package:car_world_system/sources/repository/address_api_provider.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_repository.dart';
 import 'package:car_world_system/sources/repository/login_repository.dart';
 import 'package:car_world_system/sources/ui/login/login_screen.dart';
@@ -8,6 +12,7 @@ import 'package:car_world_system/sources/ui/main/exchange/accessory_post_screen.
 import 'package:car_world_system/sources/ui/main/exchange/tabbar_exchange.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
@@ -28,7 +33,8 @@ class _CarPostScreenState extends State<CarPostScreen> {
   void initState() {
     super.initState();
     getProvince();
-    getProfile();
+    // getProfile();
+    _provinceFuture = AddressApiProvider().getListProvince();
   }
 
   @override
@@ -57,6 +63,24 @@ class _CarPostScreenState extends State<CarPostScreen> {
       _profile = profile;
     });
   }
+
+//
+  //lay tinh
+  Province? provinceObject;
+  String? provinceID, provinceName;
+  Future<List<Province>>? _provinceFuture;
+
+  //lay huyen
+  District? districtObject;
+  String? districtID, districtName;
+  Future<List<District>>? _districtFuture;
+
+  //lay xa
+  Ward? wardObject;
+  String? wardID, wardName;
+  Future<List<Ward>>? _wardFuture;
+
+//
 
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   var titleController = TextEditingController();
@@ -175,541 +199,653 @@ class _CarPostScreenState extends State<CarPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (_profile == null) {
-      return Container();
-    } else {
-      return Scaffold(
-        appBar: AppBar(
-          title: Text("Đăng tin xe hơi"),
-          centerTitle: true,
-          backgroundColor: AppConstant.backgroundColor,
-        ),
-        body: SingleChildScrollView(
-          child: Padding(
-            padding: EdgeInsets.all(10),
-            child: Form(
-                key: formkey,
-                child: Column(
-                  children: [
-                    TextFormField(
-                      controller: titleController,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Tiêu đề",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập tiêu đề",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+    // if (_profile == null) {
+    //   return Container();
+    // } else {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Đăng tin xe hơi"),
+        centerTitle: true,
+        backgroundColor: AppConstant.backgroundColor,
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: EdgeInsets.all(10),
+          child: Form(
+              key: formkey,
+              child: Column(
+                children: [
+                  TextFormField(
+                    controller: titleController,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Tiêu đề",
+                        style: TextStyle(color: AppConstant.backgroundColor),
                       ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập tiêu đề';
-                        }
-                        return null;
-                      },
-                    ),
-                    Row(
-                      children: [
-                        Text("Hãng",
-                            style: TextStyle(
-                                color: AppConstant.backgroundColor,
-                                fontSize: 16)),
-                        SizedBox(
-                          width: 1.h,
-                        ),
-                        Container(
-                            width: 32.h,
-                            height: 7.h,
-                            child: DropdownButton(
-                              hint: Text("Chọn hãng sản xuất"),
-                              value: _valProvince,
-                              isExpanded: true,
-                              items: _dataProvince.map((item) {
-                                return DropdownMenuItem(
-                                  child: Row(
-                                    children: [
-                                      Image(
-                                        image: NetworkImage(item['Image']),
-                                        width: 25,
-                                        height: 25,
-                                      ),
-                                      SizedBox(
-                                        width: 1.h,
-                                      ),
-                                      Text(
-                                        item['Name'],
-                                        style: TextStyle(fontSize: 15),
-                                      ),
-                                    ],
-                                  ),
-                                  value: item['Name'],
-                                );
-                              }).toList(),
-                              onChanged: (value) {
-                                setState(() {
-                                  _valProvince = value as String?;
-                                });
-                              },
-                            )),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 0.5.h,
-                    ),
-                    TextFormField(
-                      controller: carNameController,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Tên xe",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập tên xe",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập tên xe';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 2.0.h,
-                    ),
-                    Container(
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: <Widget>[
-                          Text(
-                            'Trạng thái sử dụng:',
-                            style: TextStyle(
-                                color: AppConstant.backgroundColor,
-                                fontSize: 16),
-                          ),
-                          LabeledRadio(
-                            label: 'Không',
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 5.0),
-                            value: false,
-                            groupValue: _isUsed,
-                            onChanged: (bool newValue) {
-                              setState(() {
-                                _isUsed = newValue;
-                              });
-                            },
-                          ),
-                          LabeledRadio(
-                            label: 'Có',
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 5.0),
-                            value: true,
-                            groupValue: _isUsed,
-                            onChanged: (bool newValue) {
-                              setState(() {
-                                _isUsed = newValue;
-                              });
-                            },
-                          ),
-                        ],
+                      hintText: "Vui lòng nhập tiêu đề",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppConstant.backgroundColor),
+                        borderRadius: BorderRadius.circular(10),
                       ),
                     ),
-                    TextFormField(
-                      controller: yearOfManufactController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Năm sản xuất",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập năm sản xuất",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Vui lòng nhập tiêu đề';
+                      }
+                      return null;
+                    },
+                  ),
+                  Row(
+                    children: [
+                      Text("Hãng",
+                          style: TextStyle(
+                              color: AppConstant.backgroundColor,
+                              fontSize: 16)),
+                      SizedBox(
+                        width: 1.h,
                       ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập năm sản xuất';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 2.0.h,
-                    ),
-                    TextFormField(
-                      controller: priceController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Giá",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập giá",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập giá';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 2.0.h,
-                    ),
-                    TextFormField(
-                      controller: originController,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Xuất sứ",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập xuất sứ",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập xuất sứ';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 2.0.h,
-                    ),
-                    TextFormField(
-                      controller: licensePlateController,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Biển số xe",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập biển số xe",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập biển số xe';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 2.0.h,
-                    ),
-                    TextFormField(
-                      controller: kilometerController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Số km đã đi",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập số km đã đi",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập số km đã đi';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 2.0.h,
-                    ),
-                    TextFormField(
-                      controller: yearOfUsedController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Năm sử dụng",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập số năm sử dụng",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập số năm sử dụng';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 2.0.h,
-                    ),
-                    TextFormField(
-                      controller: amountController,
-                      keyboardType: TextInputType.number,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Số lượng xe",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập số lượng xe",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập số lượng xe';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 2.0.h,
-                    ),
-                    TextFormField(
-                      controller: addressController,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Địa chỉ",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập địa chỉ",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập địa chỉ';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 2.0.h,
-                    ),
-                    TextFormField(
-                      controller: descriptionController,
-                      maxLines: 5,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Mô tả",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập mô tả của bạn",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập mô tả';
-                        }
-                        return null;
-                      },
-                    ),
-                    SizedBox(
-                      height: 2.0.h,
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                          "Ảnh: ",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        RaisedButton(
-                          child: Text(
-                            "Chọn ảnh",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: loadAssets,
-                          color: AppConstant.backgroundColor,
-                        ),
-                        SizedBox(
-                          width: 1.h,
-                        ),
-                        RaisedButton(
-                          child: Text(
-                            "Upload ảnh",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            if (images.length == 0) {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      backgroundColor:
-                                          AppConstant.backgroundColor,
-                                      content: Text(
-                                          "Không có ảnh nào được chọn",
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      actions: <Widget>[
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Container(
-                                            width: 80,
-                                            height: 30,
-                                            child: Center(
-                                                child: Text(
-                                              "Đóng",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )),
-                                          ),
-                                        )
-                                      ],
-                                    );
-                                  });
-                            } else {
-                              SnackBar snackbar = SnackBar(
-                                  content:
-                                      Text('Vui lòng đợi trong giây lát.'));
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackbar);
-                              uploadImages();
-                              print("link anh: $imageUrls");
-                            }
-                          },
-                          color: AppConstant.backgroundColor,
-                        ),
-                        SizedBox(
-                          width: 1.h,
-                        ),
-                        RaisedButton(
-                          child: Text(
-                            "Đăng tin",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            if (formkey.currentState!.validate()) {
-                              showDialog(
-                                context: context,
-                                builder: (context) => AlertDialog(
-                                  title: Text('Xác nhận'),
-                                  content:
-                                      Text('Bạn có muốn gửi ý tưởng không ?'),
-                                  actions: <Widget>[
-                                    FlatButton(
-                                        onPressed: () {},
-                                        child: Text('Không',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        color: AppConstant.backgroundColor),
-                                    FlatButton(
-                                        onPressed: () {
-                                          String imageListLink =
-                                              imageUrls.join("|");
-                                          List<ExchangeCarDetail> list = [];
-                                          list.add(ExchangeCarDetail(
-                                              brandName: _valProvince!,
-                                              carName: carNameController.text,
-                                              yearOfManufactor: int.parse(yearOfManufactController.text),
-                                              origin: originController.text,
-                                              licensePlate: licensePlateController.text,
-                                              kilometers: int.parse(kilometerController.text),
-                                              yearOfUsed: int.parse(yearOfUsedController.text),
-                                              isUsed: _isUsed,
-                                              image: imageListLink,
-                                              price: int.parse(priceController.text),
-                                              amount: int.parse(amountController.text)
-                                              ));
-                                          CreateExchangeCar exchangeCar =
-                                              CreateExchangeCar(
-                                                  userId: _profile!.id,
-                                                  title: titleController.text,
-                                                  description:
-                                                      descriptionController
-                                                          .text,
-                                                  address:
-                                                      addressController.text,
-                                                  exchangeCarDetails: list,
-                                                   latitude: latitude, 
-                                                   longitude: longitude);
-                                          ExchangeAccessoryRepository
-                                              exchangeAccessoryRepository =
-                                              ExchangeAccessoryRepository();
-                                          exchangeAccessoryRepository
-                                              .createExchangeCar(exchangeCar);
-
-                                          SnackBar snackbar = SnackBar(
-                                              content: Text(
-                                                  'Bạn đã gửi thành công'));
-                                          ScaffoldMessenger.of(context)
-                                              .showSnackBar(snackbar);
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                          Navigator.pop(context);
-                                        },
-                                        child: Text('Có',
-                                            style:
-                                                TextStyle(color: Colors.white)),
-                                        color: AppConstant.backgroundColor),
+                      Container(
+                          width: 32.h,
+                          height: 7.h,
+                          child: DropdownButton(
+                            hint: Text("Chọn hãng sản xuất"),
+                            value: _valProvince,
+                            isExpanded: true,
+                            items: _dataProvince.map((item) {
+                              return DropdownMenuItem(
+                                child: Row(
+                                  children: [
+                                    Image(
+                                      image: NetworkImage(item['Image']),
+                                      width: 25,
+                                      height: 25,
+                                    ),
+                                    SizedBox(
+                                      width: 1.h,
+                                    ),
+                                    Text(
+                                      item['Name'],
+                                      style: TextStyle(fontSize: 15),
+                                    ),
                                   ],
                                 ),
+                                value: item['Name'],
                               );
-                            }
+                            }).toList(),
+                            onChanged: (value) {
+                              setState(() {
+                                _valProvince = value as String?;
+                              });
+                            },
+                          )),
+                    ],
+                  ),
+                  SizedBox(
+                    height: 0.5.h,
+                  ),
+                  TextFormField(
+                    controller: carNameController,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Tên xe",
+                        style: TextStyle(color: AppConstant.backgroundColor),
+                      ),
+                      hintText: "Vui lòng nhập tên xe",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppConstant.backgroundColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Vui lòng nhập tên xe';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 2.0.h,
+                  ),
+                  Container(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          'Trạng thái sử dụng:',
+                          style: TextStyle(
+                              color: AppConstant.backgroundColor, fontSize: 16),
+                        ),
+                        LabeledRadio(
+                          label: 'Không',
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          value: false,
+                          groupValue: _isUsed,
+                          onChanged: (bool newValue) {
+                            setState(() {
+                              _isUsed = newValue;
+                            });
                           },
-                          color: AppConstant.backgroundColor,
+                        ),
+                        LabeledRadio(
+                          label: 'Có',
+                          padding: const EdgeInsets.symmetric(horizontal: 5.0),
+                          value: true,
+                          groupValue: _isUsed,
+                          onChanged: (bool newValue) {
+                            setState(() {
+                              _isUsed = newValue;
+                            });
+                          },
                         ),
                       ],
                     ),
-                    Container(
-                        width: 100.h,
-                        height: 50.h,
-                        child: Expanded(
-                          child: GridView.count(
-                            crossAxisCount: 3,
-                            children: List.generate(images.length, (index) {
-                              Asset asset = images[index];
-                              return AssetThumb(
-                                asset: asset,
-                                width: 300,
-                                height: 300,
-                              );
-                            }),
-                          ),
-                        )),
-                  ],
-                )),
-          ),
+                  ),
+                  TextFormField(
+                    controller: yearOfManufactController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Năm sản xuất",
+                        style: TextStyle(color: AppConstant.backgroundColor),
+                      ),
+                      hintText: "Vui lòng nhập năm sản xuất",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppConstant.backgroundColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Vui lòng nhập năm sản xuất';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 2.0.h,
+                  ),
+                  TextFormField(
+                    controller: priceController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Giá",
+                        style: TextStyle(color: AppConstant.backgroundColor),
+                      ),
+                      hintText: "Vui lòng nhập giá",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppConstant.backgroundColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Vui lòng nhập giá';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 2.0.h,
+                  ),
+                  TextFormField(
+                    controller: originController,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Xuất sứ",
+                        style: TextStyle(color: AppConstant.backgroundColor),
+                      ),
+                      hintText: "Vui lòng nhập xuất sứ",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppConstant.backgroundColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Vui lòng nhập xuất sứ';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 2.0.h,
+                  ),
+                  TextFormField(
+                    controller: licensePlateController,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Biển số xe",
+                        style: TextStyle(color: AppConstant.backgroundColor),
+                      ),
+                      hintText: "Vui lòng nhập biển số xe",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppConstant.backgroundColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Vui lòng nhập biển số xe';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 2.0.h,
+                  ),
+                  TextFormField(
+                    controller: kilometerController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Số km đã đi",
+                        style: TextStyle(color: AppConstant.backgroundColor),
+                      ),
+                      hintText: "Vui lòng nhập số km đã đi",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppConstant.backgroundColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Vui lòng nhập số km đã đi';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 2.0.h,
+                  ),
+                  TextFormField(
+                    controller: yearOfUsedController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Năm sử dụng",
+                        style: TextStyle(color: AppConstant.backgroundColor),
+                      ),
+                      hintText: "Vui lòng nhập số năm sử dụng",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppConstant.backgroundColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Vui lòng nhập số năm sử dụng';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 2.0.h,
+                  ),
+                  TextFormField(
+                    controller: amountController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Số lượng xe",
+                        style: TextStyle(color: AppConstant.backgroundColor),
+                      ),
+                      hintText: "Vui lòng nhập số lượng xe",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppConstant.backgroundColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Vui lòng nhập số lượng xe';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 2.0.h,
+                  ),
+                  TextFormField(
+                    controller: addressController,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Địa chỉ",
+                        style: TextStyle(color: AppConstant.backgroundColor),
+                      ),
+                      hintText: "Vui lòng nhập địa chỉ",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppConstant.backgroundColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Vui lòng nhập địa chỉ';
+                      }
+                      return null;
+                    },
+                  ),
+
+                  // tỉnh
+                  Container(
+                    child: FutureBuilder<List<Province>>(
+                        future: _provinceFuture,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Province>> snapshot) {
+                          if (!snapshot.hasData)
+                            return CupertinoActivityIndicator(
+                              animating: true,
+                            );
+                          return DropdownButtonFormField<Province>(
+                            isDense: true,
+                            decoration: InputDecoration(labelText: "Chọn tỉnh / thành phố",),
+                            items: snapshot.data!
+                                .map(
+                                    (countyState) => DropdownMenuItem<Province>(
+                                          child: Text(countyState.name),
+                                          value: countyState,
+                                        ))
+                                .toList(),
+                            onChanged: (Province? selectedState) {
+                              setState(() {
+                                districtObject = null;
+                                provinceObject = selectedState;
+                                provinceID = provinceObject!.id;
+                                provinceName = provinceObject!.name;
+                                _districtFuture = AddressApiProvider()
+                                    .getListDistrict(provinceObject!.id);
+                              });
+                            },
+                            value: provinceObject,
+                          );
+                        }),
+                  ),
+                  //
+
+                  // huyen
+                  Container(
+                    child: FutureBuilder<List<District>>(
+                        future: _districtFuture,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<District>> snapshot) {
+                          if (!snapshot.hasData)
+                            return DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                labelText: "Chọn quận / huyện",
+                              ),
+                              items: [],
+                            );
+                          return DropdownButtonFormField<District>(
+                            isDense: true,
+                            decoration: InputDecoration(
+                              labelText: "Chọn quận / huyện",
+                            ),
+                            items: snapshot.data!
+                                .map(
+                                    (countyState) => DropdownMenuItem<District>(
+                                          child: Text(countyState.name),
+                                          value: countyState,
+                                        ))
+                                .toList(),
+                            onChanged: (District? selectedState) {
+                              setState(() {
+                                wardObject = null;
+                                districtObject = selectedState;
+                                districtID = districtObject!.id;
+                                districtName = districtObject!.name;
+                                _wardFuture = AddressApiProvider()
+                                    .getListWard(districtObject!.id);
+                              });
+                            },
+                            value: districtObject,
+                          );
+                        }),
+                  ),
+                  //
+
+                  // xa
+                  Container(
+                    child: FutureBuilder<List<Ward>>(
+                        future: _wardFuture,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Ward>> snapshot) {
+                          if (!snapshot.hasData)
+                            return DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                labelText: "Chọn phường / xã",
+                              ),
+                              items: [],
+                            );
+                          return DropdownButtonFormField<Ward>(
+                            isDense: true,
+                            decoration: InputDecoration(
+                              labelText: "Chọn phường / xã",
+                            ),
+                            items: snapshot.data!
+                                .map((countyState) => DropdownMenuItem<Ward>(
+                                      child: Text(countyState.name),
+                                      value: countyState,
+                                    ))
+                                .toList(),
+                            onChanged: (Ward? selectedState) {
+                              setState(() {
+                                wardObject = selectedState;
+                                wardID = wardObject!.id;
+                                wardName = wardObject!.name;
+                              });
+                            },
+                            value: wardObject,
+                          );
+                        }),
+                  ),
+                  //"
+                 
+                  SizedBox(
+                    height: 2.0.h,
+                  ),
+                  TextFormField(
+                    controller: descriptionController,
+                    maxLines: 5,
+                    decoration: InputDecoration(
+                      label: Text(
+                        "Mô tả",
+                        style: TextStyle(color: AppConstant.backgroundColor),
+                      ),
+                      hintText: "Vui lòng nhập mô tả của bạn",
+                      focusedBorder: OutlineInputBorder(
+                        borderSide:
+                            BorderSide(color: AppConstant.backgroundColor),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                    validator: (value) {
+                      if (value!.isEmpty) {
+                        return 'Vui lòng nhập mô tả';
+                      }
+                      return null;
+                    },
+                  ),
+                  SizedBox(
+                    height: 2.0.h,
+                  ),
+                  Row(
+                    children: [
+                      Text(
+                        "Ảnh: ",
+                        style: TextStyle(color: AppConstant.backgroundColor),
+                      ),
+                      RaisedButton(
+                        child: Text(
+                          "Chọn ảnh",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: loadAssets,
+                        color: AppConstant.backgroundColor,
+                      ),
+                      SizedBox(
+                        width: 1.h,
+                      ),
+                      RaisedButton(
+                        child: Text(
+                          "Upload ảnh",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          if (images.length == 0) {
+                            showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    backgroundColor:
+                                        AppConstant.backgroundColor,
+                                    content: Text("Không có ảnh nào được chọn",
+                                        style: TextStyle(color: Colors.white)),
+                                    actions: <Widget>[
+                                      InkWell(
+                                        onTap: () {
+                                          Navigator.pop(context);
+                                        },
+                                        child: Container(
+                                          width: 80,
+                                          height: 30,
+                                          child: Center(
+                                              child: Text(
+                                            "Đóng",
+                                            style:
+                                                TextStyle(color: Colors.white),
+                                          )),
+                                        ),
+                                      )
+                                    ],
+                                  );
+                                });
+                          } else {
+                            SnackBar snackbar = SnackBar(
+                                content: Text('Vui lòng đợi trong giây lát.'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                            uploadImages();
+                            print("link anh: $imageUrls");
+                          }
+                        },
+                        color: AppConstant.backgroundColor,
+                      ),
+                      SizedBox(
+                        width: 1.h,
+                      ),
+                      RaisedButton(
+                        child: Text(
+                          "Đăng tin",
+                          style: TextStyle(color: Colors.white),
+                        ),
+                        onPressed: () {
+                          if (formkey.currentState!.validate()) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => AlertDialog(
+                                title: Text('Xác nhận'),
+                                content:
+                                    Text('Bạn có muốn gửi ý tưởng không ?'),
+                                actions: <Widget>[
+                                  FlatButton(
+                                      onPressed: () {},
+                                      child: Text('Không',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      color: AppConstant.backgroundColor),
+                                  FlatButton(
+                                      onPressed: () {
+                                        String imageListLink =
+                                            imageUrls.join("|");
+                                        List<ExchangeCarDetail> list = [];
+                                        list.add(ExchangeCarDetail(
+                                            brandName: _valProvince!,
+                                            carName: carNameController.text,
+                                            yearOfManufactor: int.parse(
+                                                yearOfManufactController.text),
+                                            origin: originController.text,
+                                            licensePlate:
+                                                licensePlateController.text,
+                                            kilometers: int.parse(
+                                                kilometerController.text),
+                                            yearOfUsed: int.parse(
+                                                yearOfUsedController.text),
+                                            isUsed: _isUsed,
+                                            image: imageListLink,
+                                            price:
+                                                int.parse(priceController.text),
+                                            amount: int.parse(
+                                                amountController.text)));
+                                        CreateExchangeCar exchangeCar =
+                                            CreateExchangeCar(
+                                          //userId: _profile!.id,
+                                          userId: 19, // sau nay sữa lại chỗ này
+                                          title: titleController.text,
+                                          description:
+                                              descriptionController.text,
+                                          address: addressController.text,
+                                          exchangeCarDetails: list,
+                                        );
+                                        ExchangeAccessoryRepository
+                                            exchangeAccessoryRepository =
+                                            ExchangeAccessoryRepository();
+                                        exchangeAccessoryRepository
+                                            .createExchangeCar(exchangeCar);
+
+                                        SnackBar snackbar = SnackBar(
+                                            content:
+                                                Text('Bạn đã gửi thành công'));
+                                        ScaffoldMessenger.of(context)
+                                            .showSnackBar(snackbar);
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                        Navigator.pop(context);
+                                      },
+                                      child: Text('Có',
+                                          style:
+                                              TextStyle(color: Colors.white)),
+                                      color: AppConstant.backgroundColor),
+                                ],
+                              ),
+                            );
+                          }
+                        },
+                        color: AppConstant.backgroundColor,
+                      ),
+                    ],
+                  ),
+                  Container(
+                      width: 100.h,
+                      height: 50.h,
+                      child: Expanded(
+                        child: GridView.count(
+                          crossAxisCount: 3,
+                          children: List.generate(images.length, (index) {
+                            Asset asset = images[index];
+                            return AssetThumb(
+                              asset: asset,
+                              width: 300,
+                              height: 300,
+                            );
+                          }),
+                        ),
+                      )),
+                ],
+              )),
         ),
-      );
-    }
+      ),
+    );
+    // }
   }
 }

@@ -3,6 +3,7 @@ import 'package:car_world_system/sources/bloc/exchange_bloc.dart';
 import 'package:car_world_system/sources/model/exchange_car.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_repository.dart';
 import 'package:car_world_system/sources/ui/login/login_screen.dart';
+import 'package:car_world_system/sources/ui/main/drawer/exchange/list_user_want_to_exchange.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:intl/intl.dart';
@@ -435,8 +436,8 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
                                   ),
                                   Text(
                                     data.exchangeCarDetails[0].amount
-                                            .toString() +
-                                        " cái",
+                                            .toString() 
+                                        ,
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
@@ -457,7 +458,7 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
                               Row(
                                 children: [
                                   Icon(
-                                    Icons.add_shopping_cart,
+                                    Icons.calendar_view_month,
                                     color: Colors.lightGreen,
                                   ),
                                   SizedBox(
@@ -590,7 +591,9 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
                   )
                 ],
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.push(context, MaterialPageRoute(builder:(context) => ListUserWantToExchangeScreen(exchangeID: data.id,)),);
+              },
             )
           ],
         )

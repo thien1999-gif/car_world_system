@@ -1,4 +1,5 @@
 import 'package:car_world_system/sources/model/event.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/model/event_register.dart';
 import 'package:car_world_system/sources/model/listProposal.dart';
 import 'package:car_world_system/sources/model/proposal_detail.dart';
@@ -8,27 +9,27 @@ import 'package:rxdart/rxdart.dart';
 class EventBloc {
   final EventRepository eventRepository = EventRepository();
 
-  final _listEventFetcher = PublishSubject<List<Event>>();
+  final _listEventFetcher = PublishSubject<List<EventContest>>();
   final _listEventRegisterFetcher = PublishSubject<List<EventRegister>>();
   final _listProposalOfUserFetcher = PublishSubject<List<ListProposal>>();
-  final _eventDetailFetcher = PublishSubject<Event>();
+  final _eventDetailFetcher = PublishSubject<EventContest>();
   final _proposalDetailFetcher = PublishSubject<ProposalDetail>();
 
 
-  Observable<List<Event>> get listEvent => _listEventFetcher.stream;
+  Observable<List<EventContest>> get listEvent => _listEventFetcher.stream;
   Observable<List<EventRegister>> get listEventRegister => _listEventRegisterFetcher.stream;
   Observable<List<ListProposal>> get listProposalOfUser => _listProposalOfUserFetcher.stream;
-  Observable<Event> get eventDetail => _eventDetailFetcher.stream;
+  Observable<EventContest> get eventDetail => _eventDetailFetcher.stream;
    Observable<ProposalDetail> get proposalDetail => _proposalDetailFetcher.stream;
   //get list new event
   getListNewEvent(String now) async {
-    List<Event> listEvent = await eventRepository.getListNewEvent(now);
+    List<EventContest> listEvent = await eventRepository.getListNewEvent(now);
     _listEventFetcher.sink.add(listEvent);
   }
 
   //get list significant event
   getListSignificantEvent(String now) async {
-    List<Event> listEvent = await eventRepository.getListSignificantEvent(now);
+    List<EventContest> listEvent = await eventRepository.getListSignificantEvent(now);
     _listEventFetcher.sink.add(listEvent);
   }
 
@@ -50,8 +51,8 @@ class EventBloc {
     _listEventRegisterFetcher.sink.add(listEventRegister);
   }
   //get event detail by id
-  getEventDetail(int id) async {
-    Event eventDetail = await eventRepository.getEventDetail(id);
+  getEventDetail(String id) async {
+    EventContest eventDetail = await eventRepository.getEventDetail(id);
     _eventDetailFetcher.sink.add(eventDetail);
   }
     //get proposal detail by id

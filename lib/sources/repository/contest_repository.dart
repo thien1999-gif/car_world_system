@@ -1,42 +1,45 @@
 import 'package:car_world_system/sources/model/cancel_register_contest.dart';
+import 'package:car_world_system/sources/model/cancel_register_event_contest.dart';
 import 'package:car_world_system/sources/model/contest.dart';
 import 'package:car_world_system/sources/model/contest_register.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/model/feedback.dart';
 import 'package:car_world_system/sources/model/userContest.dart';
+import 'package:car_world_system/sources/model/user_event_contest.dart';
 import 'package:car_world_system/sources/repository/contest_api_provider.dart';
 
 class ContestRepository {
   ContestApiProvider contestApiProvider = ContestApiProvider();
 
   //get list all contest
-  Future<List<Contest>> getListNewContest(String now) {
+  Future<List<EventContest>> getListNewContest(String now) {
     return contestApiProvider.getListNewContest(now);
   }
   //get list significant contest
-  Future<List<Contest>> getListSignficantContest(String now) {
+  Future<List<EventContest>> getListSignficantContest(String now) {
     return contestApiProvider.getListSignificantContest(now);
   }
   //get contest detail by id
-  Future<Contest> getContestDetail(int id) {
+  Future<EventContest> getContestDetail(String id) {
     return contestApiProvider.getContestDetail(id);
   }
 
   //register contest
-   Future<bool> registerContest(UserContest userContest) {
+   Future<bool> registerContest(UserEventContest userContest) {
     return contestApiProvider.registerContest(userContest);
   }
   //rating contest
-  Future<bool> ratingContest(double rate, UserContest userContest) {
+  Future<bool> ratingContest(double rate, UserEventContest userContest) {
     return contestApiProvider.ratingContest(rate, userContest);
   }
 
   //feedback contest
-  Future<bool> feedbackContest(int id, FeedBack feedback){
+  Future<bool> feedbackContest(String id, FeedBack feedback){
     return contestApiProvider.feedbackContest(id, feedback);
   }
 
   //cancel contest
-  Future<bool> cancelContest(CancelRegisterContest userContest) {
+  Future<bool> cancelContest(CancelRegisterContestEvent userContest) {
     return contestApiProvider.cancelContest(userContest);
   }
   //get list contest user register

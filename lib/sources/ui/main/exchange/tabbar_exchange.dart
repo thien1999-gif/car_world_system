@@ -13,68 +13,68 @@ class TabbarExchangeScreen extends StatefulWidget {
   _TabbarExchangeScreenState createState() => _TabbarExchangeScreenState();
 }
 
-bool _isEnableLocation = true;
-double longitude = 0, latitude = 0;
+// bool _isEnableLocation = true;
+// double longitude = 0, latitude = 0;
 
 class _TabbarExchangeScreenState extends State<TabbarExchangeScreen> {
-  Location location = new Location();
-  late bool _serviceEnable;
-  late PermissionStatus _permissionGranted;
-  late LocationData _locationData;
+  // Location location = new Location();
+  // late bool _serviceEnable;
+  // late PermissionStatus _permissionGranted;
+  // late LocationData _locationData;
 
-  bool _isListenLocation = false, _isGetLocation = false;
-  void initState() {
-    super.initState();
-    if (_isEnableLocation == true) {
-      _showDialog();
-    }
-  }
+  // bool _isListenLocation = false, _isGetLocation = false;
+  // void initState() {
+  //   super.initState();
+  //   if (_isEnableLocation == true) {
+  //     _showDialog();
+  //   }
+  // }
 
-  _showDialog() async {
-    await Future.delayed(Duration(milliseconds: 50));
-    showDialog(
-        context: context,
-        builder: (context) => AlertDialog(
-              title: Text('Vị trí'),
-              content: Text('Cho phép lấy vị trí của bạn ?'),
-              actions: <Widget>[
-                FlatButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    child: Text('Không', style: TextStyle(color: Colors.white)),
-                    color: AppConstant.backgroundColor),
-                FlatButton(
-                    onPressed: () async {
-                      _serviceEnable = await location.serviceEnabled();
-                      if (!_serviceEnable) {
-                        _serviceEnable = await location.requestService();
-                        if (_serviceEnable) return;
-                      }
+  // _showDialog() async {
+  //   await Future.delayed(Duration(milliseconds: 50));
+  //   showDialog(
+  //       context: context,
+  //       builder: (context) => AlertDialog(
+  //             title: Text('Vị trí'),
+  //             content: Text('Cho phép lấy vị trí của bạn ?'),
+  //             actions: <Widget>[
+  //               FlatButton(
+  //                   onPressed: () {
+  //                     Navigator.pop(context);
+  //                   },
+  //                   child: Text('Không', style: TextStyle(color: Colors.white)),
+  //                   color: AppConstant.backgroundColor),
+  //               FlatButton(
+  //                   onPressed: () async {
+  //                     _serviceEnable = await location.serviceEnabled();
+  //                     if (!_serviceEnable) {
+  //                       _serviceEnable = await location.requestService();
+  //                       if (_serviceEnable) return;
+  //                     }
 
-                      _permissionGranted = await location.hasPermission();
-                      if (_permissionGranted == PermissionStatus.denied) {
-                        _permissionGranted = await location.requestPermission();
-                        if (_permissionGranted != PermissionStatus.granted)
-                          return;
-                      }
+  //                     _permissionGranted = await location.hasPermission();
+  //                     if (_permissionGranted == PermissionStatus.denied) {
+  //                       _permissionGranted = await location.requestPermission();
+  //                       if (_permissionGranted != PermissionStatus.granted)
+  //                         return;
+  //                     }
 
-                      _locationData = await location.getLocation();
-                      longitude = _locationData.longitude;
-                      latitude = _locationData.latitude;
-                      print("long: " + longitude.toString());
-                      print("lati: " + latitude.toString());
-                      setState(() {
-                        _isEnableLocation = false;
-                      });
-                      Navigator.pop(context);
-                    },
-                    child:
-                        Text('Cho phép', style: TextStyle(color: Colors.white)),
-                    color: AppConstant.backgroundColor),
-              ],
-            ));
-  }
+  //                     _locationData = await location.getLocation();
+  //                     longitude = _locationData.longitude;
+  //                     latitude = _locationData.latitude;
+  //                     print("long: " + longitude.toString());
+  //                     print("lati: " + latitude.toString());
+  //                     setState(() {
+  //                       _isEnableLocation = false;
+  //                     });
+  //                     Navigator.pop(context);
+  //                   },
+  //                   child:
+  //                       Text('Cho phép', style: TextStyle(color: Colors.white)),
+  //                   color: AppConstant.backgroundColor),
+  //             ],
+  //           ));
+  // }
 
   @override
   Widget build(BuildContext context) {

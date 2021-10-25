@@ -1,6 +1,7 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/bloc/contest_bloc.dart';
 import 'package:car_world_system/sources/model/contest.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/ui/main/home/contest_detail_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -66,7 +67,7 @@ class _ContestScreenState extends State<ContestScreen> {
       contestBloc.getListNewContest(now);
       return StreamBuilder(
           stream: contestBloc.listContest,
-          builder: (context, AsyncSnapshot<List<Contest>> snapshot) {
+          builder: (context, AsyncSnapshot<List<EventContest>> snapshot) {
             if (snapshot.hasData) {
               return _buildListContest(snapshot.data!);
             } else if (snapshot.hasError) {
@@ -78,7 +79,7 @@ class _ContestScreenState extends State<ContestScreen> {
       contestBloc.getListSignficantContest(now);
       return StreamBuilder(
           stream: contestBloc.listContest,
-          builder: (context, AsyncSnapshot<List<Contest>> snapshot) {
+          builder: (context, AsyncSnapshot<List<EventContest>> snapshot) {
             if (snapshot.hasData) {
               return _buildListContest(snapshot.data!);
             } else if (snapshot.hasError) {
@@ -89,7 +90,7 @@ class _ContestScreenState extends State<ContestScreen> {
     }
   }
 
-  Widget _buildListContest(List<Contest> data) {
+  Widget _buildListContest(List<EventContest> data) {
     if (data.length == 0) {
       return Container(
         width: MediaQuery.of(context).size.width,
@@ -97,20 +98,24 @@ class _ContestScreenState extends State<ContestScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              height: 55.h,
-              width: 100.h,
+             Container(
+              height: 35.h,
+              width: 35.h,
               child: Image(
-                image: AssetImage("assets/images/not found.png"),
+                image: AssetImage("assets/images/not found 2.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
-            Text(
-              "Xin lỗi",
-              style: TextStyle(fontWeight: FontWeight.bold),
+            SizedBox(
+              height: 1.h,
             ),
             Text(
-                "chúng tôi không thể tìm được kết quả hợp với tìm kiếm của bạn")
+              "Rất tiếc, chưa có dữ liệu hiển thị",
+              style: TextStyle(
+                  
+                  fontStyle: FontStyle.italic,
+                  fontSize: 18),
+            ),
           ],
         ),
       );

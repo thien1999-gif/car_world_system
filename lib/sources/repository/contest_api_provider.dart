@@ -1,39 +1,25 @@
 import 'dart:convert';
 
 import 'package:car_world_system/sources/model/cancel_register_contest.dart';
+import 'package:car_world_system/sources/model/cancel_register_event_contest.dart';
 import 'package:car_world_system/sources/model/contest.dart';
 import 'package:car_world_system/sources/model/contest_register.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/model/feedback.dart';
 import 'package:car_world_system/sources/model/userContest.dart';
+import 'package:car_world_system/sources/model/user_event_contest.dart';
 import 'package:car_world_system/sources/repository/contest_api_string.dart';
 import 'package:http/http.dart' as http;
 
 class ContestApiProvider {
   // get all new contest
-  Future<List<Contest>> getListNewContest(String now) async {
-    final response = await http.get(ContestApiString.getListNewEvent(now));
-    List<Contest> listContest = [];
+  Future<List<EventContest>> getListNewContest(String now) async {
+    final response = await http.get(ContestApiString.getListNewContest(now));
+    List<EventContest> listContest = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
       //if (data['IsDeleted'] == false) {
-      Contest contest = Contest(
-          id: data['Id'],
-          createdBy: data['CreatedBy'],
-          title: data['Title'],
-          description: data['Description'],
-          venue: data['Venue'],
-          image: data['Image'],
-          minParticipants: data['MinParticipants'],
-          maxParticipants: data['MaxParticipants'],
-          startRegister: data['StartRegister'],
-          endRegister: data['EndRegister'],
-          startDate: data['StartDate'],
-          endDate: data['EndDate'],
-          fee: data['Fee'],
-          currentParticipants: data['CurrentParticipants'],
-          rating: data['Rating'],
-          status: data['Status'],
-          createdDate: data['CreatedDate']);
+     EventContest contest = EventContest.fromJson(data);
       listContest.add(contest);
       // }
     }
@@ -50,31 +36,14 @@ class ContestApiProvider {
   }
 
 // get all significant contest
-  Future<List<Contest>> getListSignificantContest(String now) async {
+  Future<List<EventContest>> getListSignificantContest(String now) async {
     final response =
-        await http.get(ContestApiString.getListSignificantEvent(now));
-    List<Contest> listContest = [];
+        await http.get(ContestApiString.getListSignificantContest(now));
+    List<EventContest> listContest = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
       //if (data['IsDeleted'] == false) {
-      Contest contest = Contest(
-          id: data['Id'],
-          createdBy: data['CreatedBy'],
-          title: data['Title'],
-          description: data['Description'],
-          venue: data['Venue'],
-          image: data['Image'],
-          minParticipants: data['MinParticipants'],
-          maxParticipants: data['MaxParticipants'],
-          startRegister: data['StartRegister'],
-          endRegister: data['EndRegister'],
-          startDate: data['StartDate'],
-          endDate: data['EndDate'],
-          fee: data['Fee'],
-          currentParticipants: data['CurrentParticipants'],
-          rating: data['Rating'],
-          status: data['Status'],
-          createdDate: data['CreatedDate']);
+      EventContest contest = EventContest.fromJson(data);
       listContest.add(contest);
       // }
     }
@@ -91,12 +60,12 @@ class ContestApiProvider {
   }
 
   //get contest detail by id
-  Future<Contest> getContestDetail(int id) async {
+  Future<EventContest> getContestDetail(String id) async {
     final response = await http.get(ContestApiString.getContestDetail(id));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON
-      return Contest.fromJson(jsonDecode(response.body));
+      return EventContest.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.
@@ -105,7 +74,7 @@ class ContestApiProvider {
   }
 
   //register contest
-  Future<bool> registerContest(UserContest userContest) async {
+  Future<bool> registerContest(UserEventContest userContest) async {
     final response = await http.post(
       ContestApiString.registerContest(),
       headers: <String, String>{
@@ -125,7 +94,7 @@ class ContestApiProvider {
   }
 
   //user rating contest
-  Future<bool> ratingContest(double rate, UserContest userContest) async {
+  Future<bool> ratingContest(double rate, UserEventContest userContest) async {
     final response = await http.put(
       ContestApiString.ratingContest(rate),
       headers: <String, String>{
@@ -146,7 +115,7 @@ class ContestApiProvider {
   }
 
     //user feed contest
-  Future<bool> feedbackContest(int id, FeedBack feedBack) async {
+  Future<bool> feedbackContest(String id, FeedBack feedBack) async {
     final response = await http.post(
       ContestApiString.feedbackContest(id),
       headers: <String, String>{
@@ -167,7 +136,7 @@ class ContestApiProvider {
   }
 
    //cancel contest
-  Future<bool> cancelContest(CancelRegisterContest userContest) async {
+  Future<bool> cancelContest(CancelRegisterContestEvent userContest) async {
     final response = await http.put(
       ContestApiString.cancelContest(),
       headers: <String, String>{

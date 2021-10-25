@@ -1,7 +1,9 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/bloc/event_bloc.dart';
 import 'package:car_world_system/sources/model/cancel_register_event.dart';
+import 'package:car_world_system/sources/model/cancel_register_event_contest.dart';
 import 'package:car_world_system/sources/model/event.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/repository/event_repository.dart';
 import 'package:car_world_system/sources/ui/main/drawer/event/manager_event_screen.dart';
 import 'package:flutter/material.dart';
@@ -9,7 +11,8 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:sizer/sizer.dart';
 
 class EventRegisteredDetailScreen extends StatefulWidget {
-  final int eventID, userID, eventStatus;
+  final userID, eventStatus;
+ final String eventID;
   const EventRegisteredDetailScreen(
       {Key? key,
       required this.eventID,
@@ -24,7 +27,8 @@ class EventRegisteredDetailScreen extends StatefulWidget {
 
 class _EventRegisteredDetailScreenState
     extends State<EventRegisteredDetailScreen> {
-  final int eventID, userID, eventStatus;
+  final   userID, eventStatus;
+ final String eventID;
   bool _enable = true;
   var now = DateTime.now(); // lay ngày hiện hành
   var endDateConvert;
@@ -54,7 +58,7 @@ class _EventRegisteredDetailScreenState
       ),
       body: StreamBuilder(
           stream: eventBloc.eventDetail,
-          builder: (context, AsyncSnapshot<Event> snapshot) {
+          builder: (context, AsyncSnapshot<EventContest> snapshot) {
             if (snapshot.hasData) {
               return _buildEventDetail(snapshot.data!);
             } else if (snapshot.hasError) {
@@ -65,7 +69,7 @@ class _EventRegisteredDetailScreenState
     );
   }
 
-  Widget _buildEventDetail(Event data) {
+  Widget _buildEventDetail(EventContest data) {
     var imageListUrl = data.image.split("|");
     endDateConvert = convertDateFromString(data.endRegister);
 
@@ -106,7 +110,7 @@ class _EventRegisteredDetailScreenState
         ),
         Container(
             padding: EdgeInsets.only(left: 1.h),
-            child: (eventStatus != 2)
+            child: (eventStatus != 0)
                 ? Container(
                     width: 0,
                     height: 0,
@@ -333,7 +337,7 @@ class _EventRegisteredDetailScreenState
                   )
                 ],
               ),
-              onPressed: _enable && eventStatus != 2
+              onPressed: _enable && eventStatus != 0
                   ? () {
                       showDialog(
                         context: context,
@@ -351,9 +355,9 @@ class _EventRegisteredDetailScreenState
                                 color: AppConstant.backgroundColor),
                             FlatButton(
                                 onPressed: () {
-                                  CancelRegisterEvent cancelRegisterEvent =
-                                      CancelRegisterEvent(
-                                          eventId: eventID, userId: userID);
+                                  CancelRegisterContestEvent cancelRegisterEvent =
+                                      CancelRegisterContestEvent(
+                                          contestEventId: eventID, userId: userID);
                                   EventRepository eventRepository =
                                       EventRepository();
                                   eventRepository

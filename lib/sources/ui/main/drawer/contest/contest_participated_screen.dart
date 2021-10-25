@@ -68,20 +68,24 @@ class _ContestParticipatedScreenState extends State<ContestParticipatedScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              height: 55.h,
-              width: 100.h,
+             Container(
+              height: 35.h,
+              width: 35.h,
               child: Image(
-                image: AssetImage("assets/images/not found.png"),
+                image: AssetImage("assets/images/not found 2.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
-            Text(
-              "Xin lỗi",
-              style: TextStyle(fontWeight: FontWeight.bold),
+            SizedBox(
+              height: 1.h,
             ),
             Text(
-                "chúng tôi không thể tìm được kết quả hợp với tìm kiếm của bạn")
+              "Rất tiếc, chưa có dữ liệu hiển thị",
+              style: TextStyle(
+                  
+                  fontStyle: FontStyle.italic,
+                  fontSize: 18),
+            ),
           ],
         ),
       );
@@ -98,7 +102,7 @@ class _ContestParticipatedScreenState extends State<ContestParticipatedScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>ContestParitcipatedDetailScreen(
-                            contestID: data[index].contestId,
+                            contestID: data[index].contestEventId,
                             userID: data[index].userId,
                             contestStatus: data[index].status,
                           ),
@@ -122,7 +126,7 @@ class _ContestParticipatedScreenState extends State<ContestParticipatedScreen> {
                                       image: new DecorationImage(
                                           fit: BoxFit.cover,
                                           image: NetworkImage(data[index]
-                                              .contest
+                                              .contestEvent
                                               .image
                                               .split("|")
                                               .elementAt(0))),
@@ -150,13 +154,13 @@ class _ContestParticipatedScreenState extends State<ContestParticipatedScreen> {
                                     ),
                                     Container(
                                         child: Text(
-                                          data[index].contest.title.length > 30
+                                          data[index].contestEvent.title.length > 30
                                               ? data[index]
-                                                      .contest
+                                                      .contestEvent
                                                       .title
                                                       .substring(0, 28) +
                                                   "..."
-                                              : data[index].contest.title,
+                                              : data[index].contestEvent.title,
                                           style: TextStyle(
                                               fontWeight: AppConstant.titleBold,
                                               fontSize: 15),
@@ -179,10 +183,10 @@ class _ContestParticipatedScreenState extends State<ContestParticipatedScreen> {
                                     ),
                                     Container(
                                         child: Text(
-                                          data[index].contest.rating == null
+                                          data[index].contestEvent.rating == null
                                               ? "N/A"
                                               : data[index]
-                                                  .contest
+                                                  .contestEvent
                                                   .rating
                                                   .toString(),
                                           style: TextStyle(fontSize: 15),
@@ -205,12 +209,12 @@ class _ContestParticipatedScreenState extends State<ContestParticipatedScreen> {
                                     ),
                                     Text(
                                       data[index]
-                                              .contest
+                                              .contestEvent
                                               .startDate
                                               .substring(0, 10) +
                                           " - " +
                                           data[index]
-                                              .contest
+                                              .contestEvent
                                               .endDate
                                               .substring(0, 10),
                                       style: TextStyle(fontSize: 15),
@@ -232,7 +236,7 @@ class _ContestParticipatedScreenState extends State<ContestParticipatedScreen> {
                                     ),
                                     Text(
                                       data[index]
-                                              .contest
+                                              .contestEvent
                                               .currentParticipants
                                               .toString() +
                                           ' người',

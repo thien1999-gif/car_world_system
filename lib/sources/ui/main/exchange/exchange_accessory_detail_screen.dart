@@ -1,15 +1,33 @@
 import 'package:car_world_system/constant/app_constant.dart';
+import 'package:car_world_system/sources/bloc/exchange_bloc.dart';
+import 'package:car_world_system/sources/model/exchange_accessory.dart';
+import 'package:car_world_system/sources/ui/login/login_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 class ExchangeAccessoryDetailScreen extends StatefulWidget {
-  const ExchangeAccessoryDetailScreen({ Key? key }) : super(key: key);
+   final String id;
+  const ExchangeAccessoryDetailScreen({ Key? key, required this.id }) : super(key: key);
 
   @override
-  _ExchangeAccessoryDetailScreenState createState() => _ExchangeAccessoryDetailScreenState();
+  _ExchangeAccessoryDetailScreenState createState() => _ExchangeAccessoryDetailScreenState(id);
 }
 
 class _ExchangeAccessoryDetailScreenState extends State<ExchangeAccessoryDetailScreen> {
-  @override
+   final String id;
+  final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
+
+  _ExchangeAccessoryDetailScreenState(this.id);
+
+    @override
+  void initState() {
+    super.initState();
+
+    exchangeBloc.getExchangeAccessoryDetail(id);
+  }
+
+    @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
@@ -17,260 +35,369 @@ class _ExchangeAccessoryDetailScreenState extends State<ExchangeAccessoryDetailS
         backgroundColor: AppConstant.backgroundColor,
         centerTitle: true,
       ),
-      body: ListView(
-        children: [
-          Image(
-            image: AssetImage("assets/images/slider_3.png"),
-            fit: BoxFit.cover,
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: Text(
-              "Vô lăng",
-              style: TextStyle(fontWeight: AppConstant.titleBold, fontSize: 23),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: Text(
-              "Giá",
-              style: TextStyle(color: Colors.grey, fontSize: 18),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: Text(
-              "3000000000 đồng",
-              style: TextStyle(fontSize: 18),
-            ),
-          ),
+      body: StreamBuilder(
+          stream: exchangeBloc.exchangeAccessoryDetail,
+          builder: (context, AsyncSnapshot<ExchangeAccessory> snapshot) {
+            if (snapshot.hasData) {
+              return _buildExchangeAccessoryDetail(snapshot.data!);
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            return Center(child: CircularProgressIndicator());
+          }),
+    );
+  }
 
-// thông số cơ bản
-          Padding(
-            padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: Text(
-              "Thông số cơ bản",
-              style: TextStyle(color: Colors.blue, fontSize: 18),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.all(2),
-            child: Container(
-              decoration: BoxDecoration(
-                  border: Border.all(width: 1),
-                  borderRadius: BorderRadius.all(Radius.circular(1.0))),
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Row(
-                  children: [
-                    Container(
-                      // color: Colors.blue,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Dài*Rộng*Cao",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
-                          Text(
-                            "4239x1961x1291",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            "Công suất cực đại",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
-                          Text(
-                            "335",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            "Dung tích (cc)",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
-                          Text(
-                            "1997",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            "Động cơ",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
-                          Text(
-                            "V4",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            "Động cơ",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
-                          Text(
-                            "V4",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                    ),
-                    SizedBox(
-                      width: 4.h,
-                    ),
-                    Container(
-                      // color: Colors.blue,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Momen xoắn cực đại",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
-                          Text(
-                            "320",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            "Khoảng cách gầm xe",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
-                          Text(
-                            "100",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            "Tiêu hao nhiên liệu",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
-                          Text(
-                            "20km/l",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            "Bán kính quay",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
-                          Text(
-                            "10",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                          SizedBox(
-                            height: 2.h,
-                          ),
-                          Text(
-                            "Bán kính quay",
-                            style: TextStyle(color: Colors.grey, fontSize: 18),
-                          ),
-                          Text(
-                            "10",
-                            style: TextStyle(fontSize: 18),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                ),
+  Widget _buildExchangeAccessoryDetail(ExchangeAccessory data) {
+    var imageListUrl = data.exchangeAccessorryDetails[0].image.split("|");
+
+    return ListView(
+      children: [
+        ImageSlideshow(
+          width: double.infinity,
+          height: 200,
+          initialPage: 0,
+          indicatorColor: Colors.blue,
+          indicatorBackgroundColor: Colors.grey,
+          autoPlayInterval: 5000,
+          isLoop: true,
+          children: [
+            for (int i = 0; i < imageListUrl.length ; i++)
+              Image(
+                image: NetworkImage(imageListUrl[i]),
+                fit: BoxFit.cover,
               ),
-            ),
+          ],
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+          child: Text(
+            data.title,
+            style: TextStyle(fontWeight: AppConstant.titleBold, fontSize: 23),
           ),
-
-          Padding(
-            padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: Text(
-              "Địa điểm showroom",
-              style: TextStyle(color: Colors.grey, fontSize: 18),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: Text(
-              "Ấp 1 xã An Thạnh huyện Bến Lức tỉnh Long An",
-              style: TextStyle(fontSize: 18),
-              maxLines: 5,
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: Text(
-              "Mô tả",
-              style: TextStyle(color: Colors.grey, fontSize: 18),
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-            child: Text(
-              "Thế hệ mới của dòng xe BMW Z4 2021 với những thiết kế hiện đại bắt kịp được xu hướng thịnh hành của các mẫu xe thể thao hiện nay. Bên cạnh đó, những trang bị tiện nghi của dòng xe này là thật sự nổi bật hơn rất nhiều so với các đối thủ trong cùng phân khúc. Bên cạnh đó là diện mạo thể thao và thật sự năng động cũng chính là lợi thế của dòng xe này.",
-              style: TextStyle(fontSize: 18),
-              maxLines: 15,
-            ),
-          ),
-
-          Row(
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+          child: Row(
             children: [
-              SizedBox(
-                width: 25.0.h,
-              ),
-              
-              TextButton(
-                child: Row(
-                  children: [
-                    Icon(
-                      Icons.person,
-                      color: AppConstant.backgroundColor,
-                    ),
-                    SizedBox(width: 5),
-                    Text(
-                      "Liên hệ trao đổi",
-                      style: TextStyle(
-                          color: AppConstant.backgroundColor, fontSize: 16),
-                    )
-                  ],
-                ),
-                onPressed: () {
-                    showDialog(
-                    context: context,
-                    builder: (context) => AlertDialog(
-                      title: Text('Xác nhận'),
-                      content:
-                          Text('Bạn có chắc là muốn liên hệ trao đổi không?'),
-                      actions: <Widget>[
-                        FlatButton(
-                            onPressed: () {},
-                            child: Text('Không',
-                                style: TextStyle(color: Colors.white)),
-                            color: AppConstant.backgroundColor),
-                        FlatButton(
-                            onPressed: () {},
-                            child: Text('Có',
-                                style: TextStyle(color: Colors.white)),
-                            color: AppConstant.backgroundColor),
-                      ],
-                    ),
-                  );
-                },
+              Text("Giá: ",
+                  style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.red)),
+              Text(
+                '${formatCurrency.format(data.total)} VNĐ',
+                style: TextStyle(
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.red),
               )
             ],
-          )
-        ],
-      ),
+          ),
+        ),
+
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Ngày đăng tin",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                      fontSize: 18),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.date_range,
+                      color: Colors.lightGreen,
+                    ),
+                    SizedBox(
+                      width: 1.h,
+                    ),
+                    Text(
+                      data.createdDate.substring(11, 16) +
+                          "/" +
+                          data.createdDate.substring(0, 10),
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Text(
+                  "Số điện thoại",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                      fontSize: 18),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.phone_android_sharp,
+                      color: Colors.lightGreen,
+                    ),
+                    SizedBox(
+                      width: 1.h,
+                    ),
+                    Text(
+                      phoneNumberOfUser,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Text("Tên linh kiện",
+                    style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                        fontSize: 18)),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.settings_input_component,
+                      color: Colors.lightGreen,
+                    ),
+                    SizedBox(
+                      width: 1.h,
+                    ),
+                    Text(
+                    data.exchangeAccessorryDetails[0].accessoryName,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                 SizedBox(
+                  height: 1.h,
+                ),
+                Text("Hãng sản xuất",
+                    style: TextStyle(
+                        fontStyle: FontStyle.italic,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.blue,
+                        fontSize: 18)),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.precision_manufacturing,
+                      color: Colors.lightGreen,
+                    ),
+                    SizedBox(
+                      width: 1.h,
+                    ),
+                    Text(
+                    data.exchangeAccessorryDetails[0].brandName,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Text(
+                  "Trạng thái",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                      fontSize: 18),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.settings_backup_restore_sharp,
+                      color: Colors.lightGreen,
+                    ),
+                    SizedBox(
+                      width: 1.h,
+                    ),
+                    Text(
+                    data.exchangeAccessorryDetails[0].isUsed ==true
+                                          ? "Đã sử dụng"
+                                          : "Còn mới",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                SizedBox(
+                  height: 1.h,
+                ),
+                Text(
+                  "Giá mỗi sản phẩm",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                      fontSize: 18),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.money,
+                      color: Colors.lightGreen,
+                    ),
+                    SizedBox(
+                      width: 1.h,
+                    ),
+                    Text(
+                       '${formatCurrency.format(data.exchangeAccessorryDetails[0].price)} VNĐ',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                 SizedBox(
+                  height: 1.h,
+                ),
+                Text(
+                  "Số lượng",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                      fontSize: 18),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.add_shopping_cart,
+                      color: Colors.lightGreen,
+                    ),
+                    SizedBox(
+                      width: 1.h,
+                    ),
+                    Text(
+                      data.exchangeAccessorryDetails[0].amount.toString() + " cái",
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+              ],
+            )),
+        Padding(
+          padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+          child: Text(
+            "Địa điểm",
+            style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+                fontSize: 18),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+          child: Text(
+            data.address,
+            style: TextStyle(fontSize: 18),
+            maxLines: 5,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+          child: Text(
+            "Mô tả",
+            style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+                fontSize: 18),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+          child: Text(
+            data.description,
+            style: TextStyle(fontSize: 18),
+            maxLines: 15,
+          ),
+        ),
+        Row(
+          children: [
+            SizedBox(
+              width: 10.0.h,
+            ),
+            TextButton(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.cancel,
+                    color: AppConstant.backgroundColor,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    "Gỡ bài đăng",
+                    style: TextStyle(
+                        color: AppConstant.backgroundColor, fontSize: 16),
+                  )
+                ],
+              ),
+              onPressed: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Xác nhận'),
+                    content: Text('Bạn có chắc là muốn gỡ bài đăng này không?'),
+                    actions: <Widget>[
+                      FlatButton(
+                          onPressed: () {
+                            Navigator.pop(context);
+                          },
+                          child: Text('Không',
+                              style: TextStyle(color: Colors.white)),
+                          color: AppConstant.backgroundColor),
+                      FlatButton(
+                          onPressed: () {
+                            // ExchangeAccessoryRepository exchangeAccessoryRepository = ExchangeAccessoryRepository();
+                            // exchangeAccessoryRepository.cancelExchangeAccessory(data.id);
+                            //  SnackBar snackbar =
+                            //           SnackBar(content: Text('Hủy thành công'));
+                            //       ScaffoldMessenger.of(context)
+                            //           .showSnackBar(snackbar);
+                            //       Navigator.pop(context);
+                            //       Navigator.pop(context);
+                          },
+                          child:
+                              Text('Có', style: TextStyle(color: Colors.white)),
+                          color: AppConstant.backgroundColor),
+                    ],
+                  ),
+                );
+              },
+            ),
+            TextButton(
+              child: Row(
+                children: [
+                  Icon(
+                    Icons.person,
+                    color: AppConstant.backgroundColor,
+                  ),
+                  SizedBox(width: 5),
+                  Text(
+                    "Người quan tâm",
+                    style: TextStyle(
+                        color: AppConstant.backgroundColor, fontSize: 16),
+                  )
+                ],
+              ),
+              onPressed: () {},
+            )
+          ],
+        )
+      ],
     );
   }
 }

@@ -1,8 +1,10 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/bloc/contest_bloc.dart';
 import 'package:car_world_system/sources/model/contest.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/model/userContest.dart';
 import 'package:car_world_system/sources/model/userProfile.dart';
+import 'package:car_world_system/sources/model/user_event_contest.dart';
 import 'package:car_world_system/sources/repository/contest_repository.dart';
 import 'package:car_world_system/sources/repository/login_repository.dart';
 import 'package:car_world_system/sources/ui/login/login_screen.dart';
@@ -13,7 +15,7 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 class ContestDetailScreen extends StatefulWidget {
-  final int id;
+  final String id;
   const ContestDetailScreen({Key? key, required this.id}) : super(key: key);
 
   @override
@@ -21,7 +23,7 @@ class ContestDetailScreen extends StatefulWidget {
 }
 
 class _ContestDetailScreenState extends State<ContestDetailScreen> {
-  final int id;
+  final String id;
   UserProfile? _profile;
   bool _enable = true;
   var now = DateTime.now(); // lay ngày hiện hành
@@ -60,7 +62,7 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
         ),
         body: StreamBuilder(
             stream: contestBloc.contestDetail,
-            builder: (context, AsyncSnapshot<Contest> snapshot) {
+            builder: (context, AsyncSnapshot<EventContest> snapshot) {
               if (snapshot.hasData) {
                 return _buildContestDetail(snapshot.data!);
               } else if (snapshot.hasError) {
@@ -70,7 +72,7 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
             }));
   }
 
-  Widget _buildContestDetail(Contest data) {
+  Widget _buildContestDetail(EventContest data) {
     var imageListUrl = data.image.split("|");
     startDateConvert = convertDateFromString(data.startRegister);
 
@@ -90,21 +92,21 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
     return ListView(
       children: [
         ImageSlideshow(
-            width: double.infinity,
-            height: 200,
-            initialPage: 0,
-            indicatorColor: Colors.blue,
-            indicatorBackgroundColor: Colors.grey,
-            autoPlayInterval: 5000,
-            isLoop: true,
-            children: [
-              for (int i = 0; i < imageListUrl.length - 1; i++)
-                Image(
-                  image: NetworkImage(imageListUrl[i]),
-                  fit: BoxFit.cover,
-                ),
-            ],
-          ),
+          width: double.infinity,
+          height: 200,
+          initialPage: 0,
+          indicatorColor: Colors.blue,
+          indicatorBackgroundColor: Colors.grey,
+          autoPlayInterval: 5000,
+          isLoop: true,
+          children: [
+            for (int i = 0; i < imageListUrl.length - 1; i++)
+              Image(
+                image: NetworkImage(imageListUrl[i]),
+                fit: BoxFit.cover,
+              ),
+          ],
+        ),
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Text(
@@ -157,7 +159,7 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Thời gian đăng ký sự kiện",
+                  "Thời gian đăng ký",
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.bold,
@@ -190,7 +192,7 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
                 SizedBox(
                   height: 1.h,
                 ),
-                Text("Thời gian diễn ra sự kiện",
+                Text("Thời gian diễn ra",
                     style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold,
@@ -279,16 +281,15 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
                 ),
               ],
             )),
-
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Text(
             "Địa điểm tổ chức",
             style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                      fontSize: 18),
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+                fontSize: 18),
           ),
         ),
         Padding(
@@ -304,10 +305,10 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
           child: Text(
             "Mô tả",
             style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                      fontSize: 18),
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+                fontSize: 18),
           ),
         ),
         Padding(
@@ -329,12 +330,12 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
                 children: [
                   Icon(
                     Icons.check,
-                     color:  Colors.white,
+                    color: Colors.white,
                   ),
                   SizedBox(width: 5),
                   Text(
                     "Tham gia",
-                     style: TextStyle(color: Colors.white),
+                    style: TextStyle(color: Colors.white),
                   )
                 ],
               ),
@@ -357,18 +358,24 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
                             FlatButton(
                                 onPressed: () {
                                   int userID = _profile!.id;
-                                  int contestID = data.id;
-                                  UserContest userContest = UserContest(
-                                      contestId: contestID, userId: userID);
+                                  String contestID = data.id;
+
+                                  UserEventContest userContest =
+                                      UserEventContest(
+                                          contestEventId: contestID,
+                                          userId: userID);
+
                                   ContestRepository contestRepository =
                                       ContestRepository();
-                                  contestRepository.registerContest(userContest);
+                                  contestRepository
+                                      .registerContest(userContest);
                                   SnackBar snackbar = SnackBar(
                                       content: Text('Đăng ký thành công'));
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackbar);
-                                      Navigator.pop(context);
-                                       Navigator.pop(context);
+                                  Navigator.pop(context);
+                                  Navigator.pop(context);
+
                                   // Navigator.push(
                                   //     context,
                                   //     MaterialPageRoute(

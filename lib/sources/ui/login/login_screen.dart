@@ -58,20 +58,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     label: Text("Đăng nhập với Google"),
                     onPressed: () {
-                       GoogleSingInProvider.signInWithGoogle().then((result) {
-                        if (result != null) {
-                          // LoginApiProvider user = new LoginApiProvider();
-                          LoginRepository loginRepository = LoginRepository();
-                          loginRepository.login(result);
-                          email = result.email;
-                          // phoneNumberOfUser = result.phone;
-                          Navigator.of(context).pushReplacement(
+                      // sao nay update lai
+                      //  GoogleSingInProvider.signInWithGoogle().then((result) {
+                      //   if (result != null) {
+                      //     // LoginApiProvider user = new LoginApiProvider();
+                      //     LoginRepository loginRepository = LoginRepository();
+                      //     loginRepository.login(result);
+                      //     email = result.email;
+                      //     // phoneNumberOfUser = result.phone;
+                      //     Navigator.of(context).pushReplacement(
+                      //         MaterialPageRoute(
+                      //             builder: (context) => MainPage()));
+                      //   }
+                      // });
+
+                       Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                   builder: (context) => MainPage()));
-                        }
-                      });
-
-                      
                     },
                   ),
                 )

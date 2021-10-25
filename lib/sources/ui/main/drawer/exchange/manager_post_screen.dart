@@ -22,7 +22,7 @@ class _ManagerPostScreenState extends State<ManagerPostScreen> {
             title: Text('Quản lí bài đăng'),
             centerTitle: true,
             bottom: TabBar(
-               indicatorColor: Color.fromRGBO(255, 255, 255, 1),
+              indicatorColor: Color.fromRGBO(255, 255, 255, 1),
               tabs: [
                 Tab(icon: Icon(Icons.directions_car), text: "Xe hơi"),
                 Tab(
@@ -32,7 +32,10 @@ class _ManagerPostScreenState extends State<ManagerPostScreen> {
             ),
           ),
           body: TabBarView(
-            children: [PostCarScreen(), PostAcessoryScreen()],
+            children: [
+               PostCarScreen()
+              
+              , PostAcessoryScreen()],
           ),
         ),
       ),

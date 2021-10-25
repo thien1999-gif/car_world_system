@@ -12,79 +12,79 @@ String exchangeCarToJson(List<ExchangeCar> data) => json.encode(List<dynamic>.fr
 class ExchangeCar {
     ExchangeCar({
         required this.id,
+        required this.type,
         required this.userId,
         required this.title,
         required this.description,
         required this.total,
         required this.createdDate,
         required this.address,
-        required this.longitude,
-        required this.latitude,
         required this.status,
         // @required this.feedbackId,
         // @required this.feedback,
         // @required this.user,
+        // @required this.exchangeAccessorryDetails,
         required this.exchangeCarDetails,
-       // @required this.exchangeResponses,
+        // @required this.exchangeResponses,
     });
 
     String id;
+    int type;
     int userId;
     String title;
     String description;
-    int total;
+    double total;
     String createdDate;
     String address;
-    double longitude;
-    double latitude;
     int status;
     // dynamic feedbackId;
     // dynamic feedback;
     // dynamic user;
+    // List<dynamic> exchangeAccessorryDetails;
     List<ListExchangeCarDetail> exchangeCarDetails;
     // List<dynamic> exchangeResponses;
 
     factory ExchangeCar.fromJson(Map<String, dynamic> json) => ExchangeCar(
         id: json["Id"],
+        type: json["Type"],
         userId: json["UserId"],
         title: json["Title"],
         description: json["Description"],
         total: json["Total"],
         createdDate: json["CreatedDate"],
         address: json["Address"],
-        longitude: json["Longitude"].toDouble(),
-        latitude: json["Latitude"].toDouble(),
         status: json["Status"],
         // feedbackId: json["FeedbackId"],
         // feedback: json["Feedback"],
         // user: json["User"],
+        //exchangeAccessorryDetails: List<dynamic>.from(json["ExchangeAccessorryDetails"].map((x) => x)),
         exchangeCarDetails: List<ListExchangeCarDetail>.from(json["ExchangeCarDetails"].map((x) => ListExchangeCarDetail.fromJson(x))),
-       // exchangeResponses: List<dynamic>.from(json["ExchangeResponses"].map((x) => x)),
+        //exchangeResponses: List<dynamic>.from(json["ExchangeResponses"].map((x) => x)),
     );
 
     Map<String, dynamic> toJson() => {
         "Id": id,
+        "Type": type,
         "UserId": userId,
         "Title": title,
         "Description": description,
         "Total": total,
         "CreatedDate": createdDate,
         "Address": address,
-        "Longitude": longitude,
-        "Latitude": latitude,
         "Status": status,
         // "FeedbackId": feedbackId,
         // "Feedback": feedback,
         // "User": user,
+        // "ExchangeAccessorryDetails": List<dynamic>.from(exchangeAccessorryDetails.map((x) => x)),
         "ExchangeCarDetails": List<dynamic>.from(exchangeCarDetails.map((x) => x.toJson())),
-       // "ExchangeResponses": List<dynamic>.from(exchangeResponses.map((x) => x)),
+        // "ExchangeResponses": List<dynamic>.from(exchangeResponses.map((x) => x)),
     };
 }
 
 class ListExchangeCarDetail {
     ListExchangeCarDetail({
         required this.id,
-        required this.exchangeCarId,
+        required this.exchangeId,
         required this.brandName,
         required this.carName,
         required this.yearOfManufactor,
@@ -99,7 +99,7 @@ class ListExchangeCarDetail {
     });
 
     String id;
-    String exchangeCarId;
+    String exchangeId;
     String brandName;
     String carName;
     int yearOfManufactor;
@@ -114,7 +114,7 @@ class ListExchangeCarDetail {
 
     factory ListExchangeCarDetail.fromJson(Map<String, dynamic> json) => ListExchangeCarDetail(
         id: json["Id"],
-        exchangeCarId: json["ExchangeCarId"],
+        exchangeId: json["ExchangeId"],
         brandName: json["BrandName"],
         carName: json["CarName"],
         yearOfManufactor: json["YearOfManufactor"],
@@ -130,7 +130,7 @@ class ListExchangeCarDetail {
 
     Map<String, dynamic> toJson() => {
         "Id": id,
-        "ExchangeCarId": exchangeCarId,
+        "ExchangeId": exchangeId,
         "BrandName": brandName,
         "CarName": carName,
         "YearOfManufactor": yearOfManufactor,

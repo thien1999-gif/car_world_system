@@ -1,43 +1,28 @@
 import 'dart:convert';
 
 import 'package:car_world_system/sources/model/cancel_register_event.dart';
+import 'package:car_world_system/sources/model/cancel_register_event_contest.dart';
 import 'package:car_world_system/sources/model/event.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/model/event_register.dart';
 import 'package:car_world_system/sources/model/feedback.dart';
 import 'package:car_world_system/sources/model/listProposal.dart';
 import 'package:car_world_system/sources/model/proposal.dart';
 import 'package:car_world_system/sources/model/proposal_detail.dart';
 import 'package:car_world_system/sources/model/userEvent.dart';
+import 'package:car_world_system/sources/model/user_event_contest.dart';
 import 'package:car_world_system/sources/repository/event_api_string.dart';
 import 'package:http/http.dart' as http;
 
 class EventApiProvider {
   // get all new event
-  Future<List<Event>> getListNewEvent(String now) async {
+  Future<List<EventContest>> getListNewEvent(String now) async {
     final response = await http.get(EventApiString.getListNewEvent(now));
-    List<Event> listEvent = [];
+    List<EventContest> listEvent = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
-      //if (data['IsDeleted'] == false) {
-      Event event = Event(
-          id: data['Id'],
-          createdBy: data['CreatedBy'],
-          title: data['Title'],
-          description: data['Description'],
-          venue: data['Venue'],
-          image: data['Image'],
-          minParticipants: data['MinParticipants'],
-          maxParticipants: data['MaxParticipants'],
-          startRegister: data['StartRegister'],
-          endRegister: data['EndRegister'],
-          startDate: data['StartDate'],
-          endDate: data['EndDate'],
-          currentParticipants: data['CurrentParticipants'],
-          rating: data['Rating'],
-          status: data['Status'],
-          createdDate: data['CreatedDate']);
+      EventContest event = EventContest.fromJson(data);
       listEvent.add(event);
-      // }
     }
 
     if (response.statusCode == 200) {
@@ -52,30 +37,14 @@ class EventApiProvider {
   }
 
   // get all significant event
-  Future<List<Event>> getListSignificantEvent(String now) async {
+  Future<List<EventContest>> getListSignificantEvent(String now) async {
     final response =
         await http.get(EventApiString.getListSignnificantEvent(now));
-    List<Event> listEvent = [];
+    List<EventContest> listEvent = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
       //if (data['IsDeleted'] == false) {
-      Event event = Event(
-          id: data['Id'],
-          createdBy: data['CreatedBy'],
-          title: data['Title'],
-          description: data['Description'],
-          venue: data['Venue'],
-          image: data['Image'],
-          minParticipants: data['MinParticipants'],
-          maxParticipants: data['MaxParticipants'],
-          startRegister: data['StartRegister'],
-          endRegister: data['EndRegister'],
-          startDate: data['StartDate'],
-          endDate: data['EndDate'],
-          currentParticipants: data['CurrentParticipants'],
-          rating: data['Rating'],
-          status: data['Status'],
-          createdDate: data['CreatedDate']);
+      EventContest event = EventContest.fromJson(data);
       listEvent.add(event);
       // }
     }
@@ -111,7 +80,8 @@ class EventApiProvider {
   }
 
   //register event
-  Future<bool> registerEvent(UserEvent userEvent) async {
+  Future<bool> registerEvent(UserEventContest userEvent) async {
+    print("vao dang ky su kien");
     final response = await http.post(
       EventApiString.registerEvent(),
       headers: <String, String>{
@@ -119,7 +89,7 @@ class EventApiProvider {
       },
       body: json.encode(userEvent),
     );
-
+    print("code" + response.statusCode.toString());
     if (response.statusCode == 200) {
       print("thanh cong đăng ký sự kiện");
       return true;
@@ -132,7 +102,7 @@ class EventApiProvider {
   }
 
   //user rating event
-  Future<bool> ratingEvent(double rate, UserEvent userEvent) async {
+  Future<bool> ratingEvent(double rate, UserEventContest userEvent) async {
     final response = await http.put(
       EventApiString.ratingEvent(rate),
       headers: <String, String>{
@@ -151,8 +121,9 @@ class EventApiProvider {
       return false;
     }
   }
+
   //user feed event
-  Future<bool> feedbackEvent(int id, FeedBack feedBack) async {
+  Future<bool> feedbackEvent(String id, FeedBack feedBack) async {
     final response = await http.post(
       EventApiString.feedbackEvent(id),
       headers: <String, String>{
@@ -173,7 +144,7 @@ class EventApiProvider {
   }
 
   //cancel event
-  Future<bool> cancelEvent(CancelRegisterEvent userEvent) async {
+  Future<bool> cancelEvent(CancelRegisterContestEvent userEvent) async {
     final response = await http.put(
       EventApiString.cancelEvent(),
       headers: <String, String>{
@@ -282,12 +253,12 @@ class EventApiProvider {
   }
 
   //get event detail by id
-  Future<Event> getEventDetail(int id) async {
+  Future<EventContest> getEventDetail(String id) async {
     final response = await http.get(EventApiString.getEventDetail(id));
     if (response.statusCode == 200) {
       // If the server did return a 200 OK response,
       // then parse the JSON
-      return Event.fromJson(jsonDecode(response.body));
+      return EventContest.fromJson(jsonDecode(response.body));
     } else {
       // If the server did not return a 200 OK response,
       // then throw an exception.

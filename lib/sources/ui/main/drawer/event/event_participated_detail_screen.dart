@@ -1,8 +1,10 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/bloc/event_bloc.dart';
 import 'package:car_world_system/sources/model/event.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/model/feedback.dart';
 import 'package:car_world_system/sources/model/userEvent.dart';
+import 'package:car_world_system/sources/model/user_event_contest.dart';
 import 'package:car_world_system/sources/repository/event_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -10,7 +12,8 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:sizer/sizer.dart';
 
 class EventParticipatedDetailScreen extends StatefulWidget {
-  final int eventID, userID, eventStatus;
+  final  userID, eventStatus;
+  final String eventID;
   const EventParticipatedDetailScreen(
       {Key? key,
       required this.eventID,
@@ -25,7 +28,8 @@ class EventParticipatedDetailScreen extends StatefulWidget {
 
 class _EventParticipatedDetailScreenState
     extends State<EventParticipatedDetailScreen> {
-  final int eventID, userID, eventStatus;
+  final  userID, eventStatus;
+  final String eventID;
   var eventFeedBackContest = TextEditingController();
   var rateValue = 0.0;
   _EventParticipatedDetailScreenState(
@@ -47,7 +51,7 @@ class _EventParticipatedDetailScreenState
       ),
       body: StreamBuilder(
           stream: eventBloc.eventDetail,
-          builder: (context, AsyncSnapshot<Event> snapshot) {
+          builder: (context, AsyncSnapshot<EventContest> snapshot) {
             if (snapshot.hasData) {
               return _buildEventDetail(snapshot.data!);
             } else if (snapshot.hasError) {
@@ -58,7 +62,7 @@ class _EventParticipatedDetailScreenState
     );
   }
 
-  Widget _buildEventDetail(Event data) {
+  Widget _buildEventDetail(EventContest data) {
     var imageListUrl = data.image.split("|");
 
     return ListView(
@@ -335,7 +339,7 @@ class _EventParticipatedDetailScreenState
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackbar);
                                   Navigator.pop(context);
-                                  Navigator.pop(context);
+                                  // Navigator.pop(context);
                                 },
                                 child: Text('Gửi',
                                     style: TextStyle(color: Colors.white)),
@@ -343,7 +347,7 @@ class _EventParticipatedDetailScreenState
                           ],
                         ));
               },
-              color: AppConstant.backgroundColor,
+              
             ),
             SizedBox(
               width: 1.h,
@@ -400,8 +404,8 @@ class _EventParticipatedDetailScreenState
                       FlatButton(
                           onPressed: () {
                             print("diem danh gia: " + rateValue.toString());
-                            UserEvent userEvent =
-                                UserEvent(eventId: eventID, userId: userID);
+                            UserEventContest userEvent =
+                                UserEventContest(contestEventId: eventID, userId: userID);
                             EventRepository eventRepository = EventRepository();
                             eventRepository.ratingEvent(rateValue, userEvent);
                             SnackBar snackbar =
@@ -409,7 +413,7 @@ class _EventParticipatedDetailScreenState
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackbar);
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            // Navigator.pop(context);
                           },
                           child: Text('Gửi',
                               style: TextStyle(color: Colors.white)),

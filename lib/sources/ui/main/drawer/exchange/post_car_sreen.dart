@@ -68,20 +68,24 @@ class _PostCarScreenState extends State<PostCarScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              height: 55.h,
-              width: 100.h,
+             Container(
+              height: 35.h,
+              width: 35.h,
               child: Image(
-                image: AssetImage("assets/images/not found.png"),
+                image: AssetImage("assets/images/not found 2.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
-            Text(
-              "Xin lỗi",
-              style: TextStyle(fontWeight: FontWeight.bold),
+            SizedBox(
+              height: 1.h,
             ),
             Text(
-                "chúng tôi không thể tìm được kết quả hợp với tìm kiếm của bạn")
+              "Rất tiếc, chưa có dữ liệu hiển thị",
+              style: TextStyle(
+                  
+                  fontStyle: FontStyle.italic,
+                  fontSize: 18),
+            ),
           ],
         ),
       );

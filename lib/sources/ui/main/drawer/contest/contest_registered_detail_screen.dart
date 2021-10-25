@@ -1,7 +1,9 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/bloc/contest_bloc.dart';
 import 'package:car_world_system/sources/model/cancel_register_contest.dart';
+import 'package:car_world_system/sources/model/cancel_register_event_contest.dart';
 import 'package:car_world_system/sources/model/contest.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/repository/contest_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -9,7 +11,8 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 class ContestRegisteredDetailScreen extends StatefulWidget {
-  final int contestID, userID, contestStatus;
+  final  userID, contestStatus;
+  final String contestID;
   const ContestRegisteredDetailScreen(
       {Key? key, required this.contestID, required this.userID, required this.contestStatus})
       : super(key: key);
@@ -22,7 +25,8 @@ class ContestRegisteredDetailScreen extends StatefulWidget {
 
 class _ContestRegisteredDetailScreenState
     extends State<ContestRegisteredDetailScreen> {
-      final int contestID, userID, contestStatus;
+      final  userID, contestStatus;
+      final String contestID;
 bool _enable = true;
   var now = DateTime.now(); // lay ngày hiện hành
   var endDateConvert;
@@ -50,7 +54,7 @@ final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
       ),
       body: StreamBuilder(
           stream: contestBloc.contestDetail,
-          builder: (context, AsyncSnapshot<Contest> snapshot) {
+          builder: (context, AsyncSnapshot<EventContest> snapshot) {
             if (snapshot.hasData) {
               return _buildContestDetail(snapshot.data!);
             } else if (snapshot.hasError) {
@@ -61,7 +65,7 @@ final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
     );
   }
 
-  Widget _buildContestDetail(Contest data) {
+  Widget _buildContestDetail(EventContest data) {
     var imageListUrl = data.image.split("|");
     endDateConvert = convertDateFromString(data.endRegister);
 
@@ -122,7 +126,7 @@ final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
         ),
         Container(
             padding: EdgeInsets.only(left: 1.h),
-            child: (contestStatus != 2)
+            child: (contestStatus != 0)
                 ? Container(
                     width: 0,
                     height: 0,
@@ -349,7 +353,7 @@ final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
                   )
                 ],
               ),
-              onPressed: _enable && contestStatus != 2
+              onPressed: _enable && contestStatus != 0
                   ? () {
                       showDialog(
                         context: context,
@@ -367,9 +371,9 @@ final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
                                 color: AppConstant.backgroundColor),
                             FlatButton(
                                 onPressed: () {
-                                  CancelRegisterContest cancelRegisterContest =
-                                      CancelRegisterContest(
-                                          contestId: contestID, userId: userID);
+                                  CancelRegisterContestEvent cancelRegisterContest =
+                                      CancelRegisterContestEvent(
+                                          contestEventId: contestID, userId: userID);
                                   ContestRepository contestRepository =
                                       ContestRepository();
                                   contestRepository

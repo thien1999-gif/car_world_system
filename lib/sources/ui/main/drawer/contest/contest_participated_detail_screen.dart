@@ -1,8 +1,10 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/bloc/contest_bloc.dart';
 import 'package:car_world_system/sources/model/contest.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/model/feedback.dart';
 import 'package:car_world_system/sources/model/userContest.dart';
+import 'package:car_world_system/sources/model/user_event_contest.dart';
 import 'package:car_world_system/sources/repository/contest_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -11,7 +13,8 @@ import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 class ContestParitcipatedDetailScreen extends StatefulWidget {
-  final int contestID, userID, contestStatus;
+  final  userID, contestStatus;
+  final String contestID;
   const ContestParitcipatedDetailScreen(
       {Key? key,
       required this.contestID,
@@ -26,7 +29,8 @@ class ContestParitcipatedDetailScreen extends StatefulWidget {
 
 class _ContestParitcipatedDetailScreenState
     extends State<ContestParitcipatedDetailScreen> {
-  final int contestID, userID, contestStatus;
+  final  userID, contestStatus;
+  final String contestID;
   var contestFeedBackContest = TextEditingController();
   var rateValue = 0.0;
   final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
@@ -49,7 +53,7 @@ class _ContestParitcipatedDetailScreenState
       ),
       body: StreamBuilder(
           stream: contestBloc.contestDetail,
-          builder: (context, AsyncSnapshot<Contest> snapshot) {
+          builder: (context, AsyncSnapshot<EventContest> snapshot) {
             if (snapshot.hasData) {
               return _buildContestDetail(snapshot.data!);
             } else if (snapshot.hasError) {
@@ -60,7 +64,7 @@ class _ContestParitcipatedDetailScreenState
     );
   }
 
-  Widget _buildContestDetail(Contest data) {
+  Widget _buildContestDetail(EventContest data) {
     var imageListUrl = data.image.split("|");
 
     return ListView(
@@ -302,7 +306,7 @@ class _ContestParitcipatedDetailScreenState
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Text(
-                                    "Vui lòng nhập phản hồi của bạn về sự kiện."),
+                                    "Vui lòng nhập phản hồi của bạn về cuộc thi."),
                                 SizedBox(
                                   height: 2.h,
                                 ),
@@ -356,7 +360,7 @@ class _ContestParitcipatedDetailScreenState
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(snackbar);
                                   Navigator.pop(context);
-                                  Navigator.pop(context);
+                                  // Navigator.pop(context);
                                 },
                                 child: Text('Gửi',
                                     style: TextStyle(color: Colors.white)),
@@ -421,8 +425,8 @@ class _ContestParitcipatedDetailScreenState
                       FlatButton(
                           onPressed: () {
                             print("diem danh gia: " + rateValue.toString());
-                            UserContest userContest = UserContest(
-                                contestId: contestID, userId: userID);
+                            UserEventContest userContest = UserEventContest(
+                                contestEventId:  contestID, userId: userID);
                             ContestRepository contestRepository =
                                 ContestRepository();
                             contestRepository.ratingContest(
@@ -432,7 +436,7 @@ class _ContestParitcipatedDetailScreenState
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(snackbar);
                             Navigator.pop(context);
-                            Navigator.pop(context);
+                            // Navigator.pop(context);
                           },
                           child: Text('Gửi',
                               style: TextStyle(color: Colors.white)),

@@ -1,11 +1,14 @@
 import 'package:car_world_system/sources/model/cancel_register_event.dart';
+import 'package:car_world_system/sources/model/cancel_register_event_contest.dart';
 import 'package:car_world_system/sources/model/event.dart';
+import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/model/event_register.dart';
 import 'package:car_world_system/sources/model/feedback.dart';
 import 'package:car_world_system/sources/model/listProposal.dart';
 import 'package:car_world_system/sources/model/proposal.dart';
 import 'package:car_world_system/sources/model/proposal_detail.dart';
 import 'package:car_world_system/sources/model/userEvent.dart';
+import 'package:car_world_system/sources/model/user_event_contest.dart';
 import 'package:car_world_system/sources/repository/event_api_provider.dart';
 import 'package:flutter/material.dart';
 
@@ -13,17 +16,17 @@ class EventRepository {
   EventApiProvider eventApiProvider = EventApiProvider();
 
   //get list new event
-  Future<List<Event>> getListNewEvent(String now) {
+  Future<List<EventContest>> getListNewEvent(String now) {
     return eventApiProvider.getListNewEvent(now);
   }
 
   //get list significant event
-  Future<List<Event>> getListSignificantEvent(String now) {
+  Future<List<EventContest>> getListSignificantEvent(String now) {
     return eventApiProvider.getListSignificantEvent(now);
   }
 
   //get event detail by id
-  Future<Event> getEventDetail(int id) {
+  Future<EventContest> getEventDetail(String id) {
     return eventApiProvider.getEventDetail(id);
   }
 
@@ -33,22 +36,22 @@ class EventRepository {
   }
 
   //register event
-  Future<bool> registerEvent(UserEvent userEvent) {
+  Future<bool> registerEvent(UserEventContest userEvent) {
     return eventApiProvider.registerEvent(userEvent);
   }
 
   //rating event
-  Future<bool> ratingEvent(double rate, UserEvent userEvent) {
+  Future<bool> ratingEvent(double rate, UserEventContest userEvent) {
     return eventApiProvider.ratingEvent(rate, userEvent);
   }
 
   //feedback event
-  Future<bool> feedbackEvent(int id, FeedBack feedback){
+  Future<bool> feedbackEvent(String id, FeedBack feedback){
     return eventApiProvider.feedbackEvent(id, feedback);
   }
 
   //cancel event
-  Future<bool> cancelEvent(CancelRegisterEvent userEvent) {
+  Future<bool> cancelEvent(CancelRegisterContestEvent userEvent) {
     return eventApiProvider.cancelEvent(userEvent);
   }
 
