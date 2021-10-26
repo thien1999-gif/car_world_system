@@ -55,7 +55,14 @@ class _ContestScreenState extends State<ContestScreen> {
             ),
           ],
         ),
-        loadListContest()
+         SingleChildScrollView(
+            child: Container(
+              width: 0,
+              height: 45.h,
+              child:loadListContest(),
+            ),
+          )
+        
       ],
     ));
   }

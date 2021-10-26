@@ -1,12 +1,17 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/model/create_exchange_accessory.dart';
+import 'package:car_world_system/sources/model/district.dart';
+import 'package:car_world_system/sources/model/province.dart';
 import 'package:car_world_system/sources/model/userProfile.dart';
+import 'package:car_world_system/sources/model/ward.dart';
+import 'package:car_world_system/sources/repository/address_api_provider.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_repository.dart';
 import 'package:car_world_system/sources/repository/login_repository.dart';
 import 'package:car_world_system/sources/ui/login/login_screen.dart';
 import 'package:car_world_system/sources/ui/main/exchange/tabbar_exchange.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:multi_image_picker/multi_image_picker.dart';
 import 'package:sizer/sizer.dart';
@@ -28,6 +33,7 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
     super.initState();
     getProfile();
     getProvince();
+     _provinceFuture = AddressApiProvider().getListProvince();
   }
   String _baseUrl =
       "https://carworld.cosplane.asia/api/brand/GetAllBrandsOfAccessory";
@@ -51,12 +57,29 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
     });
   }
 
+
+//
+  //lay tinh
+  Province? provinceObject;
+  String? provinceID, provinceName;
+  Future<List<Province>>? _provinceFuture;
+
+  //lay huyen
+  District? districtObject;
+  String? districtID, districtName;
+  Future<List<District>>? _districtFuture;
+
+  //lay xa
+  Ward? wardObject;
+  String? wardID, wardName;
+  Future<List<Ward>>? _wardFuture;
+
+//
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   var titleController = TextEditingController();
   var descriptionController = TextEditingController();
-  var addressController = TextEditingController();
+  
   var accessoryNameController = TextEditingController();
-//  var maxPeopleController = TextEditingController();
   var priceController = TextEditingController();
   var amountController = TextEditingController();
 
@@ -355,27 +378,120 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                     SizedBox(
                       height: 2.0.h,
                     ),
-                    TextFormField(
-                      controller: addressController,
-                      decoration: InputDecoration(
-                        label: Text(
-                          "Địa chỉ",
-                          style: TextStyle(color: AppConstant.backgroundColor),
-                        ),
-                        hintText: "Vui lòng nhập địa chỉ",
-                        focusedBorder: OutlineInputBorder(
-                          borderSide:
-                              BorderSide(color: AppConstant.backgroundColor),
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                      validator: (value) {
-                        if (value!.isEmpty) {
-                          return 'Vui lòng nhập địa chỉ';
-                        }
-                        return null;
-                      },
-                    ),
+                    
+                  // tỉnh
+                  Container(
+                    child: FutureBuilder<List<Province>>(
+                        future: _provinceFuture,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Province>> snapshot) {
+                          if (!snapshot.hasData)
+                            return CupertinoActivityIndicator(
+                              animating: true,
+                            );
+                          return DropdownButtonFormField<Province>(
+                            isDense: true,
+                            decoration: InputDecoration(labelText: "Chọn tỉnh / thành phố",),
+                            items: snapshot.data!
+                                .map(
+                                    (countyState) => DropdownMenuItem<Province>(
+                                          child: Text(countyState.name),
+                                          value: countyState,
+                                        ))
+                                .toList(),
+                            onChanged: (Province? selectedState) {
+                              setState(() {
+                                districtObject = null;
+                                provinceObject = selectedState;
+                                provinceID = provinceObject!.id;
+                                provinceName = provinceObject!.name;
+                                _districtFuture = AddressApiProvider()
+                                    .getListDistrict(provinceObject!.id);
+                              });
+                            },
+                            value: provinceObject,
+                          );
+                        }),
+                  ),
+                  //
+
+                  // huyen
+                  Container(
+                    child: FutureBuilder<List<District>>(
+                        future: _districtFuture,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<District>> snapshot) {
+                          if (!snapshot.hasData)
+                            return DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                labelText: "Chọn quận / huyện",
+                              ),
+                              items: [],
+                            );
+                          return DropdownButtonFormField<District>(
+                            isDense: true,
+                            decoration: InputDecoration(
+                              labelText: "Chọn quận / huyện",
+                            ),
+                            items: snapshot.data!
+                                .map(
+                                    (countyState) => DropdownMenuItem<District>(
+                                          child: Text(countyState.name),
+                                          value: countyState,
+                                        ))
+                                .toList(),
+                            onChanged: (District? selectedState) {
+                              setState(() {
+                                wardObject = null;
+                                districtObject = selectedState;
+                                districtID = districtObject!.id;
+                                districtName = districtObject!.name;
+                                _wardFuture = AddressApiProvider()
+                                    .getListWard(districtObject!.id);
+                              });
+                            },
+                            value: districtObject,
+                          );
+                        }),
+                  ),
+                  //
+
+                  // xa
+                  Container(
+                    child: FutureBuilder<List<Ward>>(
+                        future: _wardFuture,
+                        builder: (BuildContext context,
+                            AsyncSnapshot<List<Ward>> snapshot) {
+                          if (!snapshot.hasData)
+                            return DropdownButtonFormField<String>(
+                              decoration: InputDecoration(
+                                labelText: "Chọn phường / xã",
+                              ),
+                              items: [],
+                            );
+                          return DropdownButtonFormField<Ward>(
+                            isDense: true,
+                            decoration: InputDecoration(
+                              labelText: "Chọn phường / xã",
+                            ),
+                            items: snapshot.data!
+                                .map((countyState) => DropdownMenuItem<Ward>(
+                                      child: Text(countyState.name),
+                                      value: countyState,
+                                    ))
+                                .toList(),
+                            onChanged: (Ward? selectedState) {
+                              setState(() {
+                                wardObject = selectedState;
+                                wardID = wardObject!.id;
+                                wardName = wardObject!.name;
+                              });
+                            },
+                            value: wardObject,
+                          );
+                        }),
+                  ),
+                  //"
                     SizedBox(
                       height: 2.0.h,
                     ),
@@ -484,7 +600,7 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                                 builder: (context) => AlertDialog(
                                   title: Text('Xác nhận'),
                                   content:
-                                      Text('Bạn có muốn gửi ý tưởng không ?'),
+                                      Text('Bạn có muốn đăng tin không ?'),
                                   actions: <Widget>[
                                     FlatButton(
                                         onPressed: () {},
@@ -509,8 +625,12 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                                                   userId: _profile!.id,
                                                   title: titleController.text,
                                                   description: descriptionController.text,
-                                                  address: addressController.text,
+                                                  address: wardName! + " " + districtName! + " " + provinceName!,
                                                   exchangeAccessorryDetails: list,
+                                                  cityId: provinceID!, 
+                                           districtId: districtID!, 
+                                           phone: phoneNumberOfUser, 
+                                           wardId: wardID!,
                                                    );
                                           ExchangeAccessoryRepository
                                               exchangeAccessoryRepository =

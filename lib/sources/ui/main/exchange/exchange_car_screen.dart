@@ -1,8 +1,13 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/bloc/exchange_bloc.dart';
+import 'package:car_world_system/sources/model/district.dart';
 import 'package:car_world_system/sources/model/exchange_car.dart';
+import 'package:car_world_system/sources/model/province.dart';
+import 'package:car_world_system/sources/model/ward.dart';
+import 'package:car_world_system/sources/repository/address_api_provider.dart';
 import 'package:car_world_system/sources/ui/main/exchange/exchange_car_detail_screen.dart';
 import 'package:car_world_system/sources/ui/main/exchange/tabbar_exchange.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
@@ -15,90 +20,162 @@ class ExchangeCarScreen extends StatefulWidget {
 }
 
 class _ExchangeCarScreenState extends State<ExchangeCarScreen> {
-  // String distance = '5';
- final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
+  final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
+  //
+  //lay tinh
+  Province? provinceObject;
+  String? provinceID, provinceName;
+  Future<List<Province>>? _provinceFuture;
+
+  //lay huyen
+  District? districtObject;
+  String? districtID, districtName;
+  Future<List<District>>? _districtFuture;
+
+  //lay xa
+  Ward? wardObject;
+  String? wardID, wardName;
+  Future<List<Ward>>? _wardFuture;
+
+//
+  int isSelect = 1;
+  @override
+  void initState() {
+    super.initState();
+
+    _provinceFuture = AddressApiProvider().getListProvince();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: ListView(
         children: [
-          // Text("kink dộ: " + longitude.toString()),
-          //   Text("vi dộ: " + latitude.toString()),
           SizedBox(
             height: 1.h,
           ),
-          // Row(
-          //   children: [
-          //     SizedBox(
-          //       width: 1.h,
-          //     ),
-          //     Container(
-          //       width: 12.h,
-          //       height: 7.1.h,
-          //       child: DropdownButtonFormField<String>(
-          //         value: distance,
-          //         isExpanded: true,
-          //         decoration: InputDecoration(
-          //             labelText: 'Khoảng cách (km)',
-          //             fillColor: AppConstant.backgroundColor),
-          //         onChanged: (String? newValue) {
-          //           setState(() {
-          //             distance = newValue!;
-          //             //Text(distance)
-          //           });
-          //         },
-          //         items: <String>['5', '10', '15']
-          //             .map<DropdownMenuItem<String>>((String value) {
-          //           return DropdownMenuItem<String>(
-          //             value: value,
-          //             child: Text(value),
-          //           );
-          //         }).toList(),
-          //       ),
-          //     ),
-          //     SizedBox(
-          //       width: 1.h,
-          //     ),Container(
-          //       width: 28.h,
-          //       height: 7.h,
-          //       child: TextFormField(
-          //       //controller: ,
-
-          //       decoration: InputDecoration(
-          //         label: Text(
-          //           "Tìm kiếm xe hơi",
-          //           style: TextStyle(color: AppConstant.backgroundColor),
-          //         ),
-          //         hintText: "Bạn có thể tìm kiếm theo tên, hãng,...",
-          //         focusedBorder: OutlineInputBorder(
-          //           borderSide: BorderSide(color: AppConstant.backgroundColor),
-          //           borderRadius: BorderRadius.circular(10),
-          //         ),
-          //       ),
-          //       // validator: (value) {
-          //       //   if (value!.isEmpty) {
-          //       //     return 'Vui lòng nhập tiêu đề';
-          //       //   }
-          //       //   return null;
-          //       // },
-          //     )),
-          //     IconButton(
-          //       icon: Icon(Icons.search),
-          //       color: AppConstant.backgroundColor,
-          //       iconSize: 30,
-          //       onPressed: () {},
-          //     ),
-          //   ],
-          // ),
-
-          _loadListExchangeCarOfUser(),
+          Row(
+            children: [
+              SizedBox(
+                width: 1.h,
+              ),
+              Container(
+                width: 35.h,
+                height: 9.h,
+                child: FutureBuilder<List<Province>>(
+                    future: _provinceFuture,
+                    builder: (BuildContext context,
+                        AsyncSnapshot<List<Province>> snapshot) {
+                      if (!snapshot.hasData)
+                        return CupertinoActivityIndicator(
+                          animating: true,
+                        );
+                      return DropdownButtonFormField<Province>(
+                        isDense: true,
+                        decoration: InputDecoration(
+                          labelText: "Chọn tỉnh / thành phố",
+                        ),
+                        items: snapshot.data!
+                            .map((countyState) => DropdownMenuItem<Province>(
+                                  child: Text(countyState.name),
+                                  value: countyState,
+                                ))
+                            .toList(),
+                        onChanged: (Province? selectedState) {
+                          setState(() {
+                            districtObject = null;
+                            provinceObject = selectedState;
+                            provinceID = provinceObject!.id;
+                            provinceName = provinceObject!.name;
+                            _districtFuture = AddressApiProvider()
+                                .getListDistrict(provinceObject!.id);
+                          });
+                        },
+                        value: provinceObject,
+                      );
+                    }),
+              ),
+            ],
+          ),
+          Row(
+            children: [
+              SizedBox(
+                width: 1.h,
+              ),
+              Container(
+                  width: 35.h,
+                  height: 9.h,
+                  child: FutureBuilder<List<District>>(
+                      future: _districtFuture,
+                      builder: (BuildContext context,
+                          AsyncSnapshot<List<District>> snapshot) {
+                        if (!snapshot.hasData)
+                          return DropdownButtonFormField<String>(
+                            decoration: InputDecoration(
+                              labelText: "Chọn quận / huyện",
+                            ),
+                            items: [],
+                          );
+                        return DropdownButtonFormField<District>(
+                          isDense: true,
+                          decoration: InputDecoration(
+                            labelText: "Chọn quận / huyện",
+                          ),
+                          items: snapshot.data!
+                              .map((countyState) => DropdownMenuItem<District>(
+                                    child: Text(countyState.name),
+                                    value: countyState,
+                                  ))
+                              .toList(),
+                          onChanged: (District? selectedState) {
+                            setState(() {
+                              wardObject = null;
+                              districtObject = selectedState;
+                              districtID = districtObject!.id;
+                              districtName = districtObject!.name;
+                              _wardFuture = AddressApiProvider()
+                                  .getListWard(districtObject!.id);
+                            });
+                          },
+                          value: districtObject,
+                        );
+                      })),
+              SizedBox(
+                width: 15,
+              ),
+              IconButton(
+                icon: Icon(Icons.search),
+                color: AppConstant.backgroundColor,
+                iconSize: 30,
+                onPressed: () {
+                  if (provinceID != null && districtID != null) {
+                    setState(() {
+                      isSelect = 2;
+                    });
+                  } else {
+                    setState(() {
+                      isSelect = 3;
+                    });
+                  }
+                },
+              ),
+            ],
+          ),
+          SingleChildScrollView(
+            child: Container(
+              width: 0,
+              height: 51.h,
+              child: _loadListExchangeCarOfUser(),
+            ),
+          )
         ],
       ),
     );
   }
-    Widget _loadListExchangeCarOfUser() {
-    
-      exchangeBloc.getListExchangeCarByLocation();
+
+  Widget _loadListExchangeCarOfUser() {
+    if (isSelect == 1) {
+      exchangeBloc.getAllExchangeCarByLocation();
       return StreamBuilder(
           stream: exchangeBloc.listExchangeCarOfUser,
           builder: (context, AsyncSnapshot<List<ExchangeCar>> snapshot) {
@@ -109,7 +186,32 @@ class _ExchangeCarScreenState extends State<ExchangeCarScreen> {
             }
             return Center(child: CircularProgressIndicator());
           });
-    
+    } else if (isSelect == 3) {
+      exchangeBloc.getAllExchangeCarByProvince(provinceID!);
+      return StreamBuilder(
+          stream: exchangeBloc.listExchangeCarOfUser,
+          builder: (context, AsyncSnapshot<List<ExchangeCar>> snapshot) {
+            if (snapshot.hasData) {
+              return _buildList(snapshot.data!);
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            return Center(child: CircularProgressIndicator());
+          });
+    } else {
+      exchangeBloc.getAllExchangeCarByProvinceAndDistrict(
+          provinceID!, districtID!);
+      return StreamBuilder(
+          stream: exchangeBloc.listExchangeCarOfUser,
+          builder: (context, AsyncSnapshot<List<ExchangeCar>> snapshot) {
+            if (snapshot.hasData) {
+              return _buildList(snapshot.data!);
+            } else if (snapshot.hasError) {
+              return Text(snapshot.error.toString());
+            }
+            return Center(child: CircularProgressIndicator());
+          });
+    }
   }
 
   Widget _buildList(List<ExchangeCar> data) {
@@ -133,10 +235,7 @@ class _ExchangeCarScreenState extends State<ExchangeCarScreen> {
             ),
             Text(
               "Rất tiếc, chưa có dữ liệu hiển thị",
-              style: TextStyle(
-                  
-                  fontStyle: FontStyle.italic,
-                  fontSize: 18),
+              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18),
             ),
           ],
         ),
@@ -156,7 +255,8 @@ class _ExchangeCarScreenState extends State<ExchangeCarScreen> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => ExchangeCarDetailScreen(id:  data[index].id),
+                            builder: (context) =>
+                                ExchangeCarDetailScreen(id: data[index].id),
                           ));
                     },
                     child: Padding(
@@ -212,7 +312,8 @@ class _ExchangeCarScreenState extends State<ExchangeCarScreen> {
                                                     "..."
                                                 : data[index].title,
                                             style: TextStyle(
-                                                fontWeight: AppConstant.titleBold,
+                                                fontWeight:
+                                                    AppConstant.titleBold,
                                                 fontSize: 15),
                                           ),
                                           width: 29.h)
@@ -278,7 +379,9 @@ class _ExchangeCarScreenState extends State<ExchangeCarScreen> {
                                       ),
                                       Text(
                                         data[index].address.length > 30
-                                            ? data[index].title.substring(0, 28) +
+                                            ? data[index]
+                                                    .address
+                                                    .substring(0, 28) +
                                                 "..."
                                             : data[index].address,
                                         style: TextStyle(fontSize: 15),
@@ -321,7 +424,8 @@ class _ExchangeCarScreenState extends State<ExchangeCarScreen> {
                                         Text(
                                           "Xem chi tiết",
                                           style: TextStyle(
-                                              color: AppConstant.backgroundColor,
+                                              color:
+                                                  AppConstant.backgroundColor,
                                               fontStyle: FontStyle.italic),
                                         ),
                                         Icon(

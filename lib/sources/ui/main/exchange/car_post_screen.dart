@@ -33,7 +33,7 @@ class _CarPostScreenState extends State<CarPostScreen> {
   void initState() {
     super.initState();
     getProvince();
-    // getProfile();
+    getProfile();
     _provinceFuture = AddressApiProvider().getListProvince();
   }
 
@@ -85,7 +85,7 @@ class _CarPostScreenState extends State<CarPostScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   var titleController = TextEditingController();
   var descriptionController = TextEditingController();
-  var addressController = TextEditingController();
+  
   var carNameController = TextEditingController();
   var yearOfManufactController = TextEditingController();
   var originController = TextEditingController();
@@ -199,9 +199,9 @@ class _CarPostScreenState extends State<CarPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    // if (_profile == null) {
-    //   return Container();
-    // } else {
+    if (_profile == null) {
+      return Container();
+    } else {
     return Scaffold(
       appBar: AppBar(
         title: Text("Đăng tin xe hơi"),
@@ -512,30 +512,7 @@ class _CarPostScreenState extends State<CarPostScreen> {
                       return null;
                     },
                   ),
-                  SizedBox(
-                    height: 2.0.h,
-                  ),
-                  TextFormField(
-                    controller: addressController,
-                    decoration: InputDecoration(
-                      label: Text(
-                        "Địa chỉ",
-                        style: TextStyle(color: AppConstant.backgroundColor),
-                      ),
-                      hintText: "Vui lòng nhập địa chỉ",
-                      focusedBorder: OutlineInputBorder(
-                        borderSide:
-                            BorderSide(color: AppConstant.backgroundColor),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                    ),
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Vui lòng nhập địa chỉ';
-                      }
-                      return null;
-                    },
-                  ),
+                  
 
                   // tỉnh
                   Container(
@@ -756,7 +733,7 @@ class _CarPostScreenState extends State<CarPostScreen> {
                               builder: (context) => AlertDialog(
                                 title: Text('Xác nhận'),
                                 content:
-                                    Text('Bạn có muốn gửi ý tưởng không ?'),
+                                    Text('Bạn có muốn đăng tin không ?'),
                                 actions: <Widget>[
                                   FlatButton(
                                       onPressed: () {},
@@ -789,13 +766,17 @@ class _CarPostScreenState extends State<CarPostScreen> {
                                                 amountController.text)));
                                         CreateExchangeCar exchangeCar =
                                             CreateExchangeCar(
-                                          //userId: _profile!.id,
-                                          userId: 19, // sau nay sữa lại chỗ này
+                                          userId: _profile!.id,
+                                          
                                           title: titleController.text,
                                           description:
                                               descriptionController.text,
-                                          address: addressController.text,
+                                          address: wardName! + " " + districtName! + " " + provinceName!,
                                           exchangeCarDetails: list,
+                                           cityId: provinceID!, 
+                                           districtId: districtID!, 
+                                           phone: phoneNumberOfUser, 
+                                           wardId: wardID!,
                                         );
                                         ExchangeAccessoryRepository
                                             exchangeAccessoryRepository =
@@ -846,6 +827,6 @@ class _CarPostScreenState extends State<CarPostScreen> {
         ),
       ),
     );
-    // }
+    }
   }
 }

@@ -147,7 +147,14 @@ class _SearchAccessoryScreenState extends State<SearchAccessoryScreen> {
             ),
           ],
         ),
-        loadListAccessory()
+         SingleChildScrollView(
+            child: Container(
+              width: 0,
+              height: 56.h,
+              child: loadListAccessory(),
+            ),
+          )
+        
       ],
     ));
   }

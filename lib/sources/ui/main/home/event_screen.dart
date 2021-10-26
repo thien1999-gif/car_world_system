@@ -55,7 +55,14 @@ class _EventScreenState extends State<EventScreen> {
             ),
           ],
         ),
-        loadListEvent()
+          SingleChildScrollView(
+            child: Container(
+              width: 0,
+              height: 45.h,
+              child:loadListEvent(),
+            ),
+          )
+        
       ],
     ));
   }

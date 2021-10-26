@@ -12,8 +12,10 @@ class LoginScreen extends StatefulWidget {
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
+
 String email = "";
-String phoneNumberOfUser = "0963852741";
+String phoneNumberOfUser = "";
+
 class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
@@ -33,14 +35,16 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(height: 5.0.h),
                 Text(
                   "Nơi thể hiện đẳng cấp ",
-                  style: 
-                          TextStyle(color: Colors.white, fontSize: 15.0.sp,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15.0.sp,
                       fontFamily: 'Pacifico'),
                 ),
                 Text(
                   "và thỏa mãn đam mê của bạn ",
-                  style: 
-                          TextStyle(color: Colors.white, fontSize: 15.0.sp,
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 15.0.sp,
                       fontFamily: 'Pacifico'),
                 ),
                 SizedBox(height: 71.0.h //It will take a 30% of screen height
@@ -58,23 +62,23 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     label: Text("Đăng nhập với Google"),
                     onPressed: () {
-                      // sao nay update lai
-                      //  GoogleSingInProvider.signInWithGoogle().then((result) {
-                      //   if (result != null) {
-                      //     // LoginApiProvider user = new LoginApiProvider();
-                      //     LoginRepository loginRepository = LoginRepository();
-                      //     loginRepository.login(result);
-                      //     email = result.email;
-                      //     // phoneNumberOfUser = result.phone;
-                      //     Navigator.of(context).pushReplacement(
-                      //         MaterialPageRoute(
-                      //             builder: (context) => MainPage()));
-                      //   }
-                      // });
+                      GoogleSingInProvider.signInWithGoogle().then((result) {
+                        if (result != null) {
+                          // LoginApiProvider user = new LoginApiProvider();
+                          LoginRepository loginRepository = LoginRepository();
+                          loginRepository.login(result);
+                          email = result.email;
+                          if (result.phone == null) {
+                            phoneNumberOfUser = "0963852741";
+                          } else {
+                            phoneNumberOfUser = result.phone;
+                          }
 
-                       Navigator.of(context).pushReplacement(
+                          Navigator.of(context).pushReplacement(
                               MaterialPageRoute(
                                   builder: (context) => MainPage()));
+                        }
+                      });
                     },
                   ),
                 )

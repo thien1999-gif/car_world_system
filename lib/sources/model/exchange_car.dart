@@ -17,6 +17,11 @@ class ExchangeCar {
         required this.title,
         required this.description,
         required this.total,
+        required this.phone,
+       
+        required this.cityId,
+        required this.districtId,
+        required this.wardId,
         required this.createdDate,
         required this.address,
         required this.status,
@@ -35,7 +40,11 @@ class ExchangeCar {
     String description;
     double total;
     String createdDate;
+     String phone;
     String address;
+    String cityId;
+    String districtId;
+    String wardId;
     int status;
     // dynamic feedbackId;
     // dynamic feedback;
@@ -52,7 +61,12 @@ class ExchangeCar {
         description: json["Description"],
         total: json["Total"],
         createdDate: json["CreatedDate"],
+        phone: json["Phone"],
         address: json["Address"],
+        cityId: json["CityId"],
+        districtId: json["DistrictId"],
+        wardId: json["WardId"],
+      
         status: json["Status"],
         // feedbackId: json["FeedbackId"],
         // feedback: json["Feedback"],
@@ -70,7 +84,11 @@ class ExchangeCar {
         "Description": description,
         "Total": total,
         "CreatedDate": createdDate,
+        "Phone": phone,
         "Address": address,
+        "CityId": cityId,
+        "DistrictId": districtId,
+        "WardId": wardId,
         "Status": status,
         // "FeedbackId": feedbackId,
         // "Feedback": feedback,

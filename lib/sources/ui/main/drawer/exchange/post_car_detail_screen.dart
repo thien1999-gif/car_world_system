@@ -148,7 +148,7 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
                       width: 1.h,
                     ),
                     Text(
-                      phoneNumberOfUser,
+                      data.phone,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
@@ -161,10 +161,10 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
           child: Text(
             "Thông tin về xe",
             style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                      fontSize: 18),
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+                fontSize: 18),
           ),
         ),
         Padding(
@@ -242,7 +242,7 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
                               SizedBox(
                                 height: 2.h,
                               ),
-                              Text("Xuất sứ",
+                              Text("Xuất xứ",
                                   style: TextStyle(
                                       fontStyle: FontStyle.italic,
                                       fontWeight: FontWeight.bold,
@@ -436,8 +436,7 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
                                   ),
                                   Text(
                                     data.exchangeCarDetails[0].amount
-                                            .toString() 
-                                        ,
+                                        .toString(),
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
@@ -447,7 +446,7 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
                               SizedBox(
                                 height: 2.h,
                               ),
-                               Text(
+                              Text(
                                 "Số năm sử dụng",
                                 style: TextStyle(
                                     fontStyle: FontStyle.italic,
@@ -466,8 +465,7 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
                                   ),
                                   Text(
                                     data.exchangeCarDetails[0].yearOfUsed
-                                            .toString() 
-                                        ,
+                                        .toString(),
                                     style: TextStyle(
                                         fontSize: 16,
                                         fontWeight: FontWeight.bold),
@@ -559,14 +557,17 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
                           color: AppConstant.backgroundColor),
                       FlatButton(
                           onPressed: () {
-                            ExchangeAccessoryRepository exchangeAccessoryRepository = ExchangeAccessoryRepository();
-                            exchangeAccessoryRepository.cancelExchangeCar(data.id);
-                             SnackBar snackbar =
-                                      SnackBar(content: Text('Hủy thành công'));
-                                  ScaffoldMessenger.of(context)
-                                      .showSnackBar(snackbar);
-                                  Navigator.pop(context);
-                                  Navigator.pop(context);
+                            ExchangeAccessoryRepository
+                                exchangeAccessoryRepository =
+                                ExchangeAccessoryRepository();
+                            exchangeAccessoryRepository
+                                .cancelExchangeCar(data.id);
+                            SnackBar snackbar =
+                                SnackBar(content: Text('Hủy thành công'));
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(snackbar);
+                            Navigator.pop(context);
+                            Navigator.pop(context);
                           },
                           child:
                               Text('Có', style: TextStyle(color: Colors.white)),
@@ -592,7 +593,13 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
                 ],
               ),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder:(context) => ListUserWantToExchangeScreen(exchangeID: data.id,)),);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ListUserWantToExchangeScreen(
+                            exchangeID: data.id,
+                          )),
+                );
               },
             )
           ],

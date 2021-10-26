@@ -1,6 +1,10 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/bloc/exchange_bloc.dart';
 import 'package:car_world_system/sources/model/exchange_accessory.dart';
+import 'package:car_world_system/sources/model/send_exchange_response.dart';
+import 'package:car_world_system/sources/model/userProfile.dart';
+import 'package:car_world_system/sources/repository/exchange_accessory_repository.dart';
+import 'package:car_world_system/sources/repository/login_repository.dart';
 import 'package:car_world_system/sources/ui/login/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -17,16 +21,25 @@ class ExchangeAccessoryDetailScreen extends StatefulWidget {
 class _ExchangeAccessoryDetailScreenState extends State<ExchangeAccessoryDetailScreen> {
    final String id;
   final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
-
+UserProfile? _profile;
+  var message = TextEditingController();
   _ExchangeAccessoryDetailScreenState(this.id);
 
     @override
   void initState() {
     super.initState();
-
+ getProfile();
     exchangeBloc.getExchangeAccessoryDetail(id);
   }
 
+  void getProfile() async {
+    // LoginApiProvider user = new LoginApiProvider();
+    LoginRepository loginRepository = LoginRepository();
+    var profile = await loginRepository.getProfile(email);
+    setState(() {
+      _profile = profile;
+    });
+  }
     @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -146,7 +159,7 @@ class _ExchangeAccessoryDetailScreenState extends State<ExchangeAccessoryDetailS
                       width: 1.h,
                     ),
                     Text(
-                      phoneNumberOfUser,
+                      data.phone,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
@@ -325,75 +338,99 @@ class _ExchangeAccessoryDetailScreenState extends State<ExchangeAccessoryDetailS
             maxLines: 15,
           ),
         ),
-        Row(
+         Row(
           children: [
             SizedBox(
-              width: 10.0.h,
+              width: 27.0.h,
             ),
-            TextButton(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.cancel,
-                    color: AppConstant.backgroundColor,
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    "Gỡ bài đăng",
-                    style: TextStyle(
-                        color: AppConstant.backgroundColor, fontSize: 16),
-                  )
-                ],
-              ),
-              onPressed: () {
-                showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('Xác nhận'),
-                    content: Text('Bạn có chắc là muốn gỡ bài đăng này không?'),
-                    actions: <Widget>[
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text('Không',
-                              style: TextStyle(color: Colors.white)),
-                          color: AppConstant.backgroundColor),
-                      FlatButton(
-                          onPressed: () {
-                            // ExchangeAccessoryRepository exchangeAccessoryRepository = ExchangeAccessoryRepository();
-                            // exchangeAccessoryRepository.cancelExchangeAccessory(data.id);
-                            //  SnackBar snackbar =
-                            //           SnackBar(content: Text('Hủy thành công'));
-                            //       ScaffoldMessenger.of(context)
-                            //           .showSnackBar(snackbar);
-                            //       Navigator.pop(context);
-                            //       Navigator.pop(context);
-                          },
-                          child:
-                              Text('Có', style: TextStyle(color: Colors.white)),
-                          color: AppConstant.backgroundColor),
-                    ],
-                  ),
-                );
-              },
-            ),
-            TextButton(
+            RaisedButton(
+              color: AppConstant.backgroundColor,
               child: Row(
                 children: [
                   Icon(
                     Icons.person,
-                    color: AppConstant.backgroundColor,
+                    color: Colors.white,
                   ),
                   SizedBox(width: 5),
                   Text(
-                    "Người quan tâm",
-                    style: TextStyle(
-                        color: AppConstant.backgroundColor, fontSize: 16),
+                    "Liên hệ trao đổi",
+                    style: TextStyle(color: Colors.white),
                   )
                 ],
               ),
-              onPressed: () {},
+              onPressed: () {
+                print("user id cua bai dang " + data.userId.toString());
+                print("user id cua tai khoang dang nhap: " +
+                    _profile!.id.toString());
+                    print("id giao dich: " + data.id);
+                showDialog(
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: Text('Xác nhận'),
+                          content: Container(
+                            height: 25.h,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                    "Vui lòng nhập thông tin mà bạn muốn gửi."),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                TextFormField(
+                                  controller: message,
+                                  maxLines: 5,
+                                  decoration: InputDecoration(
+                                    label: Text(
+                                      "Thông diệp",
+                                      style: TextStyle(
+                                          color: AppConstant.backgroundColor),
+                                    ),
+                                    hintText: "Vui lòng nhập thông tin của bạn",
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: AppConstant.backgroundColor),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  // validator: (value) {
+                                  //   if (value!.isEmpty) {
+                                  //     return 'Vui lòng nhập tiêu đề';
+                                  //   }
+                                  //   return null;
+                                  // },
+                                ),
+                              ],
+                            ),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Hủy',
+                                    style: TextStyle(color: Colors.white)),
+                                color: AppConstant.backgroundColor),
+                            FlatButton(
+                                onPressed: () {
+                                  SendExchangeResponse exchangeResponse = 
+                                  SendExchangeResponse(userId: _profile!.id, message: message.text, exchangeId: data.id);
+                                  ExchangeAccessoryRepository exchangeAccessoryRepository = ExchangeAccessoryRepository();
+                                  exchangeAccessoryRepository.sendExchangeResponeseCarAndAccessory(exchangeResponse);
+                                  SnackBar snackbar = SnackBar(
+                                      content: Text('Gửi thành công'));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackbar);
+                                  Navigator.pop(context);
+                                   Navigator.pop(context);
+                                },
+                                child: Text('Gửi',
+                                    style: TextStyle(color: Colors.white)),
+                                color: AppConstant.backgroundColor),
+                          ],
+                        ));
+              },
             )
           ],
         )

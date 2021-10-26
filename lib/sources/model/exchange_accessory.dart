@@ -19,6 +19,11 @@ class ExchangeAccessory {
         required this.total,
         required this.createdDate,
         required this.address,
+        required this.phone,
+       
+        required this.cityId,
+        required this.districtId,
+        required this.wardId,
         required this.status,
         // @required this.feedbackId,
         // @required this.feedback,
@@ -35,7 +40,11 @@ class ExchangeAccessory {
     String description;
     double total;
     String createdDate;
+     String phone;
     String address;
+    String cityId;
+    String districtId;
+    String wardId;
     int status;
     // dynamic feedbackId;
     // dynamic feedback;
@@ -52,7 +61,11 @@ class ExchangeAccessory {
         description: json["Description"],
         total: json["Total"],
         createdDate: json["CreatedDate"],
+         phone: json["Phone"],
         address: json["Address"],
+        cityId: json["CityId"],
+        districtId: json["DistrictId"],
+        wardId: json["WardId"],
         status: json["Status"],
         // feedbackId: json["FeedbackId"],
         // feedback: json["Feedback"],

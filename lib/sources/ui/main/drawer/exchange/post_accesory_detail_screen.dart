@@ -8,6 +8,8 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
+import 'list_user_want_to_exchange.dart';
+
 class PostAccessoryDetail extends StatefulWidget {
   final String accessoryId;
   const PostAccessoryDetail({Key? key, required this.accessoryId})
@@ -150,7 +152,7 @@ class _PostAccessoryDetailState extends State<PostAccessoryDetail> {
                       width: 1.h,
                     ),
                     Text(
-                      phoneNumberOfUser,
+                      data.phone,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
@@ -397,7 +399,15 @@ class _PostAccessoryDetailState extends State<PostAccessoryDetail> {
                   )
                 ],
               ),
-              onPressed: () {},
+              onPressed: () {
+                 Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => ListUserWantToExchangeScreen(
+                            exchangeID: data.id,
+                          )),
+                );
+              },
             )
           ],
         )

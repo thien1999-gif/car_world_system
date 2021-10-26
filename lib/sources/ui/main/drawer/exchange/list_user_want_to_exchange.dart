@@ -2,6 +2,7 @@ import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/bloc/exchange_bloc.dart';
 import 'package:car_world_system/sources/model/userProfile.dart';
 import 'package:car_world_system/sources/model/user_exchange_response.dart';
+import 'package:car_world_system/sources/repository/exchange_accessory_repository.dart';
 import 'package:car_world_system/sources/repository/login_repository.dart';
 import 'package:car_world_system/sources/ui/login/login_screen.dart';
 import 'package:flutter/material.dart';
@@ -81,20 +82,24 @@ class _ListUserWantToExchangeScreenState
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-            Container(
-              height: 55.h,
-              width: 100.h,
+              Container(
+              height: 35.h,
+              width: 35.h,
               child: Image(
-                image: AssetImage("assets/images/not found.png"),
+                image: AssetImage("assets/images/not found 2.jpg"),
                 fit: BoxFit.cover,
               ),
             ),
-            Text(
-              "Xin lỗi",
-              style: TextStyle(fontWeight: FontWeight.bold),
+            SizedBox(
+              height: 1.h,
             ),
             Text(
-                "chúng tôi không thể tìm được kết quả hợp với tìm kiếm của bạn")
+              "Rất tiếc, chưa có dữ liệu hiển thị",
+              style: TextStyle(
+                  
+                  fontStyle: FontStyle.italic,
+                  fontSize: 18),
+            ),
           ],
         ),
       );
@@ -182,6 +187,7 @@ class _ListUserWantToExchangeScreenState
                                   Text("0963852741"),
                                 ],
                               ),
+                            
                               SizedBox(
                                 height: 10,
                               ),
@@ -244,14 +250,15 @@ class _ListUserWantToExchangeScreenState
                               color: AppConstant.backgroundColor),
                           FlatButton(
                               onPressed: () {
-                                // ExchangeAccessoryRepository exchangeAccessoryRepository = ExchangeAccessoryRepository();
-                                // exchangeAccessoryRepository.cancelExchangeAccessory(data.id);
-                                //  SnackBar snackbar =
-                                //           SnackBar(content: Text('Hủy thành công'));
-                                //       ScaffoldMessenger.of(context)
-                                //           .showSnackBar(snackbar);
-                                //       Navigator.pop(context);
-                                //       Navigator.pop(context);
+                                ExchangeAccessoryRepository exchangeAccessoryRepository = ExchangeAccessoryRepository();
+                                exchangeAccessoryRepository.acceptExchange(data[index].exchangeId, data[index].userId);
+                                 SnackBar snackbar =
+                                          SnackBar(content: Text('Trao đổi thành công'));
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(snackbar);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
+                                      Navigator.pop(context);
                               },
                               child: Text('Trao đổi',
                                   style: TextStyle(color: Colors.white)),

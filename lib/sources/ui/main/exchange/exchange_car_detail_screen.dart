@@ -162,7 +162,7 @@ class _ExchangeCarDetailScreenState extends State<ExchangeCarDetailScreen> {
                       width: 1.h,
                     ),
                     Text(
-                      phoneNumberOfUser,
+                      data.phone,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),
@@ -170,6 +170,7 @@ class _ExchangeCarDetailScreenState extends State<ExchangeCarDetailScreen> {
                 ),
               ],
             )),
+            
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Text(
@@ -256,7 +257,7 @@ class _ExchangeCarDetailScreenState extends State<ExchangeCarDetailScreen> {
                               SizedBox(
                                 height: 2.h,
                               ),
-                              Text("Xuất sứ",
+                              Text("Xuất xứ",
                                   style: TextStyle(
                                       fontStyle: FontStyle.italic,
                                       fontWeight: FontWeight.bold,

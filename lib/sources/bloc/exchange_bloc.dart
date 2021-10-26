@@ -65,16 +65,37 @@ class ExchangeBloc {
 
 //
    //get list exchange car by location
-  getListExchangeCarByLocation() async {
+  getAllExchangeCarByLocation() async {
     List<ExchangeCar> list =
-        await exchangeAccessoryRepository.getListExchangeCarByLocation();
+        await exchangeAccessoryRepository.getAllExchangeCarByLocation();
+    _listExchangeCarOfUserFetcher.sink.add(list);
+  }
+   getAllExchangeCarByProvince(String provinceID) async {
+    List<ExchangeCar> list =
+        await exchangeAccessoryRepository.getAllExchangeCarByProvince(provinceID);
+    _listExchangeCarOfUserFetcher.sink.add(list);
+  }
+   getAllExchangeCarByProvinceAndDistrict(String provinceID, String districtID) async {
+    List<ExchangeCar> list =
+        await exchangeAccessoryRepository.getAllExchangeCarByProvinceAndDistrict(provinceID, districtID);
     _listExchangeCarOfUserFetcher.sink.add(list);
   }
 
    //get list exchange car by location
-  getListExchangeAccessoryByLocation() async {
+  getAllExchangeAccessoryByLocation() async {
     List<ExchangeAccessory> list =
-        await exchangeAccessoryRepository.getListExchangeAccessoryByLocation();
+        await exchangeAccessoryRepository.getAllExchangeAccessoryByLocation();
+    _listExchangeAccessoryOfUserFetcher.sink.add(list);
+  }
+
+  getAllExchangeAccessoryByProvince(String provinceID) async {
+    List<ExchangeAccessory> list =
+        await exchangeAccessoryRepository.getAllExchangeAccessoryByProvince(provinceID);
+    _listExchangeAccessoryOfUserFetcher.sink.add(list);
+  }
+  getAllExchangeAccessoryByProvinceAndDistrict(String provinceID, String districtID) async {
+    List<ExchangeAccessory> list =
+        await exchangeAccessoryRepository.getAllExchangeAccessoryByProvinceAndDisitrict(provinceID, districtID);
     _listExchangeAccessoryOfUserFetcher.sink.add(list);
   }
 

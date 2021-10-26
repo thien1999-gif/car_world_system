@@ -226,7 +226,7 @@ class _PostAcessoryScreenState extends State<PostAcessoryScreen> {
                                     ),
                                     Text(
                                       data[index].address.length > 30
-                                          ? data[index].title.substring(0, 28) +
+                                          ? data[index].address.substring(0, 28) +
                                               "..."
                                           : data[index].address,
                                       style: TextStyle(fontSize: 15),

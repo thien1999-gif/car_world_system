@@ -55,14 +55,29 @@ class ExchangeAccessoryRepository {
     return exchangeAccessoryApiProvider.cancelExchangeCar(id);
   }
   ///////
-     //get list exchange car by location
-  Future<List<ExchangeCar>> getListExchangeCarByLocation() {
-    return exchangeAccessoryApiProvider.getListExchangeCarByLocation();
+     //get list exchange  by location
+  Future<List<ExchangeCar>> getAllExchangeCarByLocation() {
+    return exchangeAccessoryApiProvider.getAllExchangeCarByLocation();
+  }
+   Future<List<ExchangeCar>> getAllExchangeCarByProvince(String provinceID) {
+    return exchangeAccessoryApiProvider.getAllExchangeCarByProvince(provinceID);
+  }
+   Future<List<ExchangeCar>> getAllExchangeCarByProvinceAndDistrict(String provinceID, String districtID) {
+    return exchangeAccessoryApiProvider.getAllExchangeCarByProvinceAndDistrict(provinceID, districtID);
   }
 
-   Future<List<ExchangeAccessory>> getListExchangeAccessoryByLocation() {
-    return exchangeAccessoryApiProvider.getListExchangeAccessoryByLocation();
+   Future<List<ExchangeAccessory>> getAllExchangeAccessoryByLocation() {
+    return exchangeAccessoryApiProvider.getAllExchangeAccessoryByLocation();
   }
+
+    Future<List<ExchangeAccessory>> getAllExchangeAccessoryByProvince(String provinceID) {
+    return exchangeAccessoryApiProvider.getAllExchangeAccessoryByProvince(provinceID);
+  }
+
+    Future<List<ExchangeAccessory>> getAllExchangeAccessoryByProvinceAndDisitrict(String provinceID, String districtID) {
+    return exchangeAccessoryApiProvider.getAllExchangeAccessoryByProvinceAndDistrict(provinceID, districtID);
+  }
+
 // send exchange response
    Future<bool> sendExchangeResponeseCarAndAccessory(SendExchangeResponse exchangeResponse){
     return exchangeAccessoryApiProvider
@@ -72,5 +87,10 @@ class ExchangeAccessoryRepository {
       //get list exchange car by location
   Future<List<UserExchangeResponse>> getListUserWanttoExchange(String id) {
     return exchangeAccessoryApiProvider.getListUserWanttoExchange(id);
+  }
+
+
+    Future<bool> acceptExchange(String exchangeID, int userID) {
+    return exchangeAccessoryApiProvider.acceptExchange(exchangeID, userID);
   }
 }

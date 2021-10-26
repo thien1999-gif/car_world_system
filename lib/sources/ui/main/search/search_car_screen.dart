@@ -150,7 +150,14 @@ class _SearchCarScreenState extends State<SearchCarScreen> {
             ),
           ],
         ),
-        loadListCar()
+         SingleChildScrollView(
+            child: Container(
+              width: 0,
+              height: 56.h,
+              child: loadListCar(),
+            ),
+          )
+        
       ],
     ));
   }
