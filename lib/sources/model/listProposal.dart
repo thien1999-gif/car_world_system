@@ -1,5 +1,5 @@
 class ListProposal {
-  int id;
+  String id;
   int userId;
   int type;
   String title;

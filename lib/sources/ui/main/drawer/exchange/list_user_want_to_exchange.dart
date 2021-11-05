@@ -184,30 +184,11 @@ class _ListUserWantToExchangeScreenState
                                   SizedBox(
                                     width: 5,
                                   ),
-                                  Text("0963852741"),
+                                  Text(data[index].user.phone),
                                 ],
                               ),
                             
-                              SizedBox(
-                                height: 10,
-                              ),
-                              Row(
-                                children: [
-                                  Icon(
-                                    Icons.location_city,
-                                    size: 15,
-                                    color: Colors.lightGreen,
-                                  ),
-                                  SizedBox(
-                                    width: 5,
-                                  ),
-                                  Text(
-                                    "quận 9 thành phố Hồ Chí Minh",
-                                    style: TextStyle(fontSize: 15),
-                                    maxLines: 2,
-                                  ),
-                                ],
-                              ),
+                              
                               SizedBox(
                                 height: 10,
                               ),

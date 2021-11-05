@@ -14,7 +14,6 @@ class CreateExchangeCar {
         required this.userId,
         required this.title,
         required this.description,
-        required this.phone,
         required this.address,
         required this.cityId,
         required this.districtId,
@@ -25,7 +24,6 @@ class CreateExchangeCar {
     int userId;
     String title;
     String description;
-    String phone;
     String address;
     String cityId;
     String districtId;
@@ -36,7 +34,6 @@ class CreateExchangeCar {
         userId: json["userId"],
         title: json["title"],
         description: json["description"],
-        phone: json["phone"],
         address: json["address"],
         cityId: json["cityId"],
         districtId: json["districtId"],
@@ -48,7 +45,6 @@ class CreateExchangeCar {
         "userId": userId,
         "title": title,
         "description": description,
-        "phone": phone,
         "address": address,
         "cityId": cityId,
         "districtId": districtId,

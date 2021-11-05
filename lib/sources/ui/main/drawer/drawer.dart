@@ -9,6 +9,7 @@ import 'package:car_world_system/sources/ui/main/drawer/contest/manager_contest_
 import 'package:car_world_system/sources/ui/main/drawer/event/manager_event_screen.dart';
 import 'package:car_world_system/sources/ui/main/drawer/exchange/history_exchange_screen.dart';
 import 'package:car_world_system/sources/ui/main/drawer/exchange/manager_post_screen.dart';
+import 'package:car_world_system/sources/ui/main/drawer/feedback/view_feedback.dart';
 import 'package:car_world_system/sources/ui/main/drawer/proposal/manager_proposal_screen.dart';
 import 'package:flutter/material.dart';
 
@@ -103,6 +104,17 @@ class _DrawerScreenState extends State<DrawerScreen> {
               },
             ),
             ListTile(
+              leading: Icon(Icons.feedback,color: Colors.lightGreen,),
+              title: Text("Xem phản hồi"),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ViewFeedback(),
+                    ));
+              },
+            ),
+              ListTile(
               leading: Icon(Icons.manage_search,color: Colors.lightGreen,),
               title: Text("Quản lý bài đăng"),
               onTap: () {

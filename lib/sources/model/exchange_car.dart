@@ -2,6 +2,7 @@
 //
 //     final exchangeCar = exchangeCarFromJson(jsonString);
 
+import 'package:car_world_system/sources/model/user_information.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
@@ -17,17 +18,18 @@ class ExchangeCar {
         required this.title,
         required this.description,
         required this.total,
-        required this.phone,
-       
+        required this.address,
         required this.cityId,
         required this.districtId,
         required this.wardId,
         required this.createdDate,
-        required this.address,
         required this.status,
-        // @required this.feedbackId,
+        required this.feedbackId,
+        // @required this.city,
+        // @required this.district,
         // @required this.feedback,
-        // @required this.user,
+        required this.user,
+        // @required this.ward,
         // @required this.exchangeAccessorryDetails,
         required this.exchangeCarDetails,
         // @required this.exchangeResponses,
@@ -39,16 +41,18 @@ class ExchangeCar {
     String title;
     String description;
     double total;
-    String createdDate;
-     String phone;
     String address;
     String cityId;
     String districtId;
     String wardId;
+    String createdDate;
     int status;
-    // dynamic feedbackId;
+    dynamic feedbackId;
+    // City city;
+    // District district;
     // dynamic feedback;
-    // dynamic user;
+    UserInformation user;
+    // City ward;
     // List<dynamic> exchangeAccessorryDetails;
     List<ListExchangeCarDetail> exchangeCarDetails;
     // List<dynamic> exchangeResponses;
@@ -60,18 +64,19 @@ class ExchangeCar {
         title: json["Title"],
         description: json["Description"],
         total: json["Total"],
-        createdDate: json["CreatedDate"],
-        phone: json["Phone"],
         address: json["Address"],
         cityId: json["CityId"],
         districtId: json["DistrictId"],
         wardId: json["WardId"],
-      
+        createdDate: json["CreatedDate"],
         status: json["Status"],
-        // feedbackId: json["FeedbackId"],
+        feedbackId: json["FeedbackId"],
+        // city: City.fromJson(json["City"]),
+        // district: District.fromJson(json["District"]),
         // feedback: json["Feedback"],
-        // user: json["User"],
-        //exchangeAccessorryDetails: List<dynamic>.from(json["ExchangeAccessorryDetails"].map((x) => x)),
+        user: UserInformation.fromJson(json["User"]),
+        // ward: City.fromJson(json["Ward"]),
+        // exchangeAccessorryDetails: List<dynamic>.from(json["ExchangeAccessorryDetails"].map((x) => x)),
         exchangeCarDetails: List<ListExchangeCarDetail>.from(json["ExchangeCarDetails"].map((x) => ListExchangeCarDetail.fromJson(x))),
         //exchangeResponses: List<dynamic>.from(json["ExchangeResponses"].map((x) => x)),
     );
@@ -83,21 +88,24 @@ class ExchangeCar {
         "Title": title,
         "Description": description,
         "Total": total,
-        "CreatedDate": createdDate,
-        "Phone": phone,
         "Address": address,
         "CityId": cityId,
         "DistrictId": districtId,
         "WardId": wardId,
+        "CreatedDate": createdDate,
         "Status": status,
-        // "FeedbackId": feedbackId,
+        "FeedbackId": feedbackId,
+        // "City": city.toJson(),
+        // "District": district.toJson(),
         // "Feedback": feedback,
-        // "User": user,
-        // "ExchangeAccessorryDetails": List<dynamic>.from(exchangeAccessorryDetails.map((x) => x)),
+        "User": user.toJson(),
+        // "Ward": ward.toJson(),
+        //"ExchangeAccessorryDetails": List<dynamic>.from(exchangeAccessorryDetails.map((x) => x)),
         "ExchangeCarDetails": List<dynamic>.from(exchangeCarDetails.map((x) => x.toJson())),
-        // "ExchangeResponses": List<dynamic>.from(exchangeResponses.map((x) => x)),
+        //"ExchangeResponses": List<dynamic>.from(exchangeResponses.map((x) => x)),
     };
 }
+
 
 class ListExchangeCarDetail {
     ListExchangeCarDetail({
@@ -162,3 +170,4 @@ class ListExchangeCarDetail {
         "Amount": amount,
     };
 }
+

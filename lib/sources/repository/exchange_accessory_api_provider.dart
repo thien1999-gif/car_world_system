@@ -4,8 +4,11 @@ import 'package:car_world_system/sources/model/create_exchange_accessory.dart';
 import 'package:car_world_system/sources/model/create_exchange_car.dart';
 import 'package:car_world_system/sources/model/exchange_accessory.dart';
 import 'package:car_world_system/sources/model/exchange_car.dart';
+import 'package:car_world_system/sources/model/feedback.dart';
+import 'package:car_world_system/sources/model/list_feedback.dart';
 import 'package:car_world_system/sources/model/send_exchange_response.dart';
 import 'package:car_world_system/sources/model/user_exchange_response.dart';
+import 'package:car_world_system/sources/model/user_exchange_to_buy.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_api_string.dart';
 import 'package:http/http.dart' as http;
 
@@ -57,6 +60,31 @@ class ExchangeAccessoryApiProvider {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load list exchange accessory by user id');
+    }
+  }
+
+    Future<List<ExchangeAccessory>> getExchangeAccessoryToSell(
+      int id) async {
+    final response = await http
+        .get(ExchangeAccessoryApiString.getExchangeAccessoryToSell(id));
+    List<ExchangeAccessory> list = [];
+    var jsonData = jsonDecode(response.body);
+    for (var data in jsonData) {
+      // if (data['Type'] == 2) {
+      //sử dung kiểu này khi có object ở trong json
+      ExchangeAccessory exchangeAccessory = ExchangeAccessory.fromJson(data);
+      list.add(exchangeAccessory);
+       //}
+    }
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON
+      return list;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load list exchange accessory to sell');
     }
   }
 
@@ -147,6 +175,30 @@ class ExchangeAccessoryApiProvider {
       throw Exception('Failed to load list exchange car by user id');
     }
   }
+  
+
+    Future<List<ExchangeCar>> getExchangeCarToSell(int id) async {
+    final response = await http
+        .get(ExchangeAccessoryApiString.getExchangeCarToSell(id));
+    List<ExchangeCar> list = [];
+    var jsonData = jsonDecode(response.body);
+    for (var data in jsonData) {
+      //sử dung kiểu này khi có object ở trong json
+      ExchangeCar exchangeCar = ExchangeCar.fromJson(data);
+      list.add(exchangeCar);
+      // }
+    }
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON
+      return list;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load list exchange car to sell ');
+    }
+  }
 
   //get exchange car detail by id
   Future<ExchangeCar> getExchangeCarDetail(String id) async {
@@ -188,9 +240,9 @@ class ExchangeAccessoryApiProvider {
 
   ////
       //get list exchange car by location
-  Future<List<ExchangeCar>> getAllExchangeCarByLocation() async {
+  Future<List<ExchangeCar>> getAllExchangeCarByLocation(int id) async {
     final response = await http
-        .get(ExchangeAccessoryApiString.getAllExchangeCarByLocation());
+        .get(ExchangeAccessoryApiString.getAllExchangeCarByLocation(id));
     List<ExchangeCar> list = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
@@ -211,9 +263,9 @@ class ExchangeAccessoryApiProvider {
     }
   }
 
-   Future<List<ExchangeCar>> getAllExchangeCarByProvince(String provinceID) async {
+   Future<List<ExchangeCar>> getAllExchangeCarByProvince(String provinceID, int id) async {
     final response = await http
-        .get(ExchangeAccessoryApiString.getAllExchangeCarByProvince(provinceID));
+        .get(ExchangeAccessoryApiString.getAllExchangeCarByProvince(provinceID, id));
     List<ExchangeCar> list = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
@@ -234,9 +286,9 @@ class ExchangeAccessoryApiProvider {
     }
   }
 
-   Future<List<ExchangeCar>> getAllExchangeCarByProvinceAndDistrict(String provinceID, String districtID) async {
+   Future<List<ExchangeCar>> getAllExchangeCarByProvinceAndDistrict(String provinceID, String districtID, int id) async {
     final response = await http
-        .get(ExchangeAccessoryApiString.getAllExchangeCarByProvinceAndDistrict(provinceID, districtID));
+        .get(ExchangeAccessoryApiString.getAllExchangeCarByProvinceAndDistrict(provinceID, districtID, id));
     List<ExchangeCar> list = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
@@ -258,9 +310,9 @@ class ExchangeAccessoryApiProvider {
   }
 
      //get list exchange accessory by location
-  Future<List<ExchangeAccessory>> getAllExchangeAccessoryByLocation() async {
+  Future<List<ExchangeAccessory>> getAllExchangeAccessoryByLocation(int id) async {
     final response = await http
-        .get(ExchangeAccessoryApiString.getAllExchangeAccessoryByLocation());
+        .get(ExchangeAccessoryApiString.getAllExchangeAccessoryByLocation(id));
     List<ExchangeAccessory> list = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
@@ -281,9 +333,9 @@ class ExchangeAccessoryApiProvider {
     }
   }
 
-  Future<List<ExchangeAccessory>> getAllExchangeAccessoryByProvince(String provinceID) async {
+  Future<List<ExchangeAccessory>> getAllExchangeAccessoryByProvince(String provinceID, int id) async {
     final response = await http
-        .get(ExchangeAccessoryApiString.getAllExchangeAccessoryByProvince(provinceID));
+        .get(ExchangeAccessoryApiString.getAllExchangeAccessoryByProvince(provinceID, id));
     List<ExchangeAccessory> list = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
@@ -304,9 +356,9 @@ class ExchangeAccessoryApiProvider {
     }
   }
 
-  Future<List<ExchangeAccessory>> getAllExchangeAccessoryByProvinceAndDistrict(String provinceID, String districtID) async {
+  Future<List<ExchangeAccessory>> getAllExchangeAccessoryByProvinceAndDistrict(String provinceID, String districtID, int id) async {
     final response = await http
-        .get(ExchangeAccessoryApiString.getAllExchangeAccessoryByProvinceAndDistrict(provinceID, districtID));
+        .get(ExchangeAccessoryApiString.getAllExchangeAccessoryByProvinceAndDistrict(provinceID, districtID, id));
     List<ExchangeAccessory> list = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
@@ -392,6 +444,95 @@ class ExchangeAccessoryApiProvider {
       // then throw an exception.
 
       return false;
+    }
+  }
+
+   Future<bool> sendFeedBackExchangeToSell(String id, FeedBack feedBack) async {
+    final response = await http.post(
+      ExchangeAccessoryApiString.sendFeedBackExchangeToSell(id),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(feedBack),
+    );
+
+    if (response.statusCode == 200) {
+      print("thanh cong gửi feedback ve mon hang da ban");
+      return true;
+    } else {
+      // If the server did not return a 200 CREATED response,
+      // then throw an exception.
+
+      return false;
+    }
+  }
+
+     Future<bool> sendFeedBackExchangeToBuy(String id, FeedBack feedBack) async {
+    final response = await http.post(
+      ExchangeAccessoryApiString.sendFeedBackExchangeToBuy(id),
+      headers: <String, String>{
+        'Content-Type': 'application/json; charset=UTF-8',
+      },
+      body: json.encode(feedBack),
+    );
+
+    if (response.statusCode == 200) {
+      print("thanh cong gửi feedback ve mon hang da mua");
+      return true;
+    } else {
+      // If the server did not return a 200 CREATED response,
+      // then throw an exception.
+
+      return false;
+    }
+  }
+
+
+    Future<List<UserExchangeToBuy>> getExchangeToBuy(int id) async {
+    final response = await http
+        .get(ExchangeAccessoryApiString.getExchangeToBuy(id));
+    List<UserExchangeToBuy> list = [];
+    var jsonData = jsonDecode(response.body);
+    for (var data in jsonData) {
+      //sử dung kiểu này khi có object ở trong json
+      UserExchangeToBuy listUserExchange = UserExchangeToBuy.fromJson(data);
+      list.add(listUserExchange);
+      // }
+    }
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON
+      return list;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load list exchange user to buy');
+    }
+  }
+
+
+
+      Future<List<ListFeedback>> getListUserFeedback(int id) async {
+    final response = await http
+        .get(ExchangeAccessoryApiString.getListUserFeedback(id));
+    List<ListFeedback> list = [];
+    var jsonData = jsonDecode(response.body);
+    for (var data in jsonData) {
+      //sử dung kiểu này khi có object ở trong json
+      ListFeedback listFeedback = ListFeedback.fromJson(data);
+      list.add(listFeedback);
+      // }
+    }
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON
+      return list;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load list feedback of user');
     }
   }
 }

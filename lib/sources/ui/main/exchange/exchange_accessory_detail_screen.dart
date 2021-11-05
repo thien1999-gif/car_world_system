@@ -142,6 +142,54 @@ UserProfile? _profile;
                   ],
                 ),
                 Text(
+                  "Chủ bài đăng",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                      fontSize: 18),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.people,
+                      color: Colors.lightGreen,
+                    ),
+                    SizedBox(
+                      width: 1.h,
+                    ),
+                    Text(
+                      data.user.fullName,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Text(
+                  "Email",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.blue,
+                      fontSize: 18),
+                ),
+                Row(
+                  children: [
+                    Icon(
+                      Icons.email,
+                      color: Colors.lightGreen,
+                    ),
+                    SizedBox(
+                      width: 1.h,
+                    ),
+                    Text(
+                      data.user.email,
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                    ),
+                  ],
+                ),
+                Text(
                   "Số điện thoại",
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
@@ -159,7 +207,7 @@ UserProfile? _profile;
                       width: 1.h,
                     ),
                     Text(
-                      data.phone,
+                      data.user.phone,
                       style:
                           TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                     ),

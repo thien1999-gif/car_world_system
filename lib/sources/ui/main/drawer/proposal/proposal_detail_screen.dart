@@ -6,7 +6,7 @@ import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:sizer/sizer.dart';
 
 class ProposalDetailScreen extends StatefulWidget {
-  final int id;
+  final String id;
   const ProposalDetailScreen({Key? key, required this.id}) : super(key: key);
 
   @override
@@ -14,7 +14,7 @@ class ProposalDetailScreen extends StatefulWidget {
 }
 
 class _ProposalDetailScreenState extends State<ProposalDetailScreen> {
-  final int id;
+  final String id;
   @override
   void initState() {
     super.initState();

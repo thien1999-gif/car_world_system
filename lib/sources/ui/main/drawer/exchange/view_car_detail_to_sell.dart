@@ -1,29 +1,27 @@
 import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/bloc/exchange_bloc.dart';
 import 'package:car_world_system/sources/model/exchange_car.dart';
+import 'package:car_world_system/sources/model/feedback.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_repository.dart';
-import 'package:car_world_system/sources/ui/login/login_screen.dart';
-import 'package:car_world_system/sources/ui/main/drawer/exchange/list_user_want_to_exchange.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
-
-class PostCarDetailScreen extends StatefulWidget {
+class ViewCarDetailToSell extends StatefulWidget {
   final String carId;
-  const PostCarDetailScreen({Key? key, required this.carId}) : super(key: key);
+  const ViewCarDetailToSell({ Key? key, required this.carId }) : super(key: key);
 
   @override
-  _PostCarDetailScreenState createState() => _PostCarDetailScreenState(carId);
+  _ViewCarDetailToSellState createState() => _ViewCarDetailToSellState(carId);
 }
 
-class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
+class _ViewCarDetailToSellState extends State<ViewCarDetailToSell> {
   final String carId;
   final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
   final ScrollController scrollController_1 = ScrollController();
-  _PostCarDetailScreenState(this.carId);
-
-  @override
+ var userFeedBack = TextEditingController();
+  _ViewCarDetailToSellState(this.carId);
+   @override
   void initState() {
     super.initState();
 
@@ -572,84 +570,92 @@ class _PostCarDetailScreenState extends State<PostCarDetailScreen> {
         Row(
           children: [
             SizedBox(
-              width: 10.0.h,
+              width: 35.h,
             ),
-            TextButton(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.cancel,
-                    color: AppConstant.backgroundColor,
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    "Gỡ bài đăng",
-                    style: TextStyle(
-                        color: AppConstant.backgroundColor, fontSize: 16),
-                  )
-                ],
+            
+            RaisedButton(
+              color: AppConstant.backgroundColor,
+              child: Text(
+                "Phản hồi",
+                style: TextStyle(color: Colors.white),
               ),
               onPressed: () {
                 showDialog(
-                  context: context,
-                  builder: (context) => AlertDialog(
-                    title: Text('Xác nhận'),
-                    content: Text('Bạn có chắc là muốn gỡ bài đăng này không?'),
-                    actions: <Widget>[
-                      FlatButton(
-                          onPressed: () {
-                            Navigator.pop(context);
-                          },
-                          child: Text('Không',
-                              style: TextStyle(color: Colors.white)),
-                          color: AppConstant.backgroundColor),
-                      FlatButton(
-                          onPressed: () {
-                            ExchangeAccessoryRepository
-                                exchangeAccessoryRepository =
-                                ExchangeAccessoryRepository();
-                            exchangeAccessoryRepository
-                                .cancelExchangeCar(data.id);
-                            SnackBar snackbar =
-                                SnackBar(content: Text('Hủy thành công'));
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(snackbar);
-                            Navigator.pop(context);
-                            Navigator.pop(context);
-                          },
-                          child:
-                              Text('Có', style: TextStyle(color: Colors.white)),
-                          color: AppConstant.backgroundColor),
-                    ],
-                  ),
-                );
+                    context: context,
+                    builder: (context) => AlertDialog(
+                          title: Text('Xác nhận'),
+                          content: Container(
+                            height: 25.h,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Text(
+                                    "Vui lòng nhập phản hồi của bạn."),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                TextFormField(
+                                  controller: userFeedBack,
+                                  maxLines: 5,
+                                  decoration: InputDecoration(
+                                    label: Text(
+                                      "Phản hồi",
+                                      style: TextStyle(
+                                          color: AppConstant.backgroundColor),
+                                    ),
+                                    hintText: "Vui lòng nhập phản hồi của bạn",
+                                    focusedBorder: OutlineInputBorder(
+                                      borderSide: BorderSide(
+                                          color: AppConstant.backgroundColor),
+                                      borderRadius: BorderRadius.circular(10),
+                                    ),
+                                  ),
+                                  // validator: (value) {
+                                  //   if (value!.isEmpty) {
+                                  //     return 'Vui lòng nhập tiêu đề';
+                                  //   }
+                                  //   return null;
+                                  // },
+                                ),
+                              ],
+                            ),
+                          ),
+                          actions: <Widget>[
+                            FlatButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: Text('Hủy',
+                                    style: TextStyle(color: Colors.white)),
+                                color: AppConstant.backgroundColor),
+                            FlatButton(
+                                onPressed: () {
+                                  print(
+                                      "danh gia: " + userFeedBack.text);
+                                  FeedBack feedBack = FeedBack(
+                                      feedbackUserId: data.userId,
+                                      feedbackContent:
+                                          userFeedBack.text);
+                                  ExchangeAccessoryRepository exchangeAccessoryRepository =
+                                      ExchangeAccessoryRepository();
+                                  exchangeAccessoryRepository.sendFeedBackExchangeToSell(
+                                      data.id, feedBack);
+                                  SnackBar snackbar = SnackBar(
+                                      content: Text('Phản hồi thành công'));
+                                  ScaffoldMessenger.of(context)
+                                      .showSnackBar(snackbar);
+                                  Navigator.pop(context);
+                                  // Navigator.pop(context);
+                                },
+                                child: Text('Gửi',
+                                    style: TextStyle(color: Colors.white)),
+                                color: AppConstant.backgroundColor),
+                          ],
+                        ));
               },
+              
             ),
-            TextButton(
-              child: Row(
-                children: [
-                  Icon(
-                    Icons.person,
-                    color: AppConstant.backgroundColor,
-                  ),
-                  SizedBox(width: 5),
-                  Text(
-                    "Người quan tâm",
-                    style: TextStyle(
-                        color: AppConstant.backgroundColor, fontSize: 16),
-                  )
-                ],
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => ListUserWantToExchangeScreen(
-                            exchangeID: data.id,
-                          )),
-                );
-              },
-            )
           ],
         )
       ],

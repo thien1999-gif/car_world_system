@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:car_world_system/sources/model/userLogin.dart';
 import 'package:car_world_system/sources/model/userProfile.dart';
+import 'package:car_world_system/sources/model/user_information.dart';
 import 'package:car_world_system/sources/repository/login_api_string.dart';
 import 'package:http/http.dart' as http;
 //import 'package:shared_preferences/shared_preferences.dart';
@@ -53,6 +54,22 @@ class LoginApiProvider {
       // final Map<String, dynamic> data = json.decode(response.body);
       // UserProfile reponseUserProfile = UserProfile.fromJson(data);
       return userProfile;
+    } else {
+      print("Bach: " + LoginApiString.getProfile(email));
+      throw Exception('Failed to get profile user.');
+    }
+  }
+
+    Future<UserInformation> getUserInformation(String email) async {
+    final response = await http.get(LoginApiString.getProfile(email));
+    print("HIHI " + response.body);
+    if (response.statusCode == 200) {
+      var data = jsonDecode(response.body);
+    UserInformation userInformation = UserInformation.fromJson(data);
+      
+      // final Map<String, dynamic> data = json.decode(response.body);
+      // UserProfile reponseUserProfile = UserProfile.fromJson(data);
+      return userInformation;
     } else {
       print("Bach: " + LoginApiString.getProfile(email));
       throw Exception('Failed to get profile user.');

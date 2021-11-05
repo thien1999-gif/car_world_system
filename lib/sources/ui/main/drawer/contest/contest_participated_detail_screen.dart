@@ -124,7 +124,7 @@ class _ContestParitcipatedDetailScreenState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Thời gian đăng ký cuộc thi",
+                  "Thời gian đăng ký",
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.bold,
@@ -157,7 +157,7 @@ class _ContestParitcipatedDetailScreenState
                 SizedBox(
                   height: 1.h,
                 ),
-                Text("Thời gian diễn ra cuộc thi",
+                Text("Thời gian diễn ra",
                     style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold,

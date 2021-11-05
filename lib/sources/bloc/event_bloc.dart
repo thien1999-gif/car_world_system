@@ -56,7 +56,7 @@ class EventBloc {
     _eventDetailFetcher.sink.add(eventDetail);
   }
     //get proposal detail by id
-  getProposalDetail(int id) async {
+  getProposalDetail(String id) async {
     ProposalDetail proposalDetail = await eventRepository.getProposalDetail(id);
     _proposalDetailFetcher.sink.add(proposalDetail);
   }

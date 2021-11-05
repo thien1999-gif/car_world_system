@@ -299,9 +299,9 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text('Trạng thái sử dụng:', style: TextStyle(color:AppConstant.backgroundColor, fontSize: 16),),
+                          Text('Tình trạng', style: TextStyle(color:AppConstant.backgroundColor, fontSize: 16),),
                           LabeledRadio(
-                            label: 'Không',
+                            label: 'Mới',
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 5.0),
                             value: false,
@@ -313,7 +313,7 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                             },
                           ),
                           LabeledRadio(
-                            label: 'Có',
+                            label: 'Đã sử dụng',
                             padding:
                                 const EdgeInsets.symmetric(horizontal: 5.0),
                             value: true,
@@ -629,7 +629,7 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                                                   exchangeAccessorryDetails: list,
                                                   cityId: provinceID!, 
                                            districtId: districtID!, 
-                                           phone: phoneNumberOfUser, 
+                                           
                                            wardId: wardID!,
                                                    );
                                           ExchangeAccessoryRepository

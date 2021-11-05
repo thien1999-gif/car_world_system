@@ -3,8 +3,11 @@ import 'package:car_world_system/sources/bloc/exchange_bloc.dart';
 import 'package:car_world_system/sources/model/district.dart';
 import 'package:car_world_system/sources/model/exchange_accessory.dart';
 import 'package:car_world_system/sources/model/province.dart';
+import 'package:car_world_system/sources/model/userProfile.dart';
 import 'package:car_world_system/sources/model/ward.dart';
 import 'package:car_world_system/sources/repository/address_api_provider.dart';
+import 'package:car_world_system/sources/repository/login_repository.dart';
+import 'package:car_world_system/sources/ui/login/login_screen.dart';
 import 'package:car_world_system/sources/ui/main/exchange/exchange_accessory_detail_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -35,14 +38,23 @@ class _ExchangeAccessoryScreenState extends State<ExchangeAccessoryScreen> {
   Ward? wardObject;
   String? wardID, wardName;
   Future<List<Ward>>? _wardFuture;
-
+  UserProfile? _profile;
 //
   int isSelect = 1;
   @override
   void initState() {
     super.initState();
-
+    getProfile();
     _provinceFuture = AddressApiProvider().getListProvince();
+  }
+
+  void getProfile() async {
+    // LoginApiProvider user = new LoginApiProvider();
+    LoginRepository loginRepository = LoginRepository();
+    var profile = await loginRepository.getProfile(email);
+    setState(() {
+      _profile = profile;
+    });
   }
 
   final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
@@ -174,43 +186,51 @@ class _ExchangeAccessoryScreenState extends State<ExchangeAccessoryScreen> {
   }
 
   Widget _loadListExchangeAccessoryOfUser() {
-    if (isSelect == 1) {
-      exchangeBloc.getAllExchangeAccessoryByLocation();
-      return StreamBuilder(
-          stream: exchangeBloc.listExchangeAccessoryOfUser,
-          builder: (context, AsyncSnapshot<List<ExchangeAccessory>> snapshot) {
-            if (snapshot.hasData) {
-              return _buildList(snapshot.data!);
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-            return Center(child: CircularProgressIndicator());
-          });
-    } else if (isSelect == 3) {
-      exchangeBloc.getAllExchangeAccessoryByProvince(provinceID!);
-      return StreamBuilder(
-          stream: exchangeBloc.listExchangeAccessoryOfUser,
-          builder: (context, AsyncSnapshot<List<ExchangeAccessory>> snapshot) {
-            if (snapshot.hasData) {
-              return _buildList(snapshot.data!);
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-            return Center(child: CircularProgressIndicator());
-          });
+    if (_profile == null) {
+      return Container();
     } else {
-      exchangeBloc.getAllExchangeAccessoryByProvinceAndDistrict(
-          provinceID!, districtID!);
-      return StreamBuilder(
-          stream: exchangeBloc.listExchangeAccessoryOfUser,
-          builder: (context, AsyncSnapshot<List<ExchangeAccessory>> snapshot) {
-            if (snapshot.hasData) {
-              return _buildList(snapshot.data!);
-            } else if (snapshot.hasError) {
-              return Text(snapshot.error.toString());
-            }
-            return Center(child: CircularProgressIndicator());
-          });
+      if (isSelect == 1) {
+        exchangeBloc.getAllExchangeAccessoryByLocation(_profile!.id);
+        return StreamBuilder(
+            stream: exchangeBloc.listExchangeAccessoryOfUser,
+            builder:
+                (context, AsyncSnapshot<List<ExchangeAccessory>> snapshot) {
+              if (snapshot.hasData) {
+                return _buildList(snapshot.data!);
+              } else if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              return Center(child: CircularProgressIndicator());
+            });
+      } else if (isSelect == 3) {
+        exchangeBloc.getAllExchangeAccessoryByProvince(
+            provinceID!, _profile!.id);
+        return StreamBuilder(
+            stream: exchangeBloc.listExchangeAccessoryOfUser,
+            builder:
+                (context, AsyncSnapshot<List<ExchangeAccessory>> snapshot) {
+              if (snapshot.hasData) {
+                return _buildList(snapshot.data!);
+              } else if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              return Center(child: CircularProgressIndicator());
+            });
+      } else {
+        exchangeBloc.getAllExchangeAccessoryByProvinceAndDistrict(
+            provinceID!, districtID!, _profile!.id);
+        return StreamBuilder(
+            stream: exchangeBloc.listExchangeAccessoryOfUser,
+            builder:
+                (context, AsyncSnapshot<List<ExchangeAccessory>> snapshot) {
+              if (snapshot.hasData) {
+                return _buildList(snapshot.data!);
+              } else if (snapshot.hasError) {
+                return Text(snapshot.error.toString());
+              }
+              return Center(child: CircularProgressIndicator());
+            });
+      }
     }
   }
 

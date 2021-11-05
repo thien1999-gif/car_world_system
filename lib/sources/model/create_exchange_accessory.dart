@@ -14,7 +14,7 @@ class CreateExchangeAccessory {
         required this.userId,
         required this.title,
         required this.description,
-        required this.phone,
+        
         required this.address,
         required this.cityId,
         required this.districtId,
@@ -25,7 +25,6 @@ class CreateExchangeAccessory {
     int userId;
     String title;
     String description;
-    String phone;
     String address;
     String cityId;
     String districtId;
@@ -36,7 +35,7 @@ class CreateExchangeAccessory {
         userId: json["userId"],
         title: json["title"],
         description: json["description"],
-        phone: json["phone"],
+       
         address: json["address"],
         cityId: json["cityId"],
         districtId: json["districtId"],
@@ -48,7 +47,7 @@ class CreateExchangeAccessory {
         "userId": userId,
         "title": title,
         "description": description,
-        "phone": phone,
+       
         "address": address,
         "cityId": cityId,
         "districtId": districtId,

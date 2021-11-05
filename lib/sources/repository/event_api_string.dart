@@ -55,7 +55,7 @@ class EventApiString {
   //get proposal detail
   //https://carworld.cosplane.asia/api/proposal/GetProposalById?id=7
 
-  static String getProposalDetail(int id) {
+  static String getProposalDetail(String id) {
     return BASE_URL + '/api/proposal/GetProposalById?id=$id';
   }
 

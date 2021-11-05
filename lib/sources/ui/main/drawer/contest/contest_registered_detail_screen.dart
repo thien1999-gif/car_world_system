@@ -173,7 +173,7 @@ final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Thời gian đăng ký cuộc thi",
+                  "Thời gian đăng ký",
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.bold,
@@ -206,7 +206,7 @@ final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
                 SizedBox(
                   height: 1.h,
                 ),
-                Text("Thời gian diễn ra cuộc thi",
+                Text("Thời gian diễn ra",
                     style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold,

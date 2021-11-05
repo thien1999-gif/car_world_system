@@ -1,4 +1,5 @@
 import 'package:car_world_system/constant/app_constant.dart';
+import 'package:car_world_system/constant/app_constant.dart';
 import 'package:car_world_system/sources/repository/google_sign_in.dart';
 import 'package:car_world_system/sources/repository/login_api_provider.dart';
 import 'package:car_world_system/sources/repository/login_repository.dart';
@@ -47,7 +48,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       fontSize: 15.0.sp,
                       fontFamily: 'Pacifico'),
                 ),
-                SizedBox(height: 71.0.h //It will take a 30% of screen height
+                SizedBox(height: 71.0.h //71.0.h
                     ),
                 Padding(
                   padding: EdgeInsets.only(left: 10.0.h, right: 10.0.h),
@@ -81,7 +82,26 @@ class _LoginScreenState extends State<LoginScreen> {
                       });
                     },
                   ),
-                )
+                ),
+                Row(children: [
+                  SizedBox(width: 32.h,),
+ TextButton(
+                    child: Row(
+                      children: [
+                        Icon(
+                          Icons.manage_accounts_sharp,
+                          color: AppConstant.backgroundColor,
+                        ),
+                        SizedBox(width: 5),
+                        Text(
+                          "Quản trị viên",
+                          style: TextStyle(color: AppConstant.backgroundColor),
+                        )
+                      ],
+                    ),
+                    onPressed: null),
+                ],),
+               
               ],
             ),
           ),

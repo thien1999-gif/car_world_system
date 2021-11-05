@@ -267,7 +267,7 @@ class EventApiProvider {
   }
 
   //get proposal detail by id
-  Future<ProposalDetail> getProposalDetail(int id) async {
+  Future<ProposalDetail> getProposalDetail(String  id) async {
     final response = await http.get(EventApiString.getProposalDetail(id));
 
     if (response.statusCode == 200) {

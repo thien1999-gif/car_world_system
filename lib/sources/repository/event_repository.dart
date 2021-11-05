@@ -71,7 +71,7 @@ class EventRepository {
   }
 
   //get proposal detail by id
-  Future<ProposalDetail> getProposalDetail(int id) {
+  Future<ProposalDetail> getProposalDetail(String id) {
     return eventApiProvider.getProposalDetail(id);
   }
 }

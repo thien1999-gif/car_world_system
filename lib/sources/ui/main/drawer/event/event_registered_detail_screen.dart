@@ -157,7 +157,7 @@ class _EventRegisteredDetailScreenState
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Thời gian đăng ký sự kiện",
+                  "Thời gian đăng ký",
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.bold,
@@ -190,7 +190,7 @@ class _EventRegisteredDetailScreenState
                 SizedBox(
                   height: 1.h,
                 ),
-                Text("Thời gian diễn ra sự kiện",
+                Text("Thời gian diễn ra",
                     style: TextStyle(
                         fontStyle: FontStyle.italic,
                         fontWeight: FontWeight.bold,

@@ -313,12 +313,12 @@ class _CarPostScreenState extends State<CarPostScreen> {
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          'Trạng thái sử dụng:',
+                          'Tình trạng',
                           style: TextStyle(
                               color: AppConstant.backgroundColor, fontSize: 16),
                         ),
                         LabeledRadio(
-                          label: 'Không',
+                          label: 'Mới',
                           padding: const EdgeInsets.symmetric(horizontal: 5.0),
                           value: false,
                           groupValue: _isUsed,
@@ -329,7 +329,7 @@ class _CarPostScreenState extends State<CarPostScreen> {
                           },
                         ),
                         LabeledRadio(
-                          label: 'Có',
+                          label: 'Đã sử dụng',
                           padding: const EdgeInsets.symmetric(horizontal: 5.0),
                           value: true,
                           groupValue: _isUsed,
@@ -775,7 +775,7 @@ class _CarPostScreenState extends State<CarPostScreen> {
                                           exchangeCarDetails: list,
                                            cityId: provinceID!, 
                                            districtId: districtID!, 
-                                           phone: phoneNumberOfUser, 
+                                          
                                            wardId: wardID!,
                                         );
                                         ExchangeAccessoryRepository
