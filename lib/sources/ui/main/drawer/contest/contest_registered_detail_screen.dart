@@ -360,7 +360,7 @@ final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
                         builder: (context) => AlertDialog(
                           title: Text('Xác nhận'),
                           content: Text(
-                              'Bạn có muốn hủy tham gia sự kiện này không ?'),
+                              'Bạn có muốn hủy tham gia cuộc thi này không ?'),
                           actions: <Widget>[
                             FlatButton(
                                 onPressed: () {

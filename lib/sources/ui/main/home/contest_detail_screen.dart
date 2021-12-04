@@ -8,6 +8,7 @@ import 'package:car_world_system/sources/model/user_event_contest.dart';
 import 'package:car_world_system/sources/repository/contest_repository.dart';
 import 'package:car_world_system/sources/repository/login_repository.dart';
 import 'package:car_world_system/sources/ui/login/login_screen.dart';
+import 'package:car_world_system/sources/ui/main/home/contest_prize_screen.dart';
 // import 'package:car_world_system/sources/ui/main/home/payment.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
@@ -23,6 +24,11 @@ class ContestDetailScreen extends StatefulWidget {
 }
 
 class _ContestDetailScreenState extends State<ContestDetailScreen> {
+  // them
+  bool _enableRegister = true;
+
+//
+
   final String id;
   UserProfile? _profile;
   bool _enable = true;
@@ -89,6 +95,17 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
     print("so sanh ngay de check");
     print(_enable);
 
+    // them
+    if (_profile != null) {
+      for (int i = 0; i < data.contestEventRegisters.length; i++) {
+        if (_profile!.id == data.contestEventRegisters[i].userId) {
+          _enableRegister = false;
+        }
+      }
+    }
+
+//
+
     return ListView(
       children: [
         ImageSlideshow(
@@ -114,6 +131,31 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
             style: TextStyle(fontWeight: AppConstant.titleBold, fontSize: 23),
           ),
         ),
+
+        // them
+        Container(
+            padding: EdgeInsets.only(left: 1.h),
+            child: (_enableRegister)
+                ? Container(
+                    width: 0,
+                    height: 0,
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Lưu ý *** ",
+                        style: TextStyle(color: Colors.red, fontSize: 17),
+                      ),
+                      Text(
+                        "Bạn đã tham gia cuộc thi này rồi. ",
+                        style: TextStyle(color: Colors.red, fontSize: 15),
+                      )
+                    ],
+                  )),
+        //
+
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Row(
@@ -319,6 +361,26 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
             maxLines: 15,
           ),
         ),
+
+        Padding(
+          padding: EdgeInsets.only(left: 8, right: 8, top: 8),
+          child: Text(
+            "Giải thưởng",
+            style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+                fontSize: 18),
+          ),
+        ),
+
+        Container(
+          alignment: Alignment.topLeft,
+          child: ContestPrizeScreen(id: data.id),
+          height: 17.h,
+          width: 500,
+        ),
+
         Row(
           children: [
             SizedBox(
@@ -339,14 +401,14 @@ class _ContestDetailScreenState extends State<ContestDetailScreen> {
                   )
                 ],
               ),
-              onPressed: _enable
+              onPressed: _enableRegister
                   ? () {
                       showDialog(
                         context: context,
                         builder: (context) => AlertDialog(
                           title: Text('Xác nhận'),
                           content:
-                              Text('Bạn có muốn tham gia sự kiện này không ?'),
+                              Text('Bạn có muốn tham gia cuộc thi này không ?'),
                           actions: <Widget>[
                             FlatButton(
                                 onPressed: () {

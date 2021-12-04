@@ -6,8 +6,10 @@ import 'package:car_world_system/sources/model/contest.dart';
 import 'package:car_world_system/sources/model/contest_register.dart';
 import 'package:car_world_system/sources/model/event_contest.dart';
 import 'package:car_world_system/sources/model/feedback.dart';
+import 'package:car_world_system/sources/model/prize.dart';
 import 'package:car_world_system/sources/model/userContest.dart';
 import 'package:car_world_system/sources/model/user_event_contest.dart';
+import 'package:car_world_system/sources/model/user_information.dart';
 import 'package:car_world_system/sources/repository/contest_api_string.dart';
 import 'package:http/http.dart' as http;
 
@@ -19,7 +21,7 @@ class ContestApiProvider {
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
       //if (data['IsDeleted'] == false) {
-     EventContest contest = EventContest.fromJson(data);
+      EventContest contest = EventContest.fromJson(data);
       listContest.add(contest);
       // }
     }
@@ -114,7 +116,7 @@ class ContestApiProvider {
     }
   }
 
-    //user feed contest
+  //user feed contest
   Future<bool> feedbackContest(String id, FeedBack feedBack) async {
     final response = await http.post(
       ContestApiString.feedbackContest(id),
@@ -135,7 +137,7 @@ class ContestApiProvider {
     }
   }
 
-   //cancel contest
+  //cancel contest
   Future<bool> cancelContest(CancelRegisterContestEvent userContest) async {
     final response = await http.put(
       ContestApiString.cancelContest(),
@@ -157,7 +159,7 @@ class ContestApiProvider {
     }
   }
 
-    //get list contest user register
+  //get list contest user register
   Future<List<ContestRegister>> getListContestUserRegister(int id) async {
     final response =
         await http.get(ContestApiString.getListContestUserRegister(id));
@@ -182,9 +184,10 @@ class ContestApiProvider {
     }
   }
 
-    //get list contest user joined
+  //get list contest user joined
   Future<List<ContestRegister>> getListContestUserJoined(int id) async {
-    final response = await http.get(ContestApiString.getListContestUserJoined(id));
+    final response =
+        await http.get(ContestApiString.getListContestUserJoined(id));
     List<ContestRegister> listContest = [];
     var jsonData = jsonDecode(response.body);
     for (var data in jsonData) {
@@ -205,4 +208,30 @@ class ContestApiProvider {
       throw Exception('Failed to load list contest user joined');
     }
   }
+
+  Future<List<UserPrize>> getContestPrize(String id) async {
+    final response = await http.get(ContestApiString.getContestPrize(id));
+    List<UserPrize> listContest = [];
+    var jsonData = jsonDecode(response.body);
+    for (var data in jsonData) {
+      //if (data['IsDeleted'] == false) {
+      //sử dung kiểu này khi có object ở trong json
+      UserPrize contestRegister = UserPrize.fromJson(data);
+      listContest.add(contestRegister);
+      // }
+    }
+
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON
+      return listContest;
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load list contest prize');
+    }
+  }
+
+
+ 
 }

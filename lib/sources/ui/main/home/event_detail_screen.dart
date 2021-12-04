@@ -28,6 +28,10 @@ class EventDetailScreen extends StatefulWidget {
 }
 
 class _EventDetailScreenState extends State<EventDetailScreen> {
+  // them
+  bool _enableRegister = true;
+
+//
   final String id;
   UserProfile? _profile;
   _EventDetailScreenState(this.id);
@@ -91,8 +95,16 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
     } else {
       _enable = true;
     }
-    print("so sanh ngay de check");
-    print(_enable);
+
+    if (_profile != null) {
+      for (int i = 0; i < data.contestEventRegisters.length; i++) {
+        if (_profile!.id == data.contestEventRegisters[i].userId) {
+          _enableRegister = false;
+        }
+      }
+    }
+
+//
 
     return ListView(
       children: [
@@ -133,6 +145,27 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                       ),
                       Text(
                         "Vì chưa đến thời gian đăng kí tham gia nên bạn có thể đăng kí sau. ",
+                        style: TextStyle(color: Colors.red, fontSize: 15),
+                      )
+                    ],
+                  )),
+        Container(
+            padding: EdgeInsets.only(left: 1.h),
+            child: (_enableRegister)
+                ? Container(
+                    width: 0,
+                    height: 0,
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Lưu ý *** ",
+                        style: TextStyle(color: Colors.red, fontSize: 17),
+                      ),
+                      Text(
+                        "Bạn đã tham gia sự kiện này rồi. ",
                         style: TextStyle(color: Colors.red, fontSize: 15),
                       )
                     ],
@@ -271,10 +304,10 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           child: Text(
             "Địa điểm tổ chức",
             style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                      fontSize: 18),
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+                fontSize: 18),
           ),
         ),
         Padding(
@@ -289,11 +322,11 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Text(
             "Mô tả",
-           style: TextStyle(
-                      fontStyle: FontStyle.italic,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.blue,
-                      fontSize: 18),
+            style: TextStyle(
+                fontStyle: FontStyle.italic,
+                fontWeight: FontWeight.bold,
+                color: Colors.blue,
+                fontSize: 18),
           ),
         ),
         Padding(
@@ -315,7 +348,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                 children: [
                   Icon(
                     Icons.check,
-                    color:  Colors.white,
+                    color: Colors.white,
                   ),
                   SizedBox(width: 5),
                   Text(
@@ -324,7 +357,7 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                   )
                 ],
               ),
-              onPressed: _enable
+              onPressed: _enableRegister
                   ? () {
                       showDialog(
                         context: context,
@@ -344,11 +377,9 @@ class _EventDetailScreenState extends State<EventDetailScreen> {
                                 onPressed: () {
                                   int userID = _profile!.id;
                                   String eventID = data.id;
-                                  
-                                         UserEventContest userEvent =
-                                      UserEventContest(
-                                          contestEventId: eventID,
-                                          userId: userID);
+
+                                  UserEventContest userEvent = UserEventContest(
+                                      contestEventId: eventID, userId: userID);
                                   EventRepository eventRepository =
                                       EventRepository();
                                   eventRepository.registerEvent(userEvent);

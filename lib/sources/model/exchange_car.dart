@@ -2,62 +2,65 @@
 //
 //     final exchangeCar = exchangeCarFromJson(jsonString);
 
+import 'package:car_world_system/sources/model/exchange_response.dart';
 import 'package:car_world_system/sources/model/user_information.dart';
 import 'package:meta/meta.dart';
 import 'dart:convert';
 
-List<ExchangeCar> exchangeCarFromJson(String str) => List<ExchangeCar>.from(json.decode(str).map((x) => ExchangeCar.fromJson(x)));
+List<ExchangeCar> exchangeCarFromJson(String str) => List<ExchangeCar>.from(
+    json.decode(str).map((x) => ExchangeCar.fromJson(x)));
 
-String exchangeCarToJson(List<ExchangeCar> data) => json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+String exchangeCarToJson(List<ExchangeCar> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
 
 class ExchangeCar {
-    ExchangeCar({
-        required this.id,
-        required this.type,
-        required this.userId,
-        required this.title,
-        required this.description,
-        required this.total,
-        required this.address,
-        required this.cityId,
-        required this.districtId,
-        required this.wardId,
-        required this.createdDate,
-        required this.status,
-        required this.feedbackId,
-        // @required this.city,
-        // @required this.district,
-        // @required this.feedback,
-        required this.user,
-        // @required this.ward,
-        // @required this.exchangeAccessorryDetails,
-        required this.exchangeCarDetails,
-        // @required this.exchangeResponses,
-    });
+  ExchangeCar({
+    required this.id,
+    required this.type,
+    required this.userId,
+    required this.title,
+    required this.description,
+    required this.total,
+    required this.address,
+    required this.cityId,
+    required this.districtId,
+    required this.wardId,
+    required this.createdDate,
+    required this.status,
+    required this.feedbackId,
+    // @required this.city,
+    // @required this.district,
+    // @required this.feedback,
+    required this.user,
+    // @required this.ward,
+    // @required this.exchangeAccessorryDetails,
+    required this.exchangeCarDetails,
+   required this.exchangeResponses,
+  });
 
-    String id;
-    int type;
-    int userId;
-    String title;
-    String description;
-    double total;
-    String address;
-    String cityId;
-    String districtId;
-    String wardId;
-    String createdDate;
-    int status;
-    dynamic feedbackId;
-    // City city;
-    // District district;
-    // dynamic feedback;
-    UserInformation user;
-    // City ward;
-    // List<dynamic> exchangeAccessorryDetails;
-    List<ListExchangeCarDetail> exchangeCarDetails;
-    // List<dynamic> exchangeResponses;
+  String id;
+  int type;
+  int userId;
+  String title;
+  String description;
+  int total;
+  String address;
+  String cityId;
+  String districtId;
+  String wardId;
+  String createdDate;
+  int status;
+  dynamic feedbackId;
+  // City city;
+  // District district;
+  // dynamic feedback;
+  UserInformation user;
+  // City ward;
+  // List<dynamic> exchangeAccessorryDetails;
+  List<ListExchangeCarDetail> exchangeCarDetails;
+  List<ExchangeResponse> exchangeResponses;
 
-    factory ExchangeCar.fromJson(Map<String, dynamic> json) => ExchangeCar(
+  factory ExchangeCar.fromJson(Map<String, dynamic> json) => ExchangeCar(
         id: json["Id"],
         type: json["Type"],
         userId: json["UserId"],
@@ -77,11 +80,13 @@ class ExchangeCar {
         user: UserInformation.fromJson(json["User"]),
         // ward: City.fromJson(json["Ward"]),
         // exchangeAccessorryDetails: List<dynamic>.from(json["ExchangeAccessorryDetails"].map((x) => x)),
-        exchangeCarDetails: List<ListExchangeCarDetail>.from(json["ExchangeCarDetails"].map((x) => ListExchangeCarDetail.fromJson(x))),
-        //exchangeResponses: List<dynamic>.from(json["ExchangeResponses"].map((x) => x)),
-    );
+        exchangeCarDetails: List<ListExchangeCarDetail>.from(
+            json["ExchangeCarDetails"]
+                .map((x) => ListExchangeCarDetail.fromJson(x))),
+        exchangeResponses: List<ExchangeResponse>.from(json["ExchangeResponses"].map((x) => ExchangeResponse.fromJson(x))),
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "Id": id,
         "Type": type,
         "UserId": userId,
@@ -101,44 +106,45 @@ class ExchangeCar {
         "User": user.toJson(),
         // "Ward": ward.toJson(),
         //"ExchangeAccessorryDetails": List<dynamic>.from(exchangeAccessorryDetails.map((x) => x)),
-        "ExchangeCarDetails": List<dynamic>.from(exchangeCarDetails.map((x) => x.toJson())),
+        "ExchangeCarDetails":
+            List<dynamic>.from(exchangeCarDetails.map((x) => x.toJson())),
         //"ExchangeResponses": List<dynamic>.from(exchangeResponses.map((x) => x)),
-    };
+      };
 }
 
-
 class ListExchangeCarDetail {
-    ListExchangeCarDetail({
-        required this.id,
-        required this.exchangeId,
-        required this.brandName,
-        required this.carName,
-        required this.yearOfManufactor,
-        required this.origin,
-        required this.licensePlate,
-        required this.isUsed,
-        required this.kilometers,
-        required this.yearOfUsed,
-        required this.image,
-        required this.price,
-        required this.amount,
-    });
+  ListExchangeCarDetail({
+    required this.id,
+    required this.exchangeId,
+    required this.brandName,
+    required this.carName,
+    required this.yearOfManufactor,
+    required this.origin,
+    required this.licensePlate,
+    required this.isUsed,
+    required this.kilometers,
+    required this.yearOfUsed,
+    required this.image,
+    required this.price,
+    required this.amount,
+  });
 
-    String id;
-    String exchangeId;
-    String brandName;
-    String carName;
-    int yearOfManufactor;
-    String origin;
-    String licensePlate;
-    bool isUsed;
-    double kilometers;
-    int yearOfUsed;
-    String image;
-    int price;
-    int amount;
+  String id;
+  String exchangeId;
+  String brandName;
+  String carName;
+  int yearOfManufactor;
+  String origin;
+  String licensePlate;
+  bool isUsed;
+  double kilometers;
+  int yearOfUsed;
+  String image;
+  int price;
+  int amount;
 
-    factory ListExchangeCarDetail.fromJson(Map<String, dynamic> json) => ListExchangeCarDetail(
+  factory ListExchangeCarDetail.fromJson(Map<String, dynamic> json) =>
+      ListExchangeCarDetail(
         id: json["Id"],
         exchangeId: json["ExchangeId"],
         brandName: json["BrandName"],
@@ -152,9 +158,9 @@ class ListExchangeCarDetail {
         image: json["Image"],
         price: json["Price"],
         amount: json["Amount"],
-    );
+      );
 
-    Map<String, dynamic> toJson() => {
+  Map<String, dynamic> toJson() => {
         "Id": id,
         "ExchangeId": exchangeId,
         "BrandName": brandName,
@@ -168,6 +174,5 @@ class ListExchangeCarDetail {
         "Image": image,
         "Price": price,
         "Amount": amount,
-    };
+      };
 }
-

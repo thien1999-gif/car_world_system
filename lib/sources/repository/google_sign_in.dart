@@ -33,10 +33,12 @@ class GoogleSingInProvider {
       print('signInWithGoogle succeeded: $user');
 
       UserLogin userLogin = new UserLogin(
-          email: user.email,
-          fullName: user.displayName,
-          image: user.photoURL,
-          phone: user.phoneNumber);
+        email: user.email,
+        fullName: user.displayName,
+        image: user.photoURL,
+        phone: user.phoneNumber,
+        deviceToken: "",
+      );
 
       return userLogin;
     }

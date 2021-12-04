@@ -130,4 +130,10 @@ class ExchangeAccessoryApiString {
    static String getListUserFeedback(int id) {
     return BASE_URL + '/api/feedback/GetUserFeedbacks?userId=$id';
   }
+
+
+  static String getBuyerAndSellerInfo(int id) {
+    return BASE_URL + '/api/user/GetUserById?id=$id';
+  } 
+
 }

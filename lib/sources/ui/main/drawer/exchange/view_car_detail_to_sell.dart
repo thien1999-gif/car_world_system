@@ -3,13 +3,15 @@ import 'package:car_world_system/sources/bloc/exchange_bloc.dart';
 import 'package:car_world_system/sources/model/exchange_car.dart';
 import 'package:car_world_system/sources/model/feedback.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_repository.dart';
+import 'package:car_world_system/sources/ui/main/drawer/exchange/buyer_user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
+
 class ViewCarDetailToSell extends StatefulWidget {
   final String carId;
-  const ViewCarDetailToSell({ Key? key, required this.carId }) : super(key: key);
+  const ViewCarDetailToSell({Key? key, required this.carId}) : super(key: key);
 
   @override
   _ViewCarDetailToSellState createState() => _ViewCarDetailToSellState(carId);
@@ -19,9 +21,9 @@ class _ViewCarDetailToSellState extends State<ViewCarDetailToSell> {
   final String carId;
   final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
   final ScrollController scrollController_1 = ScrollController();
- var userFeedBack = TextEditingController();
+  var userFeedBack = TextEditingController();
   _ViewCarDetailToSellState(this.carId);
-   @override
+  @override
   void initState() {
     super.initState();
 
@@ -128,8 +130,19 @@ class _ViewCarDetailToSellState extends State<ViewCarDetailToSell> {
                     ),
                   ],
                 ),
+                SizedBox(
+                  width: 1.h,
+                ),
                 Text(
-                  "Chủ bài đăng",
+                  "* Thông tin người bán",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepOrangeAccent,
+                      fontSize: 18),
+                ),
+                Text(
+                  "Người bán",
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.bold,
@@ -567,12 +580,28 @@ class _ViewCarDetailToSellState extends State<ViewCarDetailToSell> {
             maxLines: 15,
           ),
         ),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "* Thông tin người mua",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepOrangeAccent,
+                      fontSize: 18),
+                ),
+                BuyerUserScreen(id: data.exchangeResponses[0].userId),
+              ],
+            )),
         Row(
           children: [
             SizedBox(
               width: 35.h,
             ),
-            
             RaisedButton(
               color: AppConstant.backgroundColor,
               child: Text(
@@ -590,8 +619,7 @@ class _ViewCarDetailToSellState extends State<ViewCarDetailToSell> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.start,
                               children: [
-                                Text(
-                                    "Vui lòng nhập phản hồi của bạn."),
+                                Text("Vui lòng nhập phản hồi của bạn."),
                                 SizedBox(
                                   height: 2.h,
                                 ),
@@ -631,16 +659,16 @@ class _ViewCarDetailToSellState extends State<ViewCarDetailToSell> {
                                 color: AppConstant.backgroundColor),
                             FlatButton(
                                 onPressed: () {
-                                  print(
-                                      "danh gia: " + userFeedBack.text);
+                                  print("danh gia: " + userFeedBack.text);
                                   FeedBack feedBack = FeedBack(
                                       feedbackUserId: data.userId,
-                                      feedbackContent:
-                                          userFeedBack.text);
-                                  ExchangeAccessoryRepository exchangeAccessoryRepository =
+                                      feedbackContent: userFeedBack.text);
+                                  ExchangeAccessoryRepository
+                                      exchangeAccessoryRepository =
                                       ExchangeAccessoryRepository();
-                                  exchangeAccessoryRepository.sendFeedBackExchangeToSell(
-                                      data.id, feedBack);
+                                  exchangeAccessoryRepository
+                                      .sendFeedBackExchangeToSell(
+                                          data.id, feedBack);
                                   SnackBar snackbar = SnackBar(
                                       content: Text('Phản hồi thành công'));
                                   ScaffoldMessenger.of(context)
@@ -654,7 +682,6 @@ class _ViewCarDetailToSellState extends State<ViewCarDetailToSell> {
                           ],
                         ));
               },
-              
             ),
           ],
         )

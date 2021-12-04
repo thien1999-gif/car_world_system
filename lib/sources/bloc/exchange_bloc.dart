@@ -3,6 +3,7 @@ import 'package:car_world_system/sources/model/exchange_car.dart';
 import 'package:car_world_system/sources/model/list_feedback.dart';
 import 'package:car_world_system/sources/model/user_exchange_response.dart';
 import 'package:car_world_system/sources/model/user_exchange_to_buy.dart';
+import 'package:car_world_system/sources/model/user_information.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -147,7 +148,22 @@ getListUserFeedback(int id) async {
         await exchangeAccessoryRepository.getListUserFeedback(id);
     _listUserFeedbackFetcher.sink.add(list);
   }
+
+
+
+  
+final _buyerAndSellerInfoFetcher = PublishSubject<UserInformation>();
+Observable<UserInformation> get buyerAndSellerInfo =>
+      _buyerAndSellerInfoFetcher.stream;
+
+  getBuyerAndSellerInfo(int id) async {
+    UserInformation userInformation =
+        await exchangeAccessoryRepository.getBuyerAndSellerInfo(id);
+    _buyerAndSellerInfoFetcher.sink.add(userInformation);
+  }
+      
   dispose() {
+    _buyerAndSellerInfoFetcher.close();
     _listExchangeAccessoryOfUserFetcher.close();
     _exchangeAccessoryDetailOfUserFetcher.close();
     _listExchangeCarOfUserFetcher.close();

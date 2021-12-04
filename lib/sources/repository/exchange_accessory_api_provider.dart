@@ -9,6 +9,7 @@ import 'package:car_world_system/sources/model/list_feedback.dart';
 import 'package:car_world_system/sources/model/send_exchange_response.dart';
 import 'package:car_world_system/sources/model/user_exchange_response.dart';
 import 'package:car_world_system/sources/model/user_exchange_to_buy.dart';
+import 'package:car_world_system/sources/model/user_information.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_api_string.dart';
 import 'package:http/http.dart' as http;
 
@@ -533,6 +534,20 @@ class ExchangeAccessoryApiProvider {
       // If the server did not return a 200 OK response,
       // then throw an exception.
       throw Exception('Failed to load list feedback of user');
+    }
+  }
+
+
+     Future<UserInformation> getBuyerAndSellerInfo(int id) async {
+    final response = await http.get(ExchangeAccessoryApiString.getBuyerAndSellerInfo(id));
+    if (response.statusCode == 200) {
+      // If the server did return a 200 OK response,
+      // then parse the JSON
+      return UserInformation.fromJson(jsonDecode(response.body));
+    } else {
+      // If the server did not return a 200 OK response,
+      // then throw an exception.
+      throw Exception('Failed to load UserInformation');
     }
   }
 }

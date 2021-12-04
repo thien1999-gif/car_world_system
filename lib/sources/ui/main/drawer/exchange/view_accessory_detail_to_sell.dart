@@ -3,6 +3,7 @@ import 'package:car_world_system/sources/bloc/exchange_bloc.dart';
 import 'package:car_world_system/sources/model/exchange_accessory.dart';
 import 'package:car_world_system/sources/model/feedback.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_repository.dart';
+import 'package:car_world_system/sources/ui/main/drawer/exchange/buyer_user_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
 import 'package:intl/intl.dart';
@@ -133,7 +134,15 @@ var userFeedBack = TextEditingController();
                   ],
                 ),
                 Text(
-                  "Chủ bài đăng",
+                  "* Thông tin người bán",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepOrangeAccent,
+                      fontSize: 18),
+                ),
+                Text(
+                  "Người bán",
                   style: TextStyle(
                       fontStyle: FontStyle.italic,
                       fontWeight: FontWeight.bold,
@@ -204,6 +213,7 @@ var userFeedBack = TextEditingController();
                     ),
                   ],
                 ),
+                
                 SizedBox(
                   height: 1.h,
                 ),
@@ -377,6 +387,23 @@ var userFeedBack = TextEditingController();
             maxLines: 15,
           ),
         ),
+        Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Column(
+               mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "* Thông tin người mua",
+                  style: TextStyle(
+                      fontStyle: FontStyle.italic,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.deepOrangeAccent,
+                      fontSize: 18),
+                ),
+                BuyerUserScreen(id: data.exchangeResponses[0].userId),
+              ],
+            )),
            Row(
           children: [
             SizedBox(

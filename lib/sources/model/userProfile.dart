@@ -11,32 +11,40 @@ class UserProfile {
   Float? longtitude;
   int? exchangePost;
   String? tokenMobile;
+  int gender;
+  String yearOfBirth;
   // String brand;
 
-  UserProfile(
-      {required this.id,
-      required this.email,
-      required this.fullName,
-      required this.image,
-      required this.phone,
-      required this.address,
-      required this.latitude,
-      required this.longtitude,
-      required this.exchangePost,
-      required this.tokenMobile});
+  UserProfile({
+    required this.id,
+    required this.email,
+    required this.fullName,
+    required this.image,
+    required this.phone,
+    required this.address,
+    required this.latitude,
+    required this.longtitude,
+    required this.exchangePost,
+    required this.tokenMobile,
+    required this.gender,
+    required this.yearOfBirth,
+  });
 
   factory UserProfile.fromJson(Map<String, dynamic> json) {
     return UserProfile(
-        id: json['Id'],
-        email: json['Email'],
-        fullName: json['FullName'],
-        image: json['Image'],
-        phone: json['Phone'],
-        address: json['Address'],
-        latitude: json['Latitude'],
-        longtitude: json['Longtitude'],
-        exchangePost: json['ExchangePost'],
-        tokenMobile: json['TokenMobile']);
+      id: json['Id'],
+      email: json['Email'],
+      fullName: json['FullName'],
+      image: json['Image'],
+      phone: json['Phone'],
+      address: json['Address'],
+      latitude: json['Latitude'],
+      longtitude: json['Longtitude'],
+      exchangePost: json['ExchangePost'],
+      tokenMobile: json['TokenMobile'],
+      gender: json["Gender"],
+      yearOfBirth: json["YearOfBirth"],
+    );
   }
 
   Map<String, dynamic> toJson() {
@@ -51,6 +59,8 @@ class UserProfile {
     data['Longtitude'] = this.longtitude;
     data['ExchangePost'] = this.exchangePost;
     data['TokenMobile'] = this.tokenMobile;
+    data['Gender'] = this.gender;
+    data['YearOfBirth'] = this.yearOfBirth;
     return data;
   }
 }

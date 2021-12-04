@@ -154,12 +154,18 @@ class _ManagerProposalScreenState extends State<ManagerProposalScreen> {
                                     SizedBox(
                                       width: 5,
                                     ),
-                                    Text(
-                                      data[index].title,
-                                      style: TextStyle(
-                                          fontWeight: AppConstant.titleBold,
-                                          fontSize: 16),
-                                    ),
+                                   Container(
+                                        child: Text(
+                                          data[index].title.length > 30
+                                              ? data[index].title
+                                                      .substring(0, 28) +
+                                                  "..."
+                                              : data[index].title,
+                                          style: TextStyle(
+                                              fontWeight: AppConstant.titleBold,
+                                              fontSize: 16),
+                                        ),
+                                        width: 29.h)
                                   ],
                                 ),
                                 SizedBox(

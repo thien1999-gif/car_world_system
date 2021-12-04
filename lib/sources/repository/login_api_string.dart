@@ -9,4 +9,8 @@ class LoginApiString {
   static String getProfile(String email) {
     return BASE_URL + '/api/user/GetUserByEmail?email=$email';
   }
+
+  static String loginAdmin() {
+    return BASE_URL + '/api/user/LoginAdmin';
+  }
 }

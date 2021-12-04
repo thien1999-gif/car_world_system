@@ -1,8 +1,11 @@
+import 'dart:convert';
+
 class UserLogin {
   String email;
   String fullName;
   String image;
   String phone;
+  String deviceToken;
   // String brand;
 
   UserLogin({
@@ -10,22 +13,26 @@ class UserLogin {
     required this.fullName,
     required this.image,
     required this.phone,
+    required this.deviceToken,
   });
 
   factory UserLogin.fromJson(Map<String, dynamic> json) {
     return UserLogin(
-        email: json['Email'],
-        fullName: json['FullName'],
-        image: json['Image'],
-        phone: json['Phone']);
+      email: json['email'],
+      fullName: json['fullName'],
+      image: json['image'],
+      phone: json['phone'],
+      deviceToken: json['deviceToken'],
+    );
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['Email'] = this.email;
-    data['FullName'] = this.fullName;
-    data['Image'] = this.image;
-    data['Phone'] = this.phone;
+    data['email'] = this.email;
+    data['fullName'] = this.fullName;
+    data['image'] = this.image;
+    data['phone'] = this.phone;
+    data['deviceToken'] = this.deviceToken;
     return data;
   }
 }

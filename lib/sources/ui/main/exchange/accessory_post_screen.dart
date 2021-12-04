@@ -18,6 +18,7 @@ import 'package:sizer/sizer.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:geocode/geocode.dart';
+
 class AccessoryPostScreen extends StatefulWidget {
   const AccessoryPostScreen({Key? key}) : super(key: key);
 
@@ -33,8 +34,9 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
     super.initState();
     getProfile();
     getProvince();
-     _provinceFuture = AddressApiProvider().getListProvince();
+    _provinceFuture = AddressApiProvider().getListProvince();
   }
+
   String _baseUrl =
       "https://carworld.cosplane.asia/api/brand/GetAllBrandsOfAccessory";
   String? _valProvince; //lay ten hang
@@ -57,7 +59,6 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
     });
   }
 
-
 //
   //lay tinh
   Province? provinceObject;
@@ -78,7 +79,7 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   var titleController = TextEditingController();
   var descriptionController = TextEditingController();
-  
+
   var accessoryNameController = TextEditingController();
   var priceController = TextEditingController();
   var amountController = TextEditingController();
@@ -137,8 +138,8 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
         print(err);
       });
     }
-    SnackBar snackbar = SnackBar(content: Text('Upload ảnh thành công'));
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    // SnackBar snackbar = SnackBar(content: Text('Upload ảnh thành công'));
+    // ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   Future<void> loadAssets() async {
@@ -172,6 +173,11 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
       images = resultList;
       _error = error;
     });
+
+    if (images.length == 0) {
+    } else {
+      uploadImages();
+    }
   }
 
   Future<dynamic> postImage(Asset imageFile) async {
@@ -223,7 +229,7 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                         return null;
                       },
                     ),
-                     Row(
+                    Row(
                       children: [
                         Text("Hãng",
                             style: TextStyle(
@@ -299,7 +305,12 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.start,
                         children: <Widget>[
-                          Text('Tình trạng', style: TextStyle(color:AppConstant.backgroundColor, fontSize: 16),),
+                          Text(
+                            'Tình trạng',
+                            style: TextStyle(
+                                color: AppConstant.backgroundColor,
+                                fontSize: 16),
+                          ),
                           LabeledRadio(
                             label: 'Mới',
                             padding:
@@ -378,120 +389,122 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                     SizedBox(
                       height: 2.0.h,
                     ),
-                    
-                  // tỉnh
-                  Container(
-                    child: FutureBuilder<List<Province>>(
-                        future: _provinceFuture,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<Province>> snapshot) {
-                          if (!snapshot.hasData)
-                            return CupertinoActivityIndicator(
-                              animating: true,
-                            );
-                          return DropdownButtonFormField<Province>(
-                            isDense: true,
-                            decoration: InputDecoration(labelText: "Chọn tỉnh / thành phố",),
-                            items: snapshot.data!
-                                .map(
-                                    (countyState) => DropdownMenuItem<Province>(
-                                          child: Text(countyState.name),
-                                          value: countyState,
-                                        ))
-                                .toList(),
-                            onChanged: (Province? selectedState) {
-                              setState(() {
-                                districtObject = null;
-                                provinceObject = selectedState;
-                                provinceID = provinceObject!.id;
-                                provinceName = provinceObject!.name;
-                                _districtFuture = AddressApiProvider()
-                                    .getListDistrict(provinceObject!.id);
-                              });
-                            },
-                            value: provinceObject,
-                          );
-                        }),
-                  ),
-                  //
 
-                  // huyen
-                  Container(
-                    child: FutureBuilder<List<District>>(
-                        future: _districtFuture,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<District>> snapshot) {
-                          if (!snapshot.hasData)
-                            return DropdownButtonFormField<String>(
+                    // tỉnh
+                    Container(
+                      child: FutureBuilder<List<Province>>(
+                          future: _provinceFuture,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<Province>> snapshot) {
+                            if (!snapshot.hasData)
+                              return CupertinoActivityIndicator(
+                                animating: true,
+                              );
+                            return DropdownButtonFormField<Province>(
+                              isDense: true,
+                              decoration: InputDecoration(
+                                labelText: "Chọn tỉnh / thành phố",
+                              ),
+                              items: snapshot.data!
+                                  .map((countyState) =>
+                                      DropdownMenuItem<Province>(
+                                        child: Text(countyState.name),
+                                        value: countyState,
+                                      ))
+                                  .toList(),
+                              onChanged: (Province? selectedState) {
+                                setState(() {
+                                  districtObject = null;
+                                  provinceObject = selectedState;
+                                  provinceID = provinceObject!.id;
+                                  provinceName = provinceObject!.name;
+                                  _districtFuture = AddressApiProvider()
+                                      .getListDistrict(provinceObject!.id);
+                                });
+                              },
+                              value: provinceObject,
+                            );
+                          }),
+                    ),
+                    //
+
+                    // huyen
+                    Container(
+                      child: FutureBuilder<List<District>>(
+                          future: _districtFuture,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<District>> snapshot) {
+                            if (!snapshot.hasData)
+                              return DropdownButtonFormField<String>(
+                                decoration: InputDecoration(
+                                  labelText: "Chọn quận / huyện",
+                                ),
+                                items: [],
+                              );
+                            return DropdownButtonFormField<District>(
+                              isDense: true,
                               decoration: InputDecoration(
                                 labelText: "Chọn quận / huyện",
                               ),
-                              items: [],
+                              items: snapshot.data!
+                                  .map((countyState) =>
+                                      DropdownMenuItem<District>(
+                                        child: Text(countyState.name),
+                                        value: countyState,
+                                      ))
+                                  .toList(),
+                              onChanged: (District? selectedState) {
+                                setState(() {
+                                  wardObject = null;
+                                  districtObject = selectedState;
+                                  districtID = districtObject!.id;
+                                  districtName = districtObject!.name;
+                                  _wardFuture = AddressApiProvider()
+                                      .getListWard(districtObject!.id);
+                                });
+                              },
+                              value: districtObject,
                             );
-                          return DropdownButtonFormField<District>(
-                            isDense: true,
-                            decoration: InputDecoration(
-                              labelText: "Chọn quận / huyện",
-                            ),
-                            items: snapshot.data!
-                                .map(
-                                    (countyState) => DropdownMenuItem<District>(
-                                          child: Text(countyState.name),
-                                          value: countyState,
-                                        ))
-                                .toList(),
-                            onChanged: (District? selectedState) {
-                              setState(() {
-                                wardObject = null;
-                                districtObject = selectedState;
-                                districtID = districtObject!.id;
-                                districtName = districtObject!.name;
-                                _wardFuture = AddressApiProvider()
-                                    .getListWard(districtObject!.id);
-                              });
-                            },
-                            value: districtObject,
-                          );
-                        }),
-                  ),
-                  //
+                          }),
+                    ),
+                    //
 
-                  // xa
-                  Container(
-                    child: FutureBuilder<List<Ward>>(
-                        future: _wardFuture,
-                        builder: (BuildContext context,
-                            AsyncSnapshot<List<Ward>> snapshot) {
-                          if (!snapshot.hasData)
-                            return DropdownButtonFormField<String>(
+                    // xa
+                    Container(
+                      child: FutureBuilder<List<Ward>>(
+                          future: _wardFuture,
+                          builder: (BuildContext context,
+                              AsyncSnapshot<List<Ward>> snapshot) {
+                            if (!snapshot.hasData)
+                              return DropdownButtonFormField<String>(
+                                decoration: InputDecoration(
+                                  labelText: "Chọn phường / xã",
+                                ),
+                                items: [],
+                              );
+                            return DropdownButtonFormField<Ward>(
+                              isDense: true,
                               decoration: InputDecoration(
                                 labelText: "Chọn phường / xã",
                               ),
-                              items: [],
+                              items: snapshot.data!
+                                  .map((countyState) => DropdownMenuItem<Ward>(
+                                        child: Text(countyState.name),
+                                        value: countyState,
+                                      ))
+                                  .toList(),
+                              onChanged: (Ward? selectedState) {
+                                setState(() {
+                                  wardObject = selectedState;
+                                  wardID = wardObject!.id;
+                                  wardName = wardObject!.name;
+                                });
+                              },
+                              value: wardObject,
                             );
-                          return DropdownButtonFormField<Ward>(
-                            isDense: true,
-                            decoration: InputDecoration(
-                              labelText: "Chọn phường / xã",
-                            ),
-                            items: snapshot.data!
-                                .map((countyState) => DropdownMenuItem<Ward>(
-                                      child: Text(countyState.name),
-                                      value: countyState,
-                                    ))
-                                .toList(),
-                            onChanged: (Ward? selectedState) {
-                              setState(() {
-                                wardObject = selectedState;
-                                wardID = wardObject!.id;
-                                wardName = wardObject!.name;
-                              });
-                            },
-                            value: wardObject,
-                          );
-                        }),
-                  ),
-                  //"
+                          }),
+                    ),
+                    //"
                     SizedBox(
                       height: 2.0.h,
                     ),
@@ -522,7 +535,7 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                     ),
                     Row(
                       children: [
-                         Text(
+                        Text(
                           "Ảnh: ",
                           style: TextStyle(color: AppConstant.backgroundColor),
                         ),
@@ -534,57 +547,57 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                           onPressed: loadAssets,
                           color: AppConstant.backgroundColor,
                         ),
-                        SizedBox(
-                          width: 1.h,
-                        ),
-                        RaisedButton(
-                          child: Text(
-                            "Upload ảnh",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            if (images.length == 0) {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      backgroundColor:
-                                          AppConstant.backgroundColor,
-                                      content: Text(
-                                          "Không có ảnh nào được chọn",
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      actions: <Widget>[
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Container(
-                                            width: 80,
-                                            height: 30,
-                                            child: Center(
-                                                child: Text(
-                                              "Đóng",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )),
-                                          ),
-                                        )
-                                      ],
-                                    );
-                                  });
-                            } else {
-                              SnackBar snackbar = SnackBar(
-                                  content:
-                                      Text('Vui lòng đợi trong giây lát.'));
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackbar);
-                              uploadImages();
-                              print("link anh: $imageUrls");
-                            }
-                          },
-                          color: AppConstant.backgroundColor,
-                        ),
+                        // SizedBox(
+                        //   width: 1.h,
+                        // ),
+                        // RaisedButton(
+                        //   child: Text(
+                        //     "Upload ảnh",
+                        //     style: TextStyle(color: Colors.white),
+                        //   ),
+                        //   onPressed: () {
+                        //     if (images.length == 0) {
+                        //       showDialog(
+                        //           context: context,
+                        //           builder: (_) {
+                        //             return AlertDialog(
+                        //               backgroundColor:
+                        //                   AppConstant.backgroundColor,
+                        //               content: Text(
+                        //                   "Không có ảnh nào được chọn",
+                        //                   style:
+                        //                       TextStyle(color: Colors.white)),
+                        //               actions: <Widget>[
+                        //                 InkWell(
+                        //                   onTap: () {
+                        //                     Navigator.pop(context);
+                        //                   },
+                        //                   child: Container(
+                        //                     width: 80,
+                        //                     height: 30,
+                        //                     child: Center(
+                        //                         child: Text(
+                        //                       "Đóng",
+                        //                       style: TextStyle(
+                        //                           color: Colors.white),
+                        //                     )),
+                        //                   ),
+                        //                 )
+                        //               ],
+                        //             );
+                        //           });
+                        //     } else {
+                        //       SnackBar snackbar = SnackBar(
+                        //           content:
+                        //               Text('Vui lòng đợi trong giây lát.'));
+                        //       ScaffoldMessenger.of(context)
+                        //           .showSnackBar(snackbar);
+                        //       uploadImages();
+                        //       print("link anh: $imageUrls");
+                        //     }
+                        //   },
+                        //   color: AppConstant.backgroundColor,
+                        // ),
                         SizedBox(
                           width: 1.h,
                         ),
@@ -599,8 +612,7 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                                 context: context,
                                 builder: (context) => AlertDialog(
                                   title: Text('Xác nhận'),
-                                  content:
-                                      Text('Bạn có muốn đăng tin không ?'),
+                                  content: Text('Bạn có muốn đăng tin không ?'),
                                   actions: <Widget>[
                                     FlatButton(
                                         onPressed: () {},
@@ -612,26 +624,35 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                                         onPressed: () {
                                           String imageListLink =
                                               imageUrls.join("|");
-                                          List<ExchangeAccessorryDetail> list = [];
+                                          List<ExchangeAccessorryDetail> list =
+                                              [];
                                           list.add(ExchangeAccessorryDetail(
-                                              accessoryName: accessoryNameController.text,
+                                              accessoryName:
+                                                  accessoryNameController.text,
                                               isUsed: _isUsed,
                                               image: imageListLink,
-                                              price: int.parse(priceController.text),
-                                              amount: int.parse(amountController.text),
-                                             brandName: _valProvince!));
-                                          CreateExchangeAccessory exchangeAccessory =
+                                              price: int.parse(
+                                                  priceController.text),
+                                              amount: int.parse(
+                                                  amountController.text),
+                                              brandName: _valProvince!));
+                                          CreateExchangeAccessory
+                                              exchangeAccessory =
                                               CreateExchangeAccessory(
-                                                  userId: _profile!.id,
-                                                  title: titleController.text,
-                                                  description: descriptionController.text,
-                                                  address: wardName! + " " + districtName! + " " + provinceName!,
-                                                  exchangeAccessorryDetails: list,
-                                                  cityId: provinceID!, 
-                                           districtId: districtID!, 
-                                           
-                                           wardId: wardID!,
-                                                   );
+                                            userId: _profile!.id,
+                                            title: titleController.text,
+                                            description:
+                                                descriptionController.text,
+                                            address: wardName! +
+                                                " " +
+                                                districtName! +
+                                                " " +
+                                                provinceName!,
+                                            exchangeAccessorryDetails: list,
+                                            cityId: provinceID!,
+                                            districtId: districtID!,
+                                            wardId: wardID!,
+                                          );
                                           ExchangeAccessoryRepository
                                               exchangeAccessoryRepository =
                                               ExchangeAccessoryRepository();
@@ -644,9 +665,9 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                                                   'Bạn đã gửi thành công'));
                                           ScaffoldMessenger.of(context)
                                               .showSnackBar(snackbar);
-                                              Navigator.pop(context);
-                                              Navigator.pop(context);
-                                              Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
+                                          Navigator.pop(context);
                                         },
                                         child: Text('Có',
                                             style:
@@ -661,7 +682,7 @@ class _AccessoryPostScreenState extends State<AccessoryPostScreen> {
                         ),
                       ],
                     ),
-                     Container(
+                    Container(
                         width: 100.h,
                         height: 50.h,
                         child: Expanded(

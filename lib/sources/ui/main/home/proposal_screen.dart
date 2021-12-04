@@ -111,8 +111,8 @@ class _ProposalScreenState extends State<ProposalScreen> {
         print(err);
       });
     }
-    SnackBar snackbar = SnackBar(content: Text('Upload ảnh thành công'));
-    ScaffoldMessenger.of(context).showSnackBar(snackbar);
+    // SnackBar snackbar = SnackBar(content: Text('Upload ảnh thành công'));
+    // ScaffoldMessenger.of(context).showSnackBar(snackbar);
   }
 
   Future<void> loadAssets() async {
@@ -146,6 +146,11 @@ class _ProposalScreenState extends State<ProposalScreen> {
       images = resultList;
       _error = error;
     });
+
+    if (images.length == 0) {
+    } else {
+      uploadImages();
+    }
   }
 
   Future<dynamic> postImage(Asset imageFile) async {
@@ -497,57 +502,57 @@ class _ProposalScreenState extends State<ProposalScreen> {
                           onPressed: loadAssets,
                           color: AppConstant.backgroundColor,
                         ),
-                        SizedBox(
-                          width: 1.h,
-                        ),
-                        RaisedButton(
-                          child: Text(
-                            "Upload ảnh",
-                            style: TextStyle(color: Colors.white),
-                          ),
-                          onPressed: () {
-                            if (images.length == 0) {
-                              showDialog(
-                                  context: context,
-                                  builder: (_) {
-                                    return AlertDialog(
-                                      backgroundColor:
-                                          AppConstant.backgroundColor,
-                                      content: Text(
-                                          "Không có ảnh nào được chọn",
-                                          style:
-                                              TextStyle(color: Colors.white)),
-                                      actions: <Widget>[
-                                        InkWell(
-                                          onTap: () {
-                                            Navigator.pop(context);
-                                          },
-                                          child: Container(
-                                            width: 80,
-                                            height: 30,
-                                            child: Center(
-                                                child: Text(
-                                              "Đóng",
-                                              style: TextStyle(
-                                                  color: Colors.white),
-                                            )),
-                                          ),
-                                        )
-                                      ],
-                                    );
-                                  });
-                            } else {
-                              SnackBar snackbar = SnackBar(
-                                  content:
-                                      Text('Vui lòng đợi trong giây lát.'));
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(snackbar);
-                              uploadImages();
-                              print("link anh: $imageUrls");
-                            }
-                          },
-                          color: AppConstant.backgroundColor,
-                        ),
+                        // SizedBox(
+                        //   width: 1.h,
+                        // ),
+                        // RaisedButton(
+                        //   child: Text(
+                        //     "Upload ảnh",
+                        //     style: TextStyle(color: Colors.white),
+                        //   ),
+                        //   onPressed: () {
+                        //     if (images.length == 0) {
+                        //       showDialog(
+                        //           context: context,
+                        //           builder: (_) {
+                        //             return AlertDialog(
+                        //               backgroundColor:
+                        //                   AppConstant.backgroundColor,
+                        //               content: Text(
+                        //                   "Không có ảnh nào được chọn",
+                        //                   style:
+                        //                       TextStyle(color: Colors.white)),
+                        //               actions: <Widget>[
+                        //                 InkWell(
+                        //                   onTap: () {
+                        //                     Navigator.pop(context);
+                        //                   },
+                        //                   child: Container(
+                        //                     width: 80,
+                        //                     height: 30,
+                        //                     child: Center(
+                        //                         child: Text(
+                        //                       "Đóng",
+                        //                       style: TextStyle(
+                        //                           color: Colors.white),
+                        //                     )),
+                        //                   ),
+                        //                 )
+                        //               ],
+                        //             );
+                        //           });
+                        //     } else {
+                        //       SnackBar snackbar = SnackBar(
+                        //           content:
+                        //               Text('Vui lòng đợi trong giây lát.'));
+                        //       ScaffoldMessenger.of(context)
+                        //           .showSnackBar(snackbar);
+                        //       uploadImages();
+                        //       print("link anh: $imageUrls");
+                        //     }
+                        //   },
+                        //   color: AppConstant.backgroundColor,
+                        // ),
                         SizedBox(
                           width: 1.h,
                         ),

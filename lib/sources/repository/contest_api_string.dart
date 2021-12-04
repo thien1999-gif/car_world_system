@@ -36,7 +36,7 @@ class ContestApiString {
   }
 
   //get list contest of user joined
-  
+
   static String getListContestUserJoined(int id) {
     return BASE_URL + '/api/ceRegister/GetCEsJoined?type=2&userId=$id';
   }
@@ -52,4 +52,10 @@ class ContestApiString {
   static String feedbackContest(String id) {
     return BASE_URL + '/api/feedback/FeedbackCE?contestEventId=$id';
   }
+
+  static String getContestPrize(String id) {
+    return BASE_URL + '/api/contestPrize/GetPrizesByContestId?contestId=$id';
+  }
+
+ 
 }

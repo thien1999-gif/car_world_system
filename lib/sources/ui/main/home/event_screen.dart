@@ -55,14 +55,13 @@ class _EventScreenState extends State<EventScreen> {
             ),
           ],
         ),
-          SingleChildScrollView(
-            child: Container(
-              width: 0,
-              height: 45.h,
-              child:loadListEvent(),
-            ),
-          )
-        
+        SingleChildScrollView(
+          child: Container(
+            width: 0,
+            height: 45.h,
+            child: loadListEvent(),
+          ),
+        )
       ],
     ));
   }
@@ -105,7 +104,7 @@ class _EventScreenState extends State<EventScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
-             Container(
+            Container(
               height: 35.h,
               width: 35.h,
               child: Image(
@@ -118,10 +117,7 @@ class _EventScreenState extends State<EventScreen> {
             ),
             Text(
               "Rất tiếc, chưa có dữ liệu hiển thị",
-              style: TextStyle(
-                  
-                  fontStyle: FontStyle.italic,
-                  fontSize: 18),
+              style: TextStyle(fontStyle: FontStyle.italic, fontSize: 18),
             ),
           ],
         ),

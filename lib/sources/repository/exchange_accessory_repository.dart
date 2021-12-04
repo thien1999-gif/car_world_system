@@ -7,6 +7,7 @@ import 'package:car_world_system/sources/model/list_feedback.dart';
 import 'package:car_world_system/sources/model/send_exchange_response.dart';
 import 'package:car_world_system/sources/model/user_exchange_response.dart';
 import 'package:car_world_system/sources/model/user_exchange_to_buy.dart';
+import 'package:car_world_system/sources/model/user_information.dart';
 import 'package:car_world_system/sources/repository/exchange_accessory_api_provider.dart';
 
 class ExchangeAccessoryRepository {
@@ -120,5 +121,10 @@ class ExchangeAccessoryRepository {
 
   Future<List<ListFeedback>> getListUserFeedback(int id) {
     return exchangeAccessoryApiProvider.getListUserFeedback(id);
+  }
+
+
+  Future<UserInformation> getBuyerAndSellerInfo(int id) {
+    return exchangeAccessoryApiProvider.getBuyerAndSellerInfo(id);
   }
 }

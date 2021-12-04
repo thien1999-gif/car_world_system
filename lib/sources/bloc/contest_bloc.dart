@@ -1,6 +1,7 @@
 import 'package:car_world_system/sources/model/contest.dart';
 import 'package:car_world_system/sources/model/contest_register.dart';
 import 'package:car_world_system/sources/model/event_contest.dart';
+import 'package:car_world_system/sources/model/prize.dart';
 import 'package:car_world_system/sources/repository/contest_repository.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -17,7 +18,8 @@ class ContestBloc {
   Observable<EventContest> get contestDetail => _contestDetailFetcher.stream;
   //get list new contest
   getListNewContest(String now) async {
-    List<EventContest> listContest = await contestRepository.getListNewContest(now);
+    List<EventContest> listContest =
+        await contestRepository.getListNewContest(now);
     _listContestFetcher.sink.add(listContest);
   }
 
@@ -48,7 +50,18 @@ class ContestBloc {
     _contestDetailFetcher.sink.add(contestDetail);
   }
 
+  final _listContestPrizeFetcher = PublishSubject<List<UserPrize>>();
+
+  Observable<List<UserPrize>> get listContestPrize =>
+      _listContestPrizeFetcher.stream;
+
+  getContestPrize(String id) async {
+    List<UserPrize> listContest = await contestRepository.getContestPrize(id);
+    _listContestPrizeFetcher.sink.add(listContest);
+  }
+
   dispose() {
+    _listContestPrizeFetcher.close();
     _listContestFetcher.close();
     _contestDetailFetcher.close();
     _listContestRegisterFetcher.close();
