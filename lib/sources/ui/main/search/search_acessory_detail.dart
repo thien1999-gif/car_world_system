@@ -4,6 +4,7 @@ import 'package:car_world_system/sources/model/accessory.dart';
 import 'package:car_world_system/sources/ui/main/search/brand_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 class SearchAccessoryDetailScreen extends StatefulWidget {
@@ -21,7 +22,7 @@ class _SearchAccessoryDetailScreenState
   final int id;
 
   _SearchAccessoryDetailScreenState(this.id);
-
+final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
   @override
   void initState() {
     super.initState();
@@ -86,7 +87,7 @@ class _SearchAccessoryDetailScreenState
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Text(
-            data.price.toString() + " đồng",
+          '${formatCurrency.format(data.price)} VNĐ',
             style: TextStyle(fontSize: 18, color: Colors.red, fontWeight: FontWeight.bold)
           ),
         ),

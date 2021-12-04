@@ -4,6 +4,7 @@ import 'package:car_world_system/sources/model/car.dart';
 import 'package:car_world_system/sources/ui/main/search/brand_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_image_slideshow/flutter_image_slideshow.dart';
+import 'package:intl/intl.dart';
 import 'package:sizer/sizer.dart';
 
 class SearchCarDetailScreen extends StatefulWidget {
@@ -16,7 +17,7 @@ class SearchCarDetailScreen extends StatefulWidget {
 
 class _SearchCarDetailScreenState extends State<SearchCarDetailScreen> {
   final int id;
-
+  final formatCurrency = new NumberFormat.currency(locale: "vi_VN", symbol: "");
   _SearchCarDetailScreenState(this.id);
   @override
   void initState() {
@@ -24,6 +25,10 @@ class _SearchCarDetailScreenState extends State<SearchCarDetailScreen> {
     carBloc.getAccessoryDetail(id);
   }
 
+  final ScrollController scrollController_1 = ScrollController();
+  final ScrollController scrollController_2 = ScrollController();
+  final ScrollController scrollController_3 = ScrollController();
+  final ScrollController scrollController_4 = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,22 +54,22 @@ class _SearchCarDetailScreenState extends State<SearchCarDetailScreen> {
     var imageListUrl = data.image.split("|");
     return ListView(
       children: [
-        // ImageSlideshow(
-        //   width: double.infinity,
-        //   height: 200,
-        //   initialPage: 0,
-        //   indicatorColor: Colors.blue,
-        //   indicatorBackgroundColor: Colors.grey,
-        //   autoPlayInterval: 5000,
-        //   isLoop: true,
-        //   children: [
-        //     for (int i = 0; i < imageListUrl.length - 1; i++)
-        //       Image(
-        //         image: NetworkImage(imageListUrl[i]),
-        //         fit: BoxFit.cover,
-        //       ),
-        //   ],
-        // ),
+        ImageSlideshow(
+          width: double.infinity,
+          height: 200,
+          initialPage: 0,
+          indicatorColor: Colors.blue,
+          indicatorBackgroundColor: Colors.grey,
+          autoPlayInterval: 5000,
+          isLoop: true,
+          children: [
+            for (int i = 0; i < imageListUrl.length - 1; i++)
+              Image(
+                image: NetworkImage(imageListUrl[i]),
+                fit: BoxFit.cover,
+              ),
+          ],
+        ),
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Text(
@@ -76,21 +81,28 @@ class _SearchCarDetailScreenState extends State<SearchCarDetailScreen> {
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Text(
             "Giá",
-            style: TextStyle(color: Colors.grey, fontSize: 18, ),
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 18,
+            ),
           ),
         ),
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
-          child: Text(
-            data.price.toString() + " đồng",
-            style: TextStyle(fontSize: 18,color: Colors.red,fontWeight:FontWeight.bold )
-          ),
+          child: Text('${formatCurrency.format(data.price)} VNĐ',
+              style: TextStyle(
+                  fontSize: 18,
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold)),
         ),
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Text(
             "Hãng sản xuất",
-            style: TextStyle(color: Colors.grey, fontSize: 18,),
+            style: TextStyle(
+              color: Colors.grey,
+              fontSize: 18,
+            ),
           ),
         ),
         BrandScreen(id: data.brandId),
@@ -105,99 +117,105 @@ class _SearchCarDetailScreenState extends State<SearchCarDetailScreen> {
         Padding(
           padding: EdgeInsets.all(2),
           child: Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(1.0))),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Container(
-                    // color: Colors.blue,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Kiểu dáng",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.bodyType,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Hộp số",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.gearBox,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Hãng",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          "BMW",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
+              height: 22.h,
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(1.0))),
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: scrollController_1,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  controller: scrollController_1,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            // color: Colors.blue,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Kiểu dáng",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.bodyType,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                Text(
+                                  "Hộp số",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.gearBox,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                Text(
+                                  "Xuất xứ",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.origin,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 10.h,
+                          ),
+                          Container(
+                            // color: Colors.blue,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Chỗ ngồi",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.seats.toString(),
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                Text(
+                                  "Năm sản xuất",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.yearOfManufactor.toString(),
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                               
+                                
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 10.h,
-                  ),
-                  Container(
-                    // color: Colors.blue,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Chỗ ngồi",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.seats.toString(),
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Năm sản xuất",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.yearOfManufactor.toString(),
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Xuất xứ",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.origin,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                  ],
+                ),
+              )),
         ),
 
-        // thông số cơ bản
+        //  thông số cơ bản
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),
           child: Text(
@@ -208,114 +226,133 @@ class _SearchCarDetailScreenState extends State<SearchCarDetailScreen> {
         Padding(
           padding: EdgeInsets.all(2),
           child: Container(
+            height: 30.h,
             decoration: BoxDecoration(
                 border: Border.all(width: 1),
                 borderRadius: BorderRadius.all(Radius.circular(1.0))),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
+            child: Scrollbar(
+              isAlwaysShown: true,
+              controller: scrollController_2,
+              child: ListView(
+                scrollDirection: Axis.horizontal,
+                controller: scrollController_2,
                 children: [
-                  Container(
-                    // color: Colors.blue,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(
                       children: [
-                        Text(
-                          "Dài*Rộng*Cao",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.length.toString() +
-                              "*" +
-                              data.width.toString() +
-                              "*" +
-                              data.height.toString(),
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Công suất cực đại",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.maxPower.toString(),
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Dung tích (cc)",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.displacement.toString(),
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Động cơ",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.engineType,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(
-                    width: 4.h,
-                  ),
-                  Container(
-                    // color: Colors.blue,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Momen xoắn cực đại",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.maxTorque.toString(),
-                          style: TextStyle(fontSize: 18),
+                        Container(
+                          // color: Colors.blue,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Dài*Rộng*Cao",
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 18),
+                              ),
+                              Text(
+                                data.length.toString() +
+                                    "*" +
+                                    data.width.toString() +
+                                    "*" +
+                                    data.height.toString(),
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                "Công suất cực đại",
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 18),
+                              ),
+                              Text(
+                                data.maxPower.toString(),
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                "Dung tích (cc)",
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 18),
+                              ),
+                              Text(
+                                data.displacement.toString(),
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                "Động cơ",
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 18),
+                              ),
+                              Text(
+                                data.engineType,
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ],
+                          ),
                         ),
                         SizedBox(
-                          height: 2.h,
+                          width: 4.h,
                         ),
-                        Text(
-                          "Khoảng cách gầm xe",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.groundClearance.toString(),
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Tiêu hao nhiên liệu",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.fuelConsumption.toString() + " km/l",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Bán kính quay",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.turningRadius.toString(),
-                          style: TextStyle(fontSize: 18),
+                        Container(
+                          // color: Colors.blue,
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Momen xoắn cực đại",
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 18),
+                              ),
+                              Text(
+                                data.maxTorque.toString(),
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                "Khoảng cách gầm xe",
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 18),
+                              ),
+                              Text(
+                                data.groundClearance.toString(),
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                "Tiêu hao nhiên liệu",
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 18),
+                              ),
+                              Text(
+                                data.fuelConsumption.toString(),
+                                style: TextStyle(fontSize: 18),
+                              ),
+                              SizedBox(
+                                height: 2.h,
+                              ),
+                              Text(
+                                "Bán kính quay",
+                                style:
+                                    TextStyle(color: Colors.grey, fontSize: 18),
+                              ),
+                              Text(
+                                data.turningRadius.toString(),
+                                style: TextStyle(fontSize: 18),
+                              ),
+                            ],
+                          ),
                         ),
                       ],
                     ),
@@ -337,96 +374,112 @@ class _SearchCarDetailScreenState extends State<SearchCarDetailScreen> {
         Padding(
           padding: EdgeInsets.all(2),
           child: Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(1.0))),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Container(
-                    // color: Colors.blue,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Dung tích bình xăng",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.fuelCapacity.toString() + " l",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Kích thước mâm xe",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.wheelSize,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Kích thước bánh xe",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.tyreSize,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
+              height: 23.h,
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(1.0))),
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: scrollController_3,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  controller: scrollController_3,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            // color: Colors.blue,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Dung tích bình xăng",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.fuelCapacity.toString() + " l",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                Text(
+                                  "Kích thước mâm xe",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.wheelSize,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                Text(
+                                  "Kích thước bánh xe",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.tyreSize,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 4.h,
+                          ),
+                          Container(
+                            // color: Colors.blue,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Trọng lượng khô",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.kerbWeight.toString() + " kg",
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                Text(
+                                  "Hệ thống treo trước",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.frontSuspension,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                Text(
+                                  "Hệ thống treo sau",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.rearSuspension,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 4.h,
-                  ),
-                  Container(
-                    // color: Colors.blue,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Trọng lượng khô",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.kerbWeight.toString() + " kg",
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Hệ thống treo trước",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.frontSuspension,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Hệ thống treo sau",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.rearSuspension,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                  ],
+                ),
+              )),
         ),
 
         //nội ngoại thất
@@ -440,74 +493,88 @@ class _SearchCarDetailScreenState extends State<SearchCarDetailScreen> {
         Padding(
           padding: EdgeInsets.all(2),
           child: Container(
-            decoration: BoxDecoration(
-                border: Border.all(width: 1),
-                borderRadius: BorderRadius.all(Radius.circular(1.0))),
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                children: [
-                  Container(
-                    // color: Colors.blue,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Chất liệu nội thất",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.interiorMaterial,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Cụm đèn trước",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.headLights,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
+              height: 15.h,
+              decoration: BoxDecoration(
+                  border: Border.all(width: 1),
+                  borderRadius: BorderRadius.all(Radius.circular(1.0))),
+              child: Scrollbar(
+                isAlwaysShown: true,
+                controller: scrollController_4,
+                child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  controller: scrollController_4,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Row(
+                        children: [
+                          Container(
+                            // color: Colors.blue,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Chất liệu nội thất",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.interiorMaterial,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                Text(
+                                  "Cụm đèn trước",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.headLights,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                          SizedBox(
+                            width: 4.h,
+                          ),
+                          Container(
+                            // color: Colors.blue,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  "Cụm đèn sau",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.tailLights,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                                SizedBox(
+                                  height: 2.h,
+                                ),
+                                Text(
+                                  "Đèn sương mù",
+                                  style: TextStyle(
+                                      color: Colors.grey, fontSize: 18),
+                                ),
+                                Text(
+                                  data.fogLamps,
+                                  style: TextStyle(fontSize: 18),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(
-                    width: 4.h,
-                  ),
-                  Container(
-                    // color: Colors.blue,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "Cụm đèn sau",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.tailLights,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                        SizedBox(
-                          height: 2.h,
-                        ),
-                        Text(
-                          "Đèn sương mù",
-                          style: TextStyle(color: Colors.grey, fontSize: 18),
-                        ),
-                        Text(
-                          data.fogLamps,
-                          style: TextStyle(fontSize: 18),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                  ],
+                ),
+              )),
         ),
         Padding(
           padding: EdgeInsets.only(left: 8, right: 8, top: 8),

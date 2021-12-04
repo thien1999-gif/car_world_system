@@ -10,7 +10,13 @@ class AccessoryApiString {
   //get list accessory by name
   //https://carworld.cosplane.asia/api/accessory/GetAccessoryByName?accessoryName=tes
   static String getListAccessoryByName(String name) {
-    return BASE_URL + '/api/accessory/GetAccessoryByName?accessoryName=$name';
+    return BASE_URL + '/api/accessory/GetAccessoriesByName?accessoryName=$name';
+  }
+
+  //get list accessory by brand name
+  //https://carworld.cosplane.asia/api/accessory/GetAccessoryByBrand?brandName=denso
+  static String getListAccessoryByBrandName(String name) {
+    return BASE_URL + '/api/accessory/GetAccessoryByBrand?brandName=$name';
   }
 
   //get accessory detail by id
@@ -21,7 +27,7 @@ class AccessoryApiString {
 
   //get brand detail
   //https://carworld.cosplane.asia/api/brand/GetBrandById?id=1007
-  static String getBrandDetail(int id){
+  static String getBrandDetail(int id) {
     return BASE_URL + '/api/brand/GetBrandById?id=$id';
   }
 }

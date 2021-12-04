@@ -1,13 +1,13 @@
+import 'package:car_world_system/sources/model/userLogin.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
-class GoogleSingInProvider{
+class GoogleSingInProvider {
+  static final FirebaseAuth _auth = FirebaseAuth.instance;
+  static GoogleSignIn googleSignIn = GoogleSignIn();
 
-   static FirebaseAuth _auth = FirebaseAuth.instance;
-   static GoogleSignIn googleSignIn = GoogleSignIn();
-
-   static Future<String?> signInWithGoogle() async {
+  static Future<UserLogin?> signInWithGoogle() async {
     await Firebase.initializeApp();
 
     final GoogleSignInAccount googleSignInAccount = await googleSignIn.signIn();
@@ -29,14 +29,23 @@ class GoogleSingInProvider{
 
       final User currentUser = _auth.currentUser;
       assert(user.uid == currentUser.uid);
-      
+
       print('signInWithGoogle succeeded: $user');
-      return '$user';
+
+      UserLogin userLogin = new UserLogin(
+        email: user.email,
+        fullName: user.displayName,
+        image: user.photoURL,
+        phone: user.phoneNumber,
+        deviceToken: "",
+      );
+
+      return userLogin;
     }
     return null;
   }
 
- static Future<void> signOutGoogle() async {
+  static Future<void> signOutGoogle() async {
     await googleSignIn.signOut();
 
     print("User Signed Out");
